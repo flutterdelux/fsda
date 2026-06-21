@@ -1,0 +1,69 @@
+title Retrieval + Stream + Param Sequence (Rsp) - Subscription / Payment / Status
+
+actor User
+participant PaymentStatusPage
+participant PaymentStatusCubit
+participant PaymentStatusUseCase
+participant PaymentRepositoryImpl
+participant PaymentRemoteDataSourceImpl
+participant ApiClient
+
+entryspacing 0.5
+PaymentStatusPage->PaymentStatusPage: Compose UI + Logic
+activate PaymentStatusPage
+PaymentStatusPage->PaymentStatusCubit: Create PaymentStatusCubit(id)
+activate PaymentStatusCubit
+PaymentStatusCubit->PaymentStatusCubit: Emit initial state
+PaymentStatusCubit-->PaymentStatusPage: PaymentStatusState.initial()
+PaymentStatusPage-->User: Payment status page is visible
+
+PaymentStatusPage->PaymentStatusCubit: watchPaymentStatus()
+PaymentStatusCubit->PaymentStatusCubit: Emit loading state
+PaymentStatusCubit-->PaymentStatusPage: PaymentStatusState.loading()
+
+PaymentStatusCubit->PaymentStatusUseCase: call(PaymentStatusParam(id))
+activate PaymentStatusUseCase
+PaymentStatusUseCase->PaymentRepositoryImpl: watchPaymentStatus(param)
+activate PaymentRepositoryImpl
+PaymentRepositoryImpl->PaymentRepositoryImpl: PaymentStatusRequest.fromParam(param)
+PaymentRepositoryImpl->PaymentRemoteDataSourceImpl: watchPaymentStatus(request)
+activate PaymentRemoteDataSourceImpl
+PaymentRemoteDataSourceImpl->ApiClient: STREAM '/payments/{id}/status/stream'
+activate ApiClient
+
+loop Every stream event
+    ApiClient-->PaymentRemoteDataSourceImpl: Map<String, dynamic>
+    deactivate ApiClient
+    PaymentRemoteDataSourceImpl-->PaymentRepositoryImpl: PaymentDto
+    deactivate PaymentRemoteDataSourceImpl
+    PaymentRepositoryImpl->PaymentRepositoryImpl: dto.toEntity()
+    PaymentRepositoryImpl-->PaymentStatusUseCase: Result.success(PaymentEntity)
+    deactivate PaymentRepositoryImpl
+    PaymentStatusUseCase-->PaymentStatusCubit: Result.success(data)
+    deactivate PaymentStatusUseCase
+    PaymentStatusCubit->PaymentStatusCubit: Emit loaded state
+    PaymentStatusCubit-->PaymentStatusPage: PaymentStatusState.loaded(data)
+    deactivate PaymentStatusCubit
+end
+
+alt Stream throws exception
+    activate PaymentStatusCubit
+    activate PaymentStatusUseCase
+    activate PaymentRepositoryImpl
+    activate PaymentRemoteDataSourceImpl
+    activate ApiClient
+    ApiClient-->PaymentRemoteDataSourceImpl: Throw Exception
+    deactivate ApiClient
+    PaymentRemoteDataSourceImpl-->PaymentRepositoryImpl: Throw SubscriptionException
+    deactivate PaymentRemoteDataSourceImpl
+    PaymentRepositoryImpl->PaymentRepositoryImpl: handleException()
+    PaymentRepositoryImpl-->PaymentStatusUseCase: Result.failure(failure)
+    deactivate PaymentRepositoryImpl
+    PaymentStatusUseCase-->PaymentStatusCubit: Result.failure(failure)
+    deactivate PaymentStatusUseCase
+    PaymentStatusCubit->PaymentStatusCubit: Emit failure state
+    PaymentStatusCubit-->PaymentStatusPage: PaymentStatusState.failure(failure)
+    deactivate PaymentStatusCubit
+end
+
+deactivate PaymentStatusPage

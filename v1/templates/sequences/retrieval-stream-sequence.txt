@@ -1,0 +1,68 @@
+title Retrieval + Stream Sequence (Rs) - Attendance / Attendance / List
+
+actor User
+participant AttendanceListPage
+participant AttendanceListCubit
+participant AttendanceListUseCase
+participant AttendanceRepositoryImpl
+participant AttendanceRemoteDataSourceImpl
+participant ApiClient
+
+entryspacing 0.5
+AttendanceListPage->AttendanceListPage: Compose UI + Logic
+activate AttendanceListPage
+AttendanceListPage->AttendanceListCubit: Create AttendanceListCubit
+activate AttendanceListCubit
+AttendanceListCubit->AttendanceListCubit: Emit initial state
+AttendanceListCubit-->AttendanceListPage: AttendanceListState.initial()
+AttendanceListPage-->User: Attendance page is visible
+
+AttendanceListPage->AttendanceListCubit: watchAttendances()
+AttendanceListCubit->AttendanceListCubit: Emit loading state
+AttendanceListCubit-->AttendanceListPage: AttendanceListState.loading()
+
+AttendanceListCubit->AttendanceListUseCase: call()
+activate AttendanceListUseCase
+AttendanceListUseCase->AttendanceRepositoryImpl: watchAttendanceList()
+activate AttendanceRepositoryImpl
+AttendanceRepositoryImpl->AttendanceRemoteDataSourceImpl: watchAttendanceList()
+activate AttendanceRemoteDataSourceImpl
+AttendanceRemoteDataSourceImpl->ApiClient: stream<List>('/attendances/stream')
+activate ApiClient
+
+loop Every stream event
+    ApiClient-->AttendanceRemoteDataSourceImpl: List<Map<String, dynamic>>
+    deactivate ApiClient
+    AttendanceRemoteDataSourceImpl-->AttendanceRepositoryImpl: List<AttendanceDto>
+    deactivate AttendanceRemoteDataSourceImpl
+    AttendanceRepositoryImpl->AttendanceRepositoryImpl: map dto.toEntity()
+    AttendanceRepositoryImpl-->AttendanceListUseCase: Result.success(List<AttendanceEntity>)
+    deactivate AttendanceRepositoryImpl
+    AttendanceListUseCase-->AttendanceListCubit: Result.success(data)
+    deactivate AttendanceListUseCase
+    AttendanceListCubit->AttendanceListCubit: Emit loaded state
+    AttendanceListCubit-->AttendanceListPage: AttendanceListState.loaded(data)
+    deactivate AttendanceListCubit
+end
+
+alt Stream throws exception
+    activate AttendanceListCubit
+    activate AttendanceListUseCase
+    activate AttendanceRepositoryImpl
+    activate AttendanceRemoteDataSourceImpl
+    activate ApiClient
+    ApiClient-->AttendanceRemoteDataSourceImpl: Throw Exception
+    deactivate ApiClient
+    AttendanceRemoteDataSourceImpl-->AttendanceRepositoryImpl: Throw Exception
+    deactivate AttendanceRemoteDataSourceImpl
+    AttendanceRepositoryImpl->AttendanceRepositoryImpl: handleException()
+    AttendanceRepositoryImpl-->AttendanceListUseCase: Result.failure(failure)
+    deactivate AttendanceRepositoryImpl
+    AttendanceListUseCase-->AttendanceListCubit: Result.failure(failure)
+    deactivate AttendanceListUseCase
+    AttendanceListCubit->AttendanceListCubit: Emit failure state
+    AttendanceListCubit-->AttendanceListPage: AttendanceListState.failure(failure)
+    deactivate AttendanceListCubit
+end
+
+deactivate AttendanceListPage

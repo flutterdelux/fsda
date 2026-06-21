@@ -1,0 +1,61 @@
+title Retrieval + Cache Sequence (Rc) - Settings / Theme / Mode
+
+actor User
+participant ThemeModePage
+participant ThemeModeCubit
+participant ThemeModeLoadUseCase
+participant ThemeRepositoryImpl
+participant ThemeLocalDataSourceImpl
+participant LocalStorage
+
+entryspacing 0.5
+ThemeModePage->ThemeModePage: Compose UI + Logic
+activate ThemeModePage
+ThemeModePage->ThemeModeCubit: Create ThemeModeCubit
+activate ThemeModeCubit
+ThemeModeCubit-->ThemeModePage: Initial state (default mode)
+ThemeModePage-->User: Theme mode page is visible
+
+ThemeModePage->ThemeModeCubit: getThemeMode()
+ThemeModeCubit->ThemeModeLoadUseCase: call()
+activate ThemeModeLoadUseCase
+ThemeModeLoadUseCase->ThemeRepositoryImpl: getThemeMode()
+activate ThemeRepositoryImpl
+ThemeRepositoryImpl->ThemeLocalDataSourceImpl: getThemeMode()
+activate ThemeLocalDataSourceImpl
+ThemeLocalDataSourceImpl->LocalStorage: read('app_theme_mode')
+activate LocalStorage
+LocalStorage-->ThemeLocalDataSourceImpl: String?
+deactivate LocalStorage
+
+alt parse success
+    ThemeLocalDataSourceImpl-->ThemeRepositoryImpl: themeModeString
+    deactivate ThemeLocalDataSourceImpl
+    ThemeRepositoryImpl->ThemeRepositoryImpl: AppThemeModeConverter.fromJson(themeModeString)
+    ThemeRepositoryImpl-->ThemeModeLoadUseCase: Result.success(AppThemeMode)
+    deactivate ThemeRepositoryImpl
+else parse/storage exception
+    activate ThemeRepositoryImpl
+    activate ThemeLocalDataSourceImpl
+    ThemeLocalDataSourceImpl-->ThemeRepositoryImpl: Throw Exception
+    deactivate ThemeLocalDataSourceImpl
+    ThemeRepositoryImpl->ThemeRepositoryImpl: handleException()
+    ThemeRepositoryImpl-->ThemeModeLoadUseCase: Result.failure(failure)
+    deactivate ThemeRepositoryImpl
+end
+
+ThemeModeLoadUseCase-->ThemeModeCubit: Forward Result
+deactivate ThemeModeLoadUseCase
+
+alt Result.Success
+    ThemeModeCubit->ThemeModeCubit: Emit mode
+    ThemeModeCubit-->ThemeModePage: Update selected mode
+    deactivate ThemeModeCubit
+else Result.Failure
+    activate ThemeModeCubit
+    ThemeModeCubit->ThemeModeCubit: Keep previous state
+    ThemeModeCubit-->ThemeModePage: Keep selected mode
+    deactivate ThemeModeCubit
+end
+
+deactivate ThemeModePage

@@ -1,0 +1,72 @@
+title Mutation + Param Sequence (Mp) - Finance / Wallet / Delete
+
+actor User
+participant WalletPage
+participant WalletDeleteCubit
+participant WalletDeleteUseCase
+participant WalletRepositoryImpl
+participant WalletRemoteDataSourceImpl
+participant ApiClient
+
+entryspacing 0.5
+WalletPage->WalletPage: Compose UI + Logic
+activate WalletPage
+WalletPage->WalletDeleteCubit: Create WalletDeleteCubit
+activate WalletDeleteCubit
+WalletDeleteCubit->WalletDeleteCubit: Emit initial state
+WalletDeleteCubit-->WalletPage: WalletDeleteState.initial()
+WalletPage-->User: Wallet page is visible
+
+User->WalletPage: Tap item "Delete wallet"
+WalletPage->WalletPage: Show WalletDeleteDialog
+User->WalletPage: Confirm delete
+WalletPage->WalletDeleteCubit: deleteWallet(WalletDeleteParam(id))
+WalletDeleteCubit->WalletDeleteCubit: Emit loading state
+WalletDeleteCubit-->WalletPage: WalletDeleteState.loading()
+WalletPage->WalletPage: Show loading overlay
+
+WalletDeleteCubit->WalletDeleteUseCase: call(param)
+activate WalletDeleteUseCase
+WalletDeleteUseCase->WalletRepositoryImpl: deleteWallet(param)
+activate WalletRepositoryImpl
+WalletRepositoryImpl->WalletRepositoryImpl: WalletDeleteRequest.fromParam(param)
+WalletRepositoryImpl->WalletRemoteDataSourceImpl: deleteWallet(request)
+activate WalletRemoteDataSourceImpl
+WalletRemoteDataSourceImpl->ApiClient: DELETE /wallets/{request.id}
+activate ApiClient
+ApiClient-->WalletRemoteDataSourceImpl: ApiResponse
+deactivate ApiClient
+
+alt response.statusCode == 200
+    WalletRemoteDataSourceImpl-->WalletRepositoryImpl: Complete without payload
+    deactivate WalletRemoteDataSourceImpl
+    WalletRepositoryImpl-->WalletDeleteUseCase: Result.success(null)
+    deactivate WalletRepositoryImpl
+else response.statusCode != 200 or exception thrown
+    activate WalletRepositoryImpl
+    activate WalletRemoteDataSourceImpl
+    WalletRemoteDataSourceImpl->WalletRemoteDataSourceImpl: Throw FinanceException.fromApiResponse()
+    WalletRemoteDataSourceImpl-->WalletRepositoryImpl: Throw Exception
+    deactivate WalletRemoteDataSourceImpl
+    WalletRepositoryImpl->WalletRepositoryImpl: handleException()
+    WalletRepositoryImpl-->WalletDeleteUseCase: Result.failure(failure)
+    deactivate WalletRepositoryImpl
+end
+
+WalletDeleteUseCase-->WalletDeleteCubit: Forward Result
+deactivate WalletDeleteUseCase
+
+alt Result.Success
+    WalletDeleteCubit->WalletDeleteCubit: Emit success state
+    WalletDeleteCubit-->WalletPage: WalletDeleteState.success()
+    deactivate WalletDeleteCubit
+    WalletPage->WalletPage: showSuccessSnackBar()
+else Result.Failure
+    activate WalletDeleteCubit
+    WalletDeleteCubit->WalletDeleteCubit: Emit failure state
+    WalletDeleteCubit-->WalletPage: WalletDeleteState.failure(failure)
+    deactivate WalletDeleteCubit
+    WalletPage->WalletPage: showErrorSnackBar()
+end
+
+deactivate WalletPage

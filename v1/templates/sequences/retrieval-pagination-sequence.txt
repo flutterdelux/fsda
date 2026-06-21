@@ -1,0 +1,74 @@
+title Retrieval + Pagination Sequence (Rpag) - Location / City / List
+
+actor User
+participant CityListPage
+participant CityListCubit
+participant CityListUseCase
+participant CityRepositoryImpl
+participant CityRemoteDataSourceImpl
+participant ApiClient
+
+entryspacing 0.5
+CityListPage->CityListPage: Compose UI + Logic
+activate CityListPage
+CityListPage->CityListCubit: Create CityListCubit
+activate CityListCubit
+CityListCubit-->CityListPage: CityListState.initial()
+CityListPage-->User: City list page is visible
+
+CityListPage->CityListCubit: init()
+CityListCubit->CityListCubit: _getData(page: 1)
+CityListCubit-->CityListPage: state(isLoading: true, list: [])
+
+CityListCubit->CityListUseCase: call(CityListParam(page: 1, pageSize))
+activate CityListUseCase
+CityListUseCase->CityRepositoryImpl: getCityList(param)
+activate CityRepositoryImpl
+CityRepositoryImpl->CityRepositoryImpl: CityListRequest.fromParam(param)
+CityRepositoryImpl->CityRemoteDataSourceImpl: getCityList(request)
+activate CityRemoteDataSourceImpl
+CityRemoteDataSourceImpl->ApiClient: GET /cities?{page,pageSize}
+activate ApiClient
+ApiClient-->CityRemoteDataSourceImpl: ApiResponse
+deactivate ApiClient
+
+alt response.statusCode == 200 and response.data != null
+    CityRemoteDataSourceImpl->CityRemoteDataSourceImpl: CityListResponse.fromJson(response.body)
+    CityRemoteDataSourceImpl-->CityRepositoryImpl: List<CityDto>
+    deactivate CityRemoteDataSourceImpl
+    CityRepositoryImpl->CityRepositoryImpl: map dto.toEntity()
+    CityRepositoryImpl-->CityListUseCase: Result.success(List<CityEntity>)
+    deactivate CityRepositoryImpl
+else response invalid or exception thrown
+    activate CityRepositoryImpl
+    activate CityRemoteDataSourceImpl
+    CityRemoteDataSourceImpl->CityRemoteDataSourceImpl: throw TravelException.fromApiResponse()
+    CityRemoteDataSourceImpl-->CityRepositoryImpl: Throw Exception
+    deactivate CityRemoteDataSourceImpl
+    CityRepositoryImpl->CityRepositoryImpl: handleException()
+    CityRepositoryImpl-->CityListUseCase: Result.failure(failure)
+    deactivate CityRepositoryImpl
+end
+
+CityListUseCase-->CityListCubit: Forward Result
+deactivate CityListUseCase
+
+alt Result.Success
+    CityListCubit->CityListCubit: Append list and update hasReachedMax
+    CityListCubit-->CityListPage: state(isLoading: false, list, hasReachedMax)
+    deactivate CityListCubit
+    CityListPage->CityListPage: Show CityListContent
+else Result.Failure
+    activate CityListCubit
+    CityListCubit->CityListCubit: Keep current list and set failure
+    CityListCubit-->CityListPage: state(isLoading: false, failure)
+    deactivate CityListCubit
+    CityListPage->CityListPage: Show CityListErrorFeedback
+end
+
+User->CityListPage: Scroll near bottom
+CityListPage->CityListCubit: loadMore()
+activate CityListCubit
+CityListCubit->CityListCubit: _getData(page: state.param.page + 1)
+deactivate CityListCubit
+deactivate CityListPage
