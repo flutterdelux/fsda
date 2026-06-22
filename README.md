@@ -1,5 +1,8 @@
 # Feature Slice Driven Architecture (FSDA)
 
+Current Specification:  
+v1.0.0
+
 > A pragmatic, rule-driven Flutter architecture focused on consistency, discoverability, and long-term maintainability.
 
 &nbsp;

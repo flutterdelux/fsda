@@ -206,5 +206,3 @@ export '../../templates/blueprints/logic/mark_all_read/inbox_mark_all_read_state
 
 export '../../templates/blueprints/ui/mark_all_read/widgets/inbox_mark_all_read_popup_menu_item.dart';
 ```
-
-&nbsp;
