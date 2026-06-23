@@ -268,15 +268,15 @@ extension AppThemeModeX on AppThemeMode {
 _modules/settings/lib/src/features/theme/theme_feature.dart_
 
 ```dart
-export '../../templates/blueprints/data/datasources/theme_local_data_source.dart';
-export '../../templates/blueprints/data/datasources/theme_local_data_source_impl.dart';
-export '../../templates/blueprints/data/repositories/theme_repository_impl.dart';
-export '../../templates/blueprints/domain/enums/app_theme_mode.dart';
-export '../../templates/blueprints/domain/repositories/theme_repository.dart';
-export '../../templates/blueprints/domain/usecases/theme_mode_load_use_case.dart';
-export '../../templates/blueprints/logic/mode/theme_mode_cubit.dart';
-export '../../templates/blueprints/ui/mode/views/theme_mode_view.dart';
-export '../../templates/blueprints/ui/mode/widgets/theme_mode_content.dart';
+export 'data/datasources/theme_local_data_source.dart';
+export 'data/datasources/theme_local_data_source_impl.dart';
+export 'data/repositories/theme_repository_impl.dart';
+export 'domain/enums/app_theme_mode.dart';
+export 'domain/repositories/theme_repository.dart';
+export 'domain/usecases/theme_mode_load_use_case.dart';
+export 'logic/mode/theme_mode_cubit.dart';
+export 'ui/mode/views/theme_mode_view.dart';
+export 'ui/mode/widgets/theme_mode_content.dart';
 ```
 
 &nbsp;

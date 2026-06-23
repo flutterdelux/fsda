@@ -431,7 +431,7 @@ fsda s create --m finance --f wallet --s delete --seq Mp
 
 CLI membaca:
 
-templates/blueprints/mutation-param-blueprint.md
+specs/v1/blueprints/mutation-param-blueprint.md
 
 lalu generate (tergantung template blueprint):
 

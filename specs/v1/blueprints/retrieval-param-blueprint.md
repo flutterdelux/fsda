@@ -489,19 +489,19 @@ class ProductDetailSkeleton extends StatelessWidget {
 _modules/product/lib/src/features/product/product_feature.dart_
 
 ```dart
-export '../../templates/blueprints/data/datasources/product_remote_data_source.dart';
-export '../../templates/blueprints/data/datasources/product_remote_data_source_impl.dart';
-export '../../templates/blueprints/data/repositories/product_repository_impl.dart';
-export '../../templates/blueprints/domain/entities/product_entity.dart';
-export '../../templates/blueprints/domain/params/product_detail_param.dart';
-export '../../templates/blueprints/domain/repositories/product_repository.dart';
-export '../../templates/blueprints/domain/usecases/product_detail_use_case.dart';
-export '../../templates/blueprints/logic/detail/product_detail_cubit.dart';
-export '../../templates/blueprints/logic/detail/product_detail_state.dart';
-export '../../templates/blueprints/ui/detail/views/product_detail_view.dart';
-export '../../templates/blueprints/ui/detail/widgets/product_detail_content.dart';
-export '../../templates/blueprints/ui/detail/widgets/product_detail_error.dart';
-export '../../templates/blueprints/ui/detail/widgets/product_detail_skeleton.dart';
+export 'data/datasources/product_remote_data_source.dart';
+export 'data/datasources/product_remote_data_source_impl.dart';
+export 'data/repositories/product_repository_impl.dart';
+export 'domain/entities/product_entity.dart';
+export 'domain/params/product_detail_param.dart';
+export 'domain/repositories/product_repository.dart';
+export 'domain/usecases/product_detail_use_case.dart';
+export 'logic/detail/product_detail_cubit.dart';
+export 'logic/detail/product_detail_state.dart';
+export 'ui/detail/views/product_detail_view.dart';
+export 'ui/detail/widgets/product_detail_content.dart';
+export 'ui/detail/widgets/product_detail_error.dart';
+export 'ui/detail/widgets/product_detail_skeleton.dart';
 ```
 
 &nbsp;

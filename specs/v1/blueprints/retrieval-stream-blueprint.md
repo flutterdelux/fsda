@@ -464,19 +464,19 @@ class AttendanceListItem extends StatelessWidget {
 _modules/attendance/lib/src/features/attendance/attendance_feature.dart_
 
 ```dart
-export '../../templates/blueprints/data/datasources/attendance_remote_data_source.dart';
-export '../../templates/blueprints/data/datasources/attendance_remote_data_source_impl.dart';
-export '../../templates/blueprints/data/repositories/attendance_repository_impl.dart';
-export '../../templates/blueprints/domain/entities/attendance_entity.dart';
-export '../../templates/blueprints/domain/repositories/attendance_repository.dart';
-export '../../templates/blueprints/domain/usecases/attendance_list_use_case.dart';
-export '../../templates/blueprints/logic/list/attendance_list_cubit.dart';
-export '../../templates/blueprints/logic/list/attendance_list_state.dart';
-export '../../templates/blueprints/ui/list/views/attendance_list_view.dart';
-export '../../templates/blueprints/ui/list/widgets/attendance_list_content.dart';
-export '../../templates/blueprints/ui/list/widgets/attendance_list_empty_feedback.dart';
-export '../../templates/blueprints/ui/list/widgets/attendance_list_error_feedback.dart';
-export '../../templates/blueprints/ui/list/widgets/attendance_list_skeleton.dart';
+export 'data/datasources/attendance_remote_data_source.dart';
+export 'data/datasources/attendance_remote_data_source_impl.dart';
+export 'data/repositories/attendance_repository_impl.dart';
+export 'domain/entities/attendance_entity.dart';
+export 'domain/repositories/attendance_repository.dart';
+export 'domain/usecases/attendance_list_use_case.dart';
+export 'logic/list/attendance_list_cubit.dart';
+export 'logic/list/attendance_list_state.dart';
+export 'ui/list/views/attendance_list_view.dart';
+export 'ui/list/widgets/attendance_list_content.dart';
+export 'ui/list/widgets/attendance_list_empty_feedback.dart';
+export 'ui/list/widgets/attendance_list_error_feedback.dart';
+export 'ui/list/widgets/attendance_list_skeleton.dart';
 ```
 
 &nbsp;

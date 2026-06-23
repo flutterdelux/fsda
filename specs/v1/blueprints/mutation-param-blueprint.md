@@ -257,20 +257,20 @@ class _Child extends StatelessWidget {
 _modules/finance/lib/src/features/wallet/wallet_feature.dart_
 
 ```dart
-export '../../templates/blueprints/data/datasources/wallet_remote_data_source.dart';
-export '../../templates/blueprints/data/datasources/wallet_remote_data_source_impl.dart';
-export '../../templates/blueprints/data/repositories/wallet_repository_impl.dart';
-export '../../templates/blueprints/data/requests/wallet_delete_request.dart';
+export 'data/datasources/wallet_remote_data_source.dart';
+export 'data/datasources/wallet_remote_data_source_impl.dart';
+export 'data/repositories/wallet_repository_impl.dart';
+export 'data/requests/wallet_delete_request.dart';
 
-export '../../templates/blueprints/domain/params/wallet_delete_param.dart';
-export '../../templates/blueprints/domain/repositories/wallet_repository.dart';
-export '../../templates/blueprints/domain/usecases/wallet_delete_use_case.dart';
+export 'domain/params/wallet_delete_param.dart';
+export 'domain/repositories/wallet_repository.dart';
+export 'domain/usecases/wallet_delete_use_case.dart';
 
-export '../../templates/blueprints/logic/delete/wallet_delete_cubit.dart';
-export '../../templates/blueprints/logic/delete/wallet_delete_state.dart';
+export 'logic/delete/wallet_delete_cubit.dart';
+export 'logic/delete/wallet_delete_state.dart';
 
-export '../../templates/blueprints/ui/delete/widgets/wallet_delete_dialog.dart';
-export '../../templates/blueprints/ui/delete/widgets/wallet_delete_popup_menu_item.dart';
+export 'ui/delete/widgets/wallet_delete_dialog.dart';
+export 'ui/delete/widgets/wallet_delete_popup_menu_item.dart';
 ```
 
 &nbsp;

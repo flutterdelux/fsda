@@ -482,28 +482,28 @@ class QueueTakeSkeleton extends StatelessWidget {
 _modules/queue/lib/src/features/queue/queue_feature.dart_
 
 ```dart
-export '../../templates/blueprints/data/converters/queue_status_converter.dart';
-export '../../templates/blueprints/data/datasources/queue_remote_data_source.dart';
-export '../../templates/blueprints/data/datasources/queue_remote_data_source_impl.dart';
-export '../../templates/blueprints/data/dtos/queue_dto.dart';
-export '../../templates/blueprints/data/repositories/queue_repository_impl.dart';
-export '../../templates/blueprints/data/responses/queue_take_response.dart';
+export 'data/converters/queue_status_converter.dart';
+export 'data/datasources/queue_remote_data_source.dart';
+export 'data/datasources/queue_remote_data_source_impl.dart';
+export 'data/dtos/queue_dto.dart';
+export 'data/repositories/queue_repository_impl.dart';
+export 'data/responses/queue_take_response.dart';
 
-export '../../templates/blueprints/domain/entities/queue_entity.dart';
-export '../../templates/blueprints/domain/enums/queue_status.dart';
-export '../../templates/blueprints/domain/repositories/queue_repository.dart';
-export '../../templates/blueprints/domain/usecases/queue_take_use_case.dart';
+export 'domain/entities/queue_entity.dart';
+export 'domain/enums/queue_status.dart';
+export 'domain/repositories/queue_repository.dart';
+export 'domain/usecases/queue_take_use_case.dart';
 
-export '../../templates/blueprints/logic/take/queue_take_cubit.dart';
-export '../../templates/blueprints/logic/take/queue_take_state.dart';
+export 'logic/take/queue_take_cubit.dart';
+export 'logic/take/queue_take_state.dart';
 
-export '../../templates/blueprints/ui/shared/extensions/queue_status_x.dart';
-export '../../templates/blueprints/ui/take/views/queue_take_view.dart';
-export '../../templates/blueprints/ui/take/widgets/queue_take_button.dart';
-export '../../templates/blueprints/ui/take/widgets/queue_take_content.dart';
-export '../../templates/blueprints/ui/take/widgets/queue_take_error_feedback.dart';
-export '../../templates/blueprints/ui/take/widgets/queue_take_initial_feedback.dart';
-export '../../templates/blueprints/ui/take/widgets/queue_take_skeleton.dart';
+export 'ui/shared/extensions/queue_status_x.dart';
+export 'ui/take/views/queue_take_view.dart';
+export 'ui/take/widgets/queue_take_button.dart';
+export 'ui/take/widgets/queue_take_content.dart';
+export 'ui/take/widgets/queue_take_error_feedback.dart';
+export 'ui/take/widgets/queue_take_initial_feedback.dart';
+export 'ui/take/widgets/queue_take_skeleton.dart';
 ```
 
 &nbsp;

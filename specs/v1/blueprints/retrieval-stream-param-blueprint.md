@@ -612,19 +612,19 @@ class PaymentStatusSkeleton extends StatelessWidget {
 _modules/subscription/lib/src/features/payment/payment_feature.dart_
 
 ```dart
-export '../../templates/blueprints/data/datasources/payment_remote_data_source.dart';
-export '../../templates/blueprints/data/datasources/payment_remote_data_source_impl.dart';
-export '../../templates/blueprints/data/repositories/payment_repository_impl.dart';
-export '../../templates/blueprints/domain/entities/payment_entity.dart';
-export '../../templates/blueprints/domain/params/payment_status_param.dart';
-export '../../templates/blueprints/domain/repositories/payment_repository.dart';
-export '../../templates/blueprints/domain/usecases/payment_status_use_case.dart';
-export '../../templates/blueprints/logic/status/payment_status_cubit.dart';
-export '../../templates/blueprints/logic/status/payment_status_state.dart';
-export '../../templates/blueprints/ui/status/views/payment_status_view.dart';
-export '../../templates/blueprints/ui/status/widgets/payment_status_content.dart';
-export '../../templates/blueprints/ui/status/widgets/payment_status_error_feedback.dart';
-export '../../templates/blueprints/ui/status/widgets/payment_status_skeleton.dart';
+export 'data/datasources/payment_remote_data_source.dart';
+export 'data/datasources/payment_remote_data_source_impl.dart';
+export 'data/repositories/payment_repository_impl.dart';
+export 'domain/entities/payment_entity.dart';
+export 'domain/params/payment_status_param.dart';
+export 'domain/repositories/payment_repository.dart';
+export 'domain/usecases/payment_status_use_case.dart';
+export 'logic/status/payment_status_cubit.dart';
+export 'logic/status/payment_status_state.dart';
+export 'ui/status/views/payment_status_view.dart';
+export 'ui/status/widgets/payment_status_content.dart';
+export 'ui/status/widgets/payment_status_error_feedback.dart';
+export 'ui/status/widgets/payment_status_skeleton.dart';
 ```
 
 &nbsp;

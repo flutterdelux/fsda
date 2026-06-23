@@ -574,20 +574,20 @@ class DestinationPopularItem extends StatelessWidget {
 _modules/travel/lib/src/features/destination/destination_feature.dart_
 
 ```dart
-export '../../templates/blueprints/data/datasources/destination_remote_data_source.dart';
-export '../../templates/blueprints/data/datasources/destination_remote_data_source_impl.dart';
-export '../../templates/blueprints/data/repositories/destination_repository_impl.dart';
-export '../../templates/blueprints/domain/entities/destination_entity.dart';
-export '../../templates/blueprints/domain/repositories/destination_repository.dart';
-export '../../templates/blueprints/domain/usecases/destination_popular_use_case.dart';
-export '../../templates/blueprints/logic/popular/destination_popular_cubit.dart';
-export '../../templates/blueprints/logic/popular/destination_popular_state.dart';
-export '../../templates/blueprints/ui/popular/widgets/destination_popular_content.dart';
-export '../../templates/blueprints/ui/popular/widgets/destination_popular_empty_feedback.dart';
-export '../../templates/blueprints/ui/popular/widgets/destination_popular_error_feedback.dart';
-export '../../templates/blueprints/ui/popular/widgets/destination_popular_section.dart';
-export '../../templates/blueprints/ui/popular/widgets/destination_popular_skeleton.dart';
-export '../../templates/blueprints/ui/popular/widgets/parts/destination_popular_item.dart';
+export 'data/datasources/destination_remote_data_source.dart';
+export 'data/datasources/destination_remote_data_source_impl.dart';
+export 'data/repositories/destination_repository_impl.dart';
+export 'domain/entities/destination_entity.dart';
+export 'domain/repositories/destination_repository.dart';
+export 'domain/usecases/destination_popular_use_case.dart';
+export 'logic/popular/destination_popular_cubit.dart';
+export 'logic/popular/destination_popular_state.dart';
+export 'ui/popular/widgets/destination_popular_content.dart';
+export 'ui/popular/widgets/destination_popular_empty_feedback.dart';
+export 'ui/popular/widgets/destination_popular_error_feedback.dart';
+export 'ui/popular/widgets/destination_popular_section.dart';
+export 'ui/popular/widgets/destination_popular_skeleton.dart';
+export 'ui/popular/widgets/parts/destination_popular_item.dart';
 ```
 
 &nbsp;

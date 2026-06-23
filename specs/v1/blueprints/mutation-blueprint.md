@@ -194,15 +194,15 @@ class _Child extends StatelessWidget {
 _modules/inbox/lib/src/features/inbox/inbox_feature.dart_
 
 ```dart
-export '../../templates/blueprints/data/datasources/inbox_remote_data_source.dart';
-export '../../templates/blueprints/data/datasources/inbox_remote_data_source_impl.dart';
-export '../../templates/blueprints/data/repositories/inbox_repository_impl.dart';
+export 'data/datasources/inbox_remote_data_source.dart';
+export 'data/datasources/inbox_remote_data_source_impl.dart';
+export 'data/repositories/inbox_repository_impl.dart';
 
-export '../../templates/blueprints/domain/repositories/inbox_repository.dart';
-export '../../templates/blueprints/domain/usecases/inbox_mark_all_read_use_case.dart';
+export 'domain/repositories/inbox_repository.dart';
+export 'domain/usecases/inbox_mark_all_read_use_case.dart';
 
-export '../../templates/blueprints/logic/mark_all_read/inbox_mark_all_read_cubit.dart';
-export '../../templates/blueprints/logic/mark_all_read/inbox_mark_all_read_state.dart';
+export 'logic/mark_all_read/inbox_mark_all_read_cubit.dart';
+export 'logic/mark_all_read/inbox_mark_all_read_state.dart';
 
-export '../../templates/blueprints/ui/mark_all_read/widgets/inbox_mark_all_read_popup_menu_item.dart';
+export 'ui/mark_all_read/widgets/inbox_mark_all_read_popup_menu_item.dart';
 ```

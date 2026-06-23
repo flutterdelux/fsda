@@ -542,20 +542,20 @@ class CityListItem extends StatelessWidget {
 _modules/location/lib/src/features/city/city_feature.dart_
 
 ```dart
-export '../../templates/blueprints/data/datasources/city_remote_data_source.dart';
-export '../../templates/blueprints/data/datasources/city_remote_data_source_impl.dart';
-export '../../templates/blueprints/data/repositories/city_repository_impl.dart';
-export '../../templates/blueprints/domain/entities/city_entity.dart';
-export '../../templates/blueprints/domain/params/city_list_param.dart';
-export '../../templates/blueprints/domain/repositories/city_repository.dart';
-export '../../templates/blueprints/domain/usecases/city_list_use_case.dart';
-export '../../templates/blueprints/logic/list/city_list_cubit.dart';
-export '../../templates/blueprints/logic/list/city_list_state.dart';
-export '../../templates/blueprints/ui/list/views/city_list_view.dart';
-export '../../templates/blueprints/ui/list/widgets/city_list_content.dart';
-export '../../templates/blueprints/ui/list/widgets/city_list_empty_feedback.dart';
-export '../../templates/blueprints/ui/list/widgets/city_list_error_feedback.dart';
-export '../../templates/blueprints/ui/list/widgets/city_list_skeleton.dart';
+export 'data/datasources/city_remote_data_source.dart';
+export 'data/datasources/city_remote_data_source_impl.dart';
+export 'data/repositories/city_repository_impl.dart';
+export 'domain/entities/city_entity.dart';
+export 'domain/params/city_list_param.dart';
+export 'domain/repositories/city_repository.dart';
+export 'domain/usecases/city_list_use_case.dart';
+export 'logic/list/city_list_cubit.dart';
+export 'logic/list/city_list_state.dart';
+export 'ui/list/views/city_list_view.dart';
+export 'ui/list/widgets/city_list_content.dart';
+export 'ui/list/widgets/city_list_empty_feedback.dart';
+export 'ui/list/widgets/city_list_error_feedback.dart';
+export 'ui/list/widgets/city_list_skeleton.dart';
 ```
 
 &nbsp;

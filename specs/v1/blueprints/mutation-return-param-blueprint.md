@@ -551,22 +551,22 @@ class TaskTitleField extends StatelessWidget {
 _modules/task/lib/src/features/task/task_feature.dart_
 
 ```dart
-export '../../templates/blueprints/data/datasources/task_remote_data_source.dart';
-export '../../templates/blueprints/data/datasources/task_remote_data_source_impl.dart';
-export '../../templates/blueprints/data/repositories/task_repository_impl.dart';
+export 'data/datasources/task_remote_data_source.dart';
+export 'data/datasources/task_remote_data_source_impl.dart';
+export 'data/repositories/task_repository_impl.dart';
 
-export '../../templates/blueprints/domain/params/task_create_param.dart';
-export '../../templates/blueprints/domain/repositories/task_repository.dart';
-export '../../templates/blueprints/domain/usecases/task_create_use_case.dart';
+export 'domain/params/task_create_param.dart';
+export 'domain/repositories/task_repository.dart';
+export 'domain/usecases/task_create_use_case.dart';
 
-export '../../templates/blueprints/logic/create/task_create_cubit.dart';
-export '../../templates/blueprints/logic/create/task_create_form_cubit.dart';
-export '../../templates/blueprints/logic/create/task_create_form_state.dart';
-export '../../templates/blueprints/logic/create/task_create_state.dart';
+export 'logic/create/task_create_cubit.dart';
+export 'logic/create/task_create_form_cubit.dart';
+export 'logic/create/task_create_form_state.dart';
+export 'logic/create/task_create_state.dart';
 
-export '../../templates/blueprints/ui/create/views/task_create_view.dart';
-export '../../templates/blueprints/ui/create/widgets/task_create_button.dart';
-export '../../templates/blueprints/ui/create/widgets/task_create_form.dart';
+export 'ui/create/views/task_create_view.dart';
+export 'ui/create/widgets/task_create_button.dart';
+export 'ui/create/widgets/task_create_form.dart';
 ```
 
 &nbsp;

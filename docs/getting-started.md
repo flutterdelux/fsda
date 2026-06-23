@@ -183,7 +183,7 @@ Mutation + Param
 
 Contoh:
 
-* [Mutation Param Blueprint](../templates/blueprints/mutation-param-blueprint.md)
+* [Mutation Param Blueprint](../specs/v1/blueprints/mutation-param-blueprint.md)
 
 Blueprint adalah template implementasi.
 

@@ -487,21 +487,21 @@ class NoteListSkeleton extends StatelessWidget {
 _modules/note/lib/src/features/note/note_feature.dart_
 
 ```dart
-export '../../templates/blueprints/data/datasources/local/note_local_data_source.dart';
-export '../../templates/blueprints/data/datasources/local/note_local_data_source_impl.dart';
-export '../../templates/blueprints/data/datasources/remote/note_remote_data_source.dart';
-export '../../templates/blueprints/data/datasources/remote/note_remote_data_source_impl.dart';
-export '../../templates/blueprints/data/repositories/note_repository_impl.dart';
-export '../../templates/blueprints/domain/entities/note_entity.dart';
-export '../../templates/blueprints/domain/repositories/note_repository.dart';
-export '../../templates/blueprints/domain/usecases/note_list_use_case.dart';
-export '../../templates/blueprints/logic/list/note_list_cubit.dart';
-export '../../templates/blueprints/logic/list/note_list_state.dart';
-export '../../templates/blueprints/ui/list/views/note_list_view.dart';
-export '../../templates/blueprints/ui/list/widgets/note_list_content.dart';
-export '../../templates/blueprints/ui/list/widgets/note_list_empty_feedback.dart';
-export '../../templates/blueprints/ui/list/widgets/note_list_error_feedback.dart';
-export '../../templates/blueprints/ui/list/widgets/note_list_skeleton.dart';
+export 'data/datasources/local/note_local_data_source.dart';
+export 'data/datasources/local/note_local_data_source_impl.dart';
+export 'data/datasources/remote/note_remote_data_source.dart';
+export 'data/datasources/remote/note_remote_data_source_impl.dart';
+export 'data/repositories/note_repository_impl.dart';
+export 'domain/entities/note_entity.dart';
+export 'domain/repositories/note_repository.dart';
+export 'domain/usecases/note_list_use_case.dart';
+export 'logic/list/note_list_cubit.dart';
+export 'logic/list/note_list_state.dart';
+export 'ui/list/views/note_list_view.dart';
+export 'ui/list/widgets/note_list_content.dart';
+export 'ui/list/widgets/note_list_empty_feedback.dart';
+export 'ui/list/widgets/note_list_error_feedback.dart';
+export 'ui/list/widgets/note_list_skeleton.dart';
 ```
 
 &nbsp;

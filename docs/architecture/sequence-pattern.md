@@ -16,17 +16,17 @@ Sequence ada untuk memastikan seluruh implementasi feature slice mengikuti pola 
 
 | Code | Sequence                      | Module       | Feature     | Feature Slice | Example Method           | Blueprint                                                             |
 | ---- | ----------------------------- | ------------ | ----------- | ------------- | ------------------------ | --------------------------------------------------------------------- |
-| M    | Mutation                      | inbox        | inbox       | mark_all_read | markAllInboxRead()       | [Open](../../templates/blueprints/mutation-blueprint.md)              |
-| Mp   | Mutation + Param              | finance      | wallet      | delete        | deleteWallet()           | [Open](../../templates/blueprints/mutation-param-blueprint.md)        |
-| Mr   | Mutation + Return             | queue        | queue       | take          | takeQueue()              | [Open](../../templates/blueprints/mutation-return-blueprint.md)       |
-| Mrp  | Mutation + Return + Param     | task         | task        | create        | createTask()             | [Open](../../templates/blueprints/mutation-return-param-blueprint.md) |
-| R    | Retrieval                     | travel       | destination | popular       | getPopularDestination()  | [Open](../../templates/blueprints/retrieval-blueprint.md)             |
-| Rp   | Retrieval + Param             | product      | product     | detail        | getProductDetail()       | [Open](../../templates/blueprints/retrieval-param-blueprint.md)       |
-| Rpag | Retrieval + Pagination        | location     | city        | list          | getCityList()            | [Open](../../templates/blueprints/retrieval-pagination-blueprint.md)  |
-| Rs   | Retrieval + Stream            | attendance   | attendance  | list          | watchAttendanceList()    | [Open](../../templates/blueprints/retrieval-stream-blueprint.md)      |
-| Rsp  | Retrieval + Stream + Param    | subscription | payment     | status        | watchPaymentStatus()     | [Open](../../templates/blueprints/retrieval-stream-param-blueprint.md)|
-| Rc   | Retrieval + Cache             | settings     | theme       | mode          | getThemeMode()           | [Open](../../templates/blueprints/retrieval-cache-blueprint.md)       |
-| Rloc | Retrieval + Local First       | note         | note        | list          | getNoteList()            | [Open](../../templates/blueprints/retrieval-local-first-blueprint.md) |
+| M    | Mutation                      | inbox        | inbox       | mark_all_read | markAllInboxRead()       | [Open](../../specs/v1/blueprints/mutation-blueprint.md)              |
+| Mp   | Mutation + Param              | finance      | wallet      | delete        | deleteWallet()           | [Open](../../specs/v1/blueprints/mutation-param-blueprint.md)        |
+| Mr   | Mutation + Return             | queue        | queue       | take          | takeQueue()              | [Open](../../specs/v1/blueprints/mutation-return-blueprint.md)       |
+| Mrp  | Mutation + Return + Param     | task         | task        | create        | createTask()             | [Open](../../specs/v1/blueprints/mutation-return-param-blueprint.md) |
+| R    | Retrieval                     | travel       | destination | popular       | getPopularDestination()  | [Open](../../specs/v1/blueprints/retrieval-blueprint.md)             |
+| Rp   | Retrieval + Param             | product      | product     | detail        | getProductDetail()       | [Open](../../specs/v1/blueprints/retrieval-param-blueprint.md)       |
+| Rpag | Retrieval + Pagination        | location     | city        | list          | getCityList()            | [Open](../../specs/v1/blueprints/retrieval-pagination-blueprint.md)  |
+| Rs   | Retrieval + Stream            | attendance   | attendance  | list          | watchAttendanceList()    | [Open](../../specs/v1/blueprints/retrieval-stream-blueprint.md)      |
+| Rsp  | Retrieval + Stream + Param    | subscription | payment     | status        | watchPaymentStatus()     | [Open](../../specs/v1/blueprints/retrieval-stream-param-blueprint.md)|
+| Rc   | Retrieval + Cache             | settings     | theme       | mode          | getThemeMode()           | [Open](../../specs/v1/blueprints/retrieval-cache-blueprint.md)       |
+| Rloc | Retrieval + Local First       | note         | note        | list          | getNoteList()            | [Open](../../specs/v1/blueprints/retrieval-local-first-blueprint.md) |
 
 ### Supported Slice Sequences
 
