@@ -1,57 +1,99 @@
-import 'package:args/args.dart';
+import 'dart:io';
 
-const String version = '0.0.1';
+import 'package:args/command_runner.dart';
+import 'package:fsda_cli/commands/add_command.dart';
+import 'package:fsda_cli/commands/gen_command.dart';
+import 'package:fsda_cli/commands/init_command.dart';
+import 'package:fsda_cli/commands/reg_command.dart';
+import 'package:fsda_cli/generators/app_generator.dart';
+import 'package:fsda_cli/generators/feature_generator.dart';
+import 'package:fsda_cli/generators/infra_generator.dart';
+import 'package:fsda_cli/generators/module_generator.dart';
+import 'package:fsda_cli/generators/package_generator.dart';
+import 'package:fsda_cli/generators/slice_generator.dart';
+import 'package:fsda_cli/services/file_service.dart';
+import 'package:fsda_cli/services/file_system_seed_service.dart';
+import 'package:fsda_cli/services/hook_service.dart';
+import 'package:fsda_cli/services/logger_service.dart';
+import 'package:fsda_cli/services/process_service.dart';
+import 'package:fsda_cli/services/pubspec_service.dart';
+import 'package:fsda_cli/services/sdk_version_service.dart';
+import 'package:fsda_cli/services/zip_seed_service.dart';
+import 'package:path/path.dart' as p;
 
-ArgParser buildParser() {
-  return ArgParser()
-    ..addFlag(
-      'help',
-      abbr: 'h',
-      negatable: false,
-      help: 'Print this usage information.',
+const String version = '0.0.2';
+
+void main(List<String> arguments) async {
+  final sdk = SdkVersionService();
+
+  // Initialize services
+  final logger = LoggerService();
+  final processService = ProcessService();
+  final pubspecService = PubspecService(sdk: sdk, process: processService);
+  final fileService = FileService();
+  final hookService = HookService(processService);
+  final seedService = ZipSeedService(zipPath: zipPath, zipDecoder: zipDecoder);
+
+  // Initialize generators
+  final packageGenerator = PackageGenerator(
+    logger: logger,
+    pubspecService: pubspecService,
+    fileService: fileService,
+    hookService: hookService,
+    seedService: seedService,
+  );
+  final infraGenerator = InfraGenerator(
+    logger: logger,
+    pubspecService: pubspecService,
+    fileService: fileService,
+    hookService: hookService,
+    seedService: seedService,
+  );
+  final appGenerator = AppGenerator(logger: logger);
+  final moduleGenerator = ModuleGenerator(logger: logger);
+  final featureGenerator = FeatureGenerator(logger: logger);
+  final sliceGenerator = SliceGenerator(logger: logger);
+
+  // Initialize command runner
+  final runner = CommandRunner('fsda', 'Feature Slice Driven Architecture CLI')
+    ..addCommand(InitCommand(generator: packageGenerator, logger: logger))
+    ..addCommand(
+      AddCommand(
+        packageGenerator: packageGenerator,
+        logger: logger,
+        infraGenerator: infraGenerator,
+      ),
     )
-    ..addFlag(
-      'verbose',
-      abbr: 'v',
-      negatable: false,
-      help: 'Show additional command output.',
+    ..addCommand(
+      GenCommand(
+        appGenerator: appGenerator,
+        moduleGenerator: moduleGenerator,
+        featureGenerator: featureGenerator,
+        sliceGenerator: sliceGenerator,
+        logger: logger,
+      ),
     )
-    ..addFlag('version', negatable: false, help: 'Print the tool version.');
-}
+    ..addCommand(RegCommand(logger: logger));
 
-void printUsage(ArgParser argParser) {
-  print('Usage: dart fsda_cli.dart <flags> [arguments]');
-  print(argParser.usage);
-}
+  runner.argParser.addFlag(
+    'version',
+    negatable: false,
+    help: 'Print the tool version.',
+  );
 
-void main(List<String> arguments) {
-  final ArgParser argParser = buildParser();
   try {
-    final ArgResults results = argParser.parse(arguments);
-    bool verbose = false;
-
-    // Process the parsed arguments.
-    if (results.flag('help')) {
-      printUsage(argParser);
+    final parsedArgs = runner.argParser.parse(arguments);
+    if (parsedArgs.flag('version')) {
+      logger.log('fsda version: $version');
       return;
     }
-    if (results.flag('version')) {
-      print('fsda_cli version: $version');
-      return;
-    }
-    if (results.flag('verbose')) {
-      verbose = true;
-    }
 
-    // Act on the arguments provided.
-    print('Positional arguments: ${results.rest}');
-    if (verbose) {
-      print('[VERBOSE] All arguments: ${results.arguments}');
-    }
-  } on FormatException catch (e) {
-    // Print usage information if an invalid argument was provided.
-    print(e.message);
-    print('');
-    printUsage(argParser);
+    await runner.run(arguments);
+  } on UsageException catch (e) {
+    logger.error(e.message);
+    logger.log('');
+    logger.log(e.usage);
+  } catch (e) {
+    logger.error('An unexpected error occurred: $e');
   }
 }

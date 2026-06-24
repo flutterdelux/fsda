@@ -1,0 +1,12 @@
+{
+    "dependencies": [
+        "connectivity_plus"
+    ],
+    "dev_dependencies": [
+        "lints",
+        "test"
+    ],
+    "post_hooks": [
+        "dart pub get"
+    ]
+}

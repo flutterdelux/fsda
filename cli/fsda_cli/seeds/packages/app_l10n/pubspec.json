@@ -1,0 +1,27 @@
+{
+    "name": "app_l10n",
+    "description": "Localization package for the app",
+    "version": "0.0.1",
+    "publish_to": "none",
+    "dependencies_manual": [
+        "  flutter:",
+        "    sdk: flutter",
+        "  flutter_localizations:",
+        "    sdk: flutter"
+    ],
+    "dev_dependencies": [
+        "flutter_lints",
+        "build_runner"
+    ],
+    "dev_dependencies_manual": [
+        "  flutter_test:",
+        "    sdk: flutter"
+    ],
+    "flutter": [
+        "  generate: true"
+    ],
+    "post_hooks": [
+        "dart pub get",
+        "flutter gen-l10n"
+    ]
+}
