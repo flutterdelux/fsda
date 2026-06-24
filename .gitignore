@@ -1,4 +1,6 @@
-v1/cli/.dart_tool/
+
 example/app_example/
 example/packages/
 example/scripts/
+
+cli/seeds/
