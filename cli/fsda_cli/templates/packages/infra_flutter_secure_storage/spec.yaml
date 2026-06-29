@@ -1,0 +1,7 @@
+dependencies:
+  - flutter_secure_storage
+
+dev_dependencies:
+  - lints
+  - test
+

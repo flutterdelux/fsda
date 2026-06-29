@@ -1,0 +1,6 @@
+dependencies:
+  - connectivity_plus
+
+dev_dependencies:
+  - lints
+  - test

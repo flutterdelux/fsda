@@ -3,7 +3,8 @@ include: package:lints/recommended.yaml
 analyzer:
   exclude:
     - "assets/generators/app/**"
-    - "seeds/**"
+    - "templates/**"
+    - "bricks/**"
   language:
     # Forces you to explicitly cast 'dynamic' types. Prevents hidden runtime crashes.
     # Bad:  int x = json['id'];         (json['id'] is dynamic)

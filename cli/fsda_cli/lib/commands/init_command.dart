@@ -1,12 +1,19 @@
 import 'package:args/command_runner.dart';
 
-import '../generators/package_generator.dart';
-import '../models/generation_result.dart';
+import '../generators/init_generator.dart';
 import '../services/logger_service.dart';
+import '../services/workspace_service.dart';
 
 class InitCommand extends Command {
-  final PackageGenerator generator;
+  final InitGenerator initGenerator;
   final LoggerService logger;
+  final WorkspaceService workspaceService;
+
+  InitCommand({
+    required this.initGenerator,
+    required this.logger,
+    required this.workspaceService,
+  });
 
   @override
   final String name = 'init';
@@ -14,25 +21,23 @@ class InitCommand extends Command {
   @override
   final String description = 'Initialize package base';
 
-  InitCommand({required this.generator, required this.logger});
+  @override
+  String get invocation => 'fsda init';
 
   @override
   Future<void> run() async {
-    final result = await Future.wait([
-      generator.generate({'name': 'app_core'}),
-      generator.generate({'name': 'app_l10n'}),
-      generator.generate({'name': 'app_ui'}),
-    ]);
+    workspaceService.ensureInsideWorkspace(usage);
 
-    final allSuccess = result.every(
-      (r) => r.when(failure: (_) => false, success: (_, _) => true),
-    );
-    if (allSuccess) {
-      logger.success('All base packages generated successfully.');
-    } else {
-      for (final r in result) {
-        r.when(success: (_, _) {}, failure: (message) => logger.error(message));
-      }
+    final args = argResults!.rest;
+
+    if (args.isNotEmpty) {
+      throw UsageException(
+        'This command does not accept any arguments.\n'
+        'Use the standard format: fsda init',
+        usage,
+      );
     }
+
+    await initGenerator.generate();
   }
 }

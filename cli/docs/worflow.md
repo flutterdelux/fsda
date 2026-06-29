@@ -4,30 +4,12 @@ FSDA workflow with CLI for Development Speed, Clean code, and maintainability.
 
 ## Create Workspace
 
-```bash
-fsda workspace create <workspace_name>
-```
-
-generate:
-
-```text
-apps/
-modules/
-packages/
-```
-
-then: 
-
-```bash
-cd <workspace_name>
-```
-
-&nbsp;
+Manually create workspace folder.
 
 ## Setup Packages
 
 ```bash
-fsda package init
+fsda init
 ```
 
 ```bash

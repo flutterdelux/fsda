@@ -1,0 +1,6 @@
+dependencies:
+  - hive
+
+dev_dependencies:
+  - lints
+  - test

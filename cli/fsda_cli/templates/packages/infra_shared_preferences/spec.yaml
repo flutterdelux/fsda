@@ -1,0 +1,6 @@
+dependencies:
+  - shared_preferences
+
+dev_dependencies:
+  - lints
+  - test

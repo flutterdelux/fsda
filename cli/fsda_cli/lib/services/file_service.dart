@@ -1,30 +1,67 @@
+import 'dart:convert';
 import 'dart:io';
 
-import 'package:path/path.dart' as p;
+import 'sdk_service.dart';
 
 class FileService {
-  Future<void> copyDirectory({
-    required Directory source,
-    required Directory target,
+  final SdkService sdkService;
+
+  const FileService({required this.sdkService});
+
+  Future<void> updateFile({
+    required String path,
+    bool Function(String content)? cancelWhen,
+    void Function(List<String> lines)? updateLines,
   }) async {
-    if (!await source.exists()) {
-      throw Exception('Source directory not found: ${source.path}');
+    final barrelFile = File(path);
+
+    final content = await barrelFile.readAsString();
+    if (cancelWhen != null && cancelWhen(content)) {
+      throw Exception('Update canceled: condition met for file $path');
     }
 
-    await target.create(recursive: true);
+    final lines = content.split('\n');
 
-    await for (final entity in source.list()) {
-      final name = p.basename(entity.path);
+    if (updateLines != null) {
+      updateLines(lines);
+    }
 
-      final targetPath = p.join(target.path, name);
+    await barrelFile.writeAsString('${lines.join('\n')}\n');
+  }
 
-      if (entity is File) {
-        await File(targetPath).create(recursive: true);
+  Future<void> generateTemplate({
+    required String path,
+    required Map<String, List<int>> files,
+  }) async {
+    final targetDir = Directory(path);
+    if (!await targetDir.exists()) {
+      await targetDir.create(recursive: true);
+    }
 
-        await entity.copy(targetPath);
-      } else if (entity is Directory) {
-        await copyDirectory(source: entity, target: Directory(targetPath));
+    for (final entry in files.entries) {
+      final filePath = entry.key;
+      final fileBytes = entry.value;
+
+      if (filePath == 'spec.yaml') continue;
+
+      final targetFile = File('${targetDir.path}/$filePath');
+
+      if (filePath == 'pubspec.yaml') {
+        String content = utf8.decode(fileBytes);
+        final dartVersion = sdkService.dartVersion;
+
+        content = content.replaceFirst(
+          RegExp(r'environment:\r?\n\s+sdk:'),
+          'environment:\n  sdk: ^$dartVersion',
+        );
+
+        await targetFile.create(recursive: true);
+        await targetFile.writeAsString(content);
+        continue;
       }
+
+      await targetFile.create(recursive: true);
+      await targetFile.writeAsBytes(fileBytes);
     }
   }
 }

@@ -1,0 +1,6 @@
+dependencies:
+  - http
+
+dev_dependencies:
+  - lints
+  - test

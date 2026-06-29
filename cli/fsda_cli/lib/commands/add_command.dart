@@ -1,14 +1,20 @@
 import 'package:args/command_runner.dart';
 
-import '../generators/infra_generator.dart';
+import '../constants/cli_rules.dart';
 import '../generators/package_generator.dart';
-import '../models/generation_result.dart';
 import '../services/logger_service.dart';
+import '../services/workspace_service.dart';
 
 class AddCommand extends Command {
-  final PackageGenerator packageGenerator;
-  final InfraGenerator infraGenerator;
   final LoggerService logger;
+  final WorkspaceService workspaceService;
+  final PackageGenerator packageGenerator;
+
+  AddCommand({
+    required this.workspaceService,
+    required this.packageGenerator,
+    required this.logger,
+  });
 
   @override
   final String name = 'add';
@@ -16,40 +22,44 @@ class AddCommand extends Command {
   @override
   final String description = 'Add a package or infra adapter to the project.';
 
-  AddCommand({
-    required this.packageGenerator,
-    required this.infraGenerator,
-    required this.logger,
-  });
+  @override
+  String get invocation => 'fsda add <package|infra> <name>';
 
   @override
   Future<void> run() async {
+    workspaceService.ensureInsideWorkspace(usage);
+
     final args = argResults!.rest;
 
-    if (args.length < 2) {
+    if (args.length != 2) {
       throw UsageException('Usage: fsda add <package|infra> <name>', usage);
     }
 
-    final type = args[0]; // package | infra
+    final type = args[0];
     final name = args[1];
 
-    final generator = switch (type) {
-      'package' => packageGenerator,
-      'infra' => infraGenerator,
-      _ => null,
-    };
-
-    if (generator == null) {
-      logger.error(
-        'Generator "$type" not found. Available generators for add: package, infra.',
+    if (type != 'package' && type != 'infra') {
+      throw UsageException(
+        'Invalid type "$type". Use "package" or "infra".',
+        usage,
       );
-      return;
     }
 
-    final result = await generator.generate({'name': name});
-    result.when(
-      success: (message, _) => logger.success(message),
-      failure: (message) => logger.error(message),
-    );
+    final packageName = type == 'infra'
+        ? name.startsWith('infra_')
+              ? name
+              : 'infra_$name'
+        : name;
+
+    final nameRegExp = RegExp(CliRules.packageNamePattern);
+    if (!nameRegExp.hasMatch(packageName)) {
+      throw UsageException(
+        'Invalid name "$packageName".\n'
+        '${CliRules.packageNameRule}',
+        usage,
+      );
+    }
+
+    await packageGenerator.generate(packageName);
   }
 }

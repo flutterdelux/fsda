@@ -1,35 +1,95 @@
 import 'dart:io';
+
+import 'package:mason/mason.dart';
 import 'package:path/path.dart' as p;
-import '../models/generation_result.dart';
+
+import '../constants/cli_rules.dart';
+import '../generated/bricks/module_bundle.dart';
+import '../models/gen_argument.dart';
+import '../services/sdk_service.dart';
 import 'base_generator.dart';
 
-class ModuleGenerator extends BaseGenerator {
-  ModuleGenerator({required super.logger});
+const _dependencies = ['freezed_annotation', 'json_annotation', 'bloc'];
+
+const _devDependencies = [
+  'flutter_lints',
+  'build_runner',
+  'freezed',
+  'json_serializable',
+];
+
+const _postHooks = [
+  'flutter gen-l10n',
+  'dart run build_runner build --force-jit --delete-conflicting-outputs',
+];
+
+class ModuleGenerator extends BaseGenerator<void, GenArgument> {
+  final SdkService sdkService;
+
+  ModuleGenerator({
+    required this.sdkService,
+    required super.pubspecService,
+    required super.hookService,
+    required super.logger,
+    required super.fileService,
+  });
 
   @override
-  Future<GenerationResult> generate(Map<String, dynamic> args) async {
-    final moduleName = args['name'] as String?;
-    if (moduleName == null) {
-      return GenerationResult.failure(message: 'Module name is required');
+  Future<void> generate(GenArgument args) async {
+    final moduleName = args.module;
+
+    if (moduleName == null || moduleName.isEmpty) {
+      logger.error('Module name is required.');
+      return;
+    }
+
+    final nameRegExp = RegExp(CliRules.moduleNamePattern);
+    if (!nameRegExp.hasMatch(moduleName)) {
+      logger.error(
+        'Invalid module name "$moduleName".\n'
+        '${CliRules.moduleNameRule}',
+      );
+      return;
+    }
+
+    final targetDir = Directory(
+      p.join(Directory.current.path, 'modules', moduleName),
+    );
+
+    if (await targetDir.exists()) {
+      logger.error('Module "$moduleName" already exists at ${targetDir.path}');
+      return;
     }
 
     try {
-      // final assetsPath = await fsService.getAssetsPath();
-      // final sourceDir = p.join(assetsPath, 'module');
-      // final targetDir = Directory.current.path;
-
-      // await fsService.copyTemplateDirectory(
-      //   sourceDir: sourceDir,
-      //   targetDir: targetDir,
-      //   variables: {'module_name': moduleName, 'name': moduleName},
-      //   renderTemplate: render,
-      // );
-
-      return GenerationResult.success(
-        message: 'Module $moduleName generated successfully',
+      final progress = logger.progress(
+        'Baking module "$moduleName" via Mason...',
       );
+      final generator = await MasonGenerator.fromBundle(moduleBundle);
+      final target = DirectoryGeneratorTarget(targetDir);
+      final dartVersion = sdkService.dartVersion;
+
+      final generatedFiles = await generator.generate(
+        target,
+        vars: <String, dynamic>{'module': moduleName, 'dart_sdk': dartVersion},
+      );
+      progress.complete(
+        'Baked ${generatedFiles.length} files into modules/$moduleName',
+      );
+
+      final templateSuccess = await generateTemplatePipeline(
+        name: moduleName,
+        targetDir: targetDir,
+        dependencies: _dependencies,
+        devDependencies: _devDependencies,
+        postHooks: _postHooks,
+      );
+      if (!templateSuccess) return;
+
+      logger.success('Module "$moduleName" created successfully');
     } catch (e) {
-      return GenerationResult.failure(message: 'Failed to generate module: $e');
+      logger.error('$e');
+      return;
     }
   }
 }

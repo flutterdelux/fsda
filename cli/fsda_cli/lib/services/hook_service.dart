@@ -1,21 +1,25 @@
 import 'process_service.dart';
 
 class HookService {
-  final ProcessService process;
+  final ProcessService processService;
+  const HookService({required this.processService});
 
-  HookService(this.process);
-
-  Future<void> run(List<String> hooks, {required String cwd}) async {
+  Future<void> runHook({
+    required List<String> hooks,
+    required String workingDirectory,
+  }) async {
     for (final hook in hooks) {
-      await _execute(hook, cwd);
+      if (hook.trim().isEmpty) continue;
+
+      final hookName = hook.split(' ').length > 3
+          ? '${hook.split(' ').take(3).join(' ')} ...'
+          : hook;
+
+      await processService.runCommandString(
+        label: 'Run Hook: $hookName',
+        commandString: hook,
+        workingDirectory: workingDirectory,
+      );
     }
-  }
-
-  Future<void> _execute(String hook, String cwd) async {
-    final parts = hook.split(' ');
-    final command = parts.first;
-    final args = parts.sublist(1);
-
-    await process.run(command, args, workingDirectory: cwd);
   }
 }

@@ -1,0 +1,6 @@
+dependencies:
+  - dio
+
+dev_dependencies:
+  - lints
+  - test

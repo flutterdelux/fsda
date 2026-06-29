@@ -1,75 +1,68 @@
 import 'dart:io';
+
 import 'package:path/path.dart' as p;
-import '../models/generation_result.dart';
-import '../services/file_service.dart';
-import '../services/hook_service.dart';
-import '../services/pubspec_service.dart';
-import '../services/seed_service.dart';
+
+import '../generated/package_bundle.dart';
+import '../services/bundle_service.dart';
+import '../services/process_service.dart';
 import 'base_generator.dart';
 
-class PackageGenerator extends BaseGenerator {
-  final PubspecService pubspecService;
-  final FileService fileService;
-  final HookService hookService;
-  final SeedService seedService;
+class PackageGenerator extends BaseGenerator<bool, String> {
+  final ProcessService processService;
+  final BundleService bundleService;
 
   PackageGenerator({
     required super.logger,
-    required this.pubspecService,
-    required this.fileService,
-    required this.hookService,
-    required this.seedService,
+    required this.processService,
+    required super.pubspecService,
+    required super.fileService,
+    required super.hookService,
+    required this.bundleService,
   });
 
   @override
-  Future<GenerationResult> generate(Map<String, dynamic> args) async {
-    final packageName = args['name'] as String?;
-
-    if (packageName == null) {
-      return GenerationResult.failure(message: 'Package name is required');
+  Future<bool> generate(String packageName) async {
+    if (packageName.isEmpty) {
+      logger.error('Package name is required');
+      return false;
     }
 
+    final targetDir = Directory(
+      p.join(Directory.current.path, 'packages', packageName),
+    );
+
+    if (await targetDir.exists()) {
+      logger.error('Package "$packageName" already exists');
+      return false;
+    }
+
+    final targetPath = p.join(Directory.current.path, 'packages', packageName);
+
+    logger.info('---------- Creating package "$packageName" ----------');
+
     try {
-      final targetDir = Directory(
-        p.join(Directory.current.path, 'packages', packageName),
+      final template = await bundleService.unpackAndBake(
+        bundleMap: packageBundle,
+        templateName: packageName,
+        targetPath: targetPath,
       );
 
-      await targetDir.create(recursive: true);
-
-      // load seed
-      final seed = await seedService.loadPackage(packageName);
-
-      // copy files
-      await fileService.copyDirectory(
-        source: seed.workingDirectory,
-        target: targetDir,
-      );
-
-      // generate pubspec
-      await pubspecService.generatePubspec(
-        path: targetDir.path,
+      final templateSuccess = await generateTemplatePipeline(
         name: packageName,
-        dependencies: seed.spec.dependencies,
-        devDependencies: seed.spec.devDependencies,
-        dependenciesManual: seed.spec.dependenciesManual,
-        devDependenciesManual: seed.spec.devDependenciesManual,
+        targetDir: targetDir,
+        dependencies: template.spec.dependencies,
+        devDependencies: template.spec.devDependencies,
+        postHooks: template.spec.postHooks,
       );
+      if (!templateSuccess) return false;
 
-      // install dependencies
-      await pubspecService.installDependencies(
-        path: targetDir.path,
-        dependencies: seed.spec.dependencies,
-        devDependencies: seed.spec.devDependencies,
+      logger.success(
+        'Package $packageName has been successfully created at $targetPath',
       );
-
-      // run hooks
-      await hookService.run(seed.spec.postHooks, cwd: targetDir.path);
-
-      return GenerationResult.success(
-        message: 'Package $packageName created successfully',
-      );
+      return true;
     } catch (e) {
-      return GenerationResult.failure(message: 'Failed to create package: $e');
+      logger.error('$e');
+      return false;
     }
   }
 }
