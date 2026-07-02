@@ -7,6 +7,7 @@
 
 2. Run the Dart pub global activate command pointing to the local source directory:
    ```bash
+   mason bundle bricks/reg_module -t dart -o lib/generated/bricks
    mason bundle bricks/sequence_m -t dart -o lib/generated/bricks
    mason bundle bricks/feature -t dart -o lib/generated/bricks
    mason bundle bricks/module -t dart -o lib/generated/bricks

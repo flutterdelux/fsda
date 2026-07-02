@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:mason/mason.dart';
@@ -9,8 +10,14 @@ import '../generated/bricks/feature_bundle.dart';
 import '../models/gen_argument.dart';
 import 'base_generator.dart';
 
+const _postHooks = ['flutter gen-l10n'];
+
 class FeatureGenerator extends BaseGenerator<void, GenArgument> {
-  FeatureGenerator({required super.logger, required super.fileService});
+  FeatureGenerator({
+    required super.logger,
+    required super.fileService,
+    required super.hookService,
+  });
 
   @override
   Future<void> generate(GenArgument args) async {
@@ -100,6 +107,25 @@ class FeatureGenerator extends BaseGenerator<void, GenArgument> {
         'Baked ${generatedFiles.length} files into modules/$moduleName/src/features/$featureName',
       );
 
+      final arbInjected = await _injectArbBoundary(
+        moduleName: moduleName,
+        featureName: featureName,
+      );
+      if (arbInjected) {
+        final progress = logger.progress(
+          'Running post-hooks for "$featureName"',
+        );
+        await hookService!.runHook(
+          hooks: _postHooks,
+          workingDirectory: p.join(
+            Directory.current.path,
+            'modules',
+            moduleName,
+          ),
+        );
+        progress.complete('Completed post-hooks for "$featureName"');
+      }
+
       await _updateModuleBarrel(
         moduleBarrelPath: barrelFilePath,
         moduleSnake: moduleName,
@@ -140,5 +166,77 @@ class FeatureGenerator extends BaseGenerator<void, GenArgument> {
         }
       },
     );
+  }
+
+  Future<bool> _injectArbBoundary({
+    required String moduleName,
+    required String featureName,
+  }) async {
+    final l10nDir = Directory(
+      p.join(Directory.current.path, 'modules', moduleName, 'lib', 'l10n'),
+    );
+
+    if (!await l10nDir.exists()) {
+      logger.info(
+        'L10n directory not found in module "$moduleName", skipping ARB injection.',
+      );
+      return false;
+    }
+
+    final arbFiles = l10nDir
+        .listSync()
+        .whereType<File>()
+        .where((file) => file.path.endsWith('.arb'))
+        .toList();
+
+    if (arbFiles.isEmpty) return false;
+
+    final featureCamel = featureName.camelCase;
+    final featureTitle = featureName.titleCase;
+
+    final metaKey = '@${featureCamel}Alt';
+    final textKey = '${featureCamel}Alt';
+
+    const encoder = JsonEncoder.withIndent('  ');
+
+    for (final file in arbFiles) {
+      final fileName = p.basename(file.path);
+      try {
+        final rawJson = await file.readAsString();
+
+        final arbMap = Map<String, dynamic>.from(jsonDecode(rawJson) as Map);
+
+        // Idempotent Guard: If @walletAlt already exists, skip!
+        if (arbMap.containsKey(metaKey)) {
+          logger.info(
+            'ARB boundary for "$featureName" already exists in $fileName',
+          );
+          continue;
+        }
+
+        // Inject header boundary to the end of the Map
+        arbMap[metaKey] = {
+          'description':
+              '========================= $featureTitle =========================',
+        };
+
+        // Inject dummy text
+        // (Both EN and ID texts are automatically set to "Wallet" first, developer translates manually)
+        arbMap[textKey] = featureTitle;
+
+        // Convert the Map back to a pure JSON string
+        final prettyJson = encoder.convert(arbMap);
+
+        await file.writeAsString('$prettyJson\n');
+        logger.success('Injected ARB boundary for "$featureName" to $fileName');
+      } catch (e) {
+        logger.error(
+          'Failed to inject ARB boundary for "$featureName" in $fileName: $e',
+        );
+        return false;
+      }
+    }
+
+    return true;
   }
 }

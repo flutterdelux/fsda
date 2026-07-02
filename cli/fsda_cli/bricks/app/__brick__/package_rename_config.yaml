@@ -1,13 +1,13 @@
 package_rename_config:
   android:
     app_name: {{app.titleCase()}}
-    package_name: com.fdelux.{{app.camelCase.lowerCase}}
-    override_old_package: com.example.{{app.camelCase.lowerCase}}
+    package_name: com.fdelux.{{app.camelCase().lowerCase()}}
+    override_old_package: com.example.{{app.lowerCase()}}
     lang: kotlin
 
   ios:
     app_name: {{app.titleCase()}}
-    bundle_name: {{app.camelCase.lowerCase}}
+    bundle_name: {{app.camelCase().lowerCase()}}
     bundle_id: com.fdelux.{{app.camelCase().lowerCase()}}
 
   web:

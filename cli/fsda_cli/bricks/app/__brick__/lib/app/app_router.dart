@@ -16,15 +16,13 @@ class AppRouter {
   late final router = GoRouter(
     navigatorKey: navigatorKey,
     initialLocation: startupPath,
-    // initialLocation: DashboardRoute.homePath,
-    // refreshListenable: RouterRefreshStream(),
     redirect: _redirect,
     debugLogDiagnostics: false,
     errorBuilder: (context, state) => const NotFoundPage(),
     routes: [
       _mainRoute,
       DashboardRoute.base,
-      // Module routes
+      // ...inject here
     ],
   );
 

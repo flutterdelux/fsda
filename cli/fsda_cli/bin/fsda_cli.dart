@@ -1,16 +1,19 @@
 import 'package:args/command_runner.dart';
 import 'package:fsda_cli/commands/add_command.dart';
 import 'package:fsda_cli/commands/create_command.dart';
+import 'package:fsda_cli/commands/di_command.dart';
 import 'package:fsda_cli/commands/gen_command.dart';
 import 'package:fsda_cli/commands/init_command.dart';
 import 'package:fsda_cli/commands/list_command.dart';
 import 'package:fsda_cli/commands/reg_command.dart';
 import 'package:fsda_cli/constants/cli_info.dart';
 import 'package:fsda_cli/generators/app_generator.dart';
+import 'package:fsda_cli/generators/di_generator.dart';
 import 'package:fsda_cli/generators/feature_generator.dart';
 import 'package:fsda_cli/generators/init_generator.dart';
 import 'package:fsda_cli/generators/module_generator.dart';
 import 'package:fsda_cli/generators/package_generator.dart';
+import 'package:fsda_cli/generators/reg_module_generator.dart';
 import 'package:fsda_cli/generators/slice_generator.dart';
 import 'package:fsda_cli/generators/workspace_generator.dart';
 import 'package:fsda_cli/services/bundle_service.dart';
@@ -23,9 +26,8 @@ import 'package:fsda_cli/services/sdk_service.dart';
 import 'package:fsda_cli/services/workspace_service.dart';
 
 void main(List<String> arguments) async {
-  final sdkService = SdkService();
-
   // Initialize services
+  final sdkService = SdkService();
   final logger = LoggerService();
   final processService = ProcessService();
   final pubspecService = PubspecService(processService: processService);
@@ -67,12 +69,18 @@ void main(List<String> arguments) async {
   final featureGenerator = FeatureGenerator(
     logger: logger,
     fileService: fileService,
+    hookService: hookService,
   );
   final sliceGenerator = SliceGenerator(
     logger: logger,
     fileService: fileService,
     hookService: hookService,
   );
+  final regModuleGenerator = RegModuleGenerator(
+    logger: logger,
+    fileService: fileService,
+  );
+  final diGenerator = DiGenerator(logger: logger, fileService: fileService);
 
   // Initialize command runner
   final runner = CommandRunner('fsda', 'Feature Slice Driven Architecture CLI')
@@ -103,8 +111,13 @@ void main(List<String> arguments) async {
       ),
     )
     ..addCommand(
-      RegCommand(logger: logger, workspaceService: workspaceService),
-    );
+      RegCommand(
+        logger: logger,
+        workspaceService: workspaceService,
+        regModuleGenerator: regModuleGenerator,
+      ),
+    )
+    ..addCommand(DiCommand(diGenerator: diGenerator));
 
   runner.argParser.addFlag(
     'version',

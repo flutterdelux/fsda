@@ -9,9 +9,10 @@ abstract final class CliInfo {
     required List<String> packages,
   }) =>
       '''
-name: $workspaceName
-version: '$version'
+workspace: $workspaceName
 created_at: '${DateTime.now().toIso8601String()}'
+
+fsda_cli: '$version'
 
 init:
   packages:

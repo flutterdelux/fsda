@@ -16,7 +16,8 @@ class MainApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       localizationsDelegates: [
         ...AppLocalizations.localizationsDelegates,
-        // ...FinanceLocalizations.localizationsDelegates,
+
+        /// Module L10n delegate injection
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       locale: const Locale('id_ID'),

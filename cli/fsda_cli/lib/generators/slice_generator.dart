@@ -124,7 +124,7 @@ class SliceGenerator extends BaseGenerator<void, GenArgument> {
       final dsImplCode = doc['data_source_impl'] as String?;
       final repoContractCode = doc['repository_contract'] as String?;
       final repoImplCode = doc['repository_impl'] as String?;
-      final exportCode = doc['export'] as String?;
+      final exportsMap = doc['exports'] as YamlMap?;
       final postHooks = List<String>.from(doc['post_hooks'] as List? ?? []);
 
       if (dsContractCode != null) {
@@ -176,11 +176,11 @@ class SliceGenerator extends BaseGenerator<void, GenArgument> {
         );
       }
 
-      if (exportCode != null && exportCode.trim().isNotEmpty) {
+      if (exportsMap != null && exportsMap.isNotEmpty) {
         progress.update('Registering exports to feature barrel...');
-        await _updateFeatureBarrel(
+        await _updateFeatureBarrelStructured(
           path: p.join(featureRoot, '${featureName}_feature.dart'),
-          exportBlock: exportCode.trim(),
+          exportsMap: exportsMap,
         );
       }
 
@@ -319,24 +319,37 @@ class SliceGenerator extends BaseGenerator<void, GenArgument> {
     await file.writeAsString(content);
   }
 
-  Future<void> _updateFeatureBarrel({
+  Future<void> _updateFeatureBarrelStructured({
     required String path,
-    required String exportBlock,
+    required YamlMap exportsMap,
   }) async {
     final file = File(path);
     if (!await file.exists()) return;
 
-    await fileService!.updateFile(
-      path: path,
-      cancelWhen: (content) {
-        final firstLine = exportBlock.split('\n').first.trim();
-        return content.contains(firstLine);
-      },
-      updateLines: (lines) {
-        lines.add('');
-        lines.add(exportBlock);
-      },
-    );
+    final content = await file.readAsString();
+    final lines = content.split('\n');
+
+    for (final layer in ['data', 'domain', 'logic', 'ui']) {
+      final yamlList = exportsMap[layer];
+      if (yamlList == null || yamlList is! YamlList) continue;
+
+      final validExports = yamlList
+          .map((e) => e.toString().trim())
+          .where((stmt) => stmt.isNotEmpty && !content.contains(stmt))
+          .toList();
+
+      if (validExports.isEmpty) continue;
+
+      final markerIndex = lines.indexWhere((l) => l.trim() == '// $layer');
+
+      if (markerIndex != -1) {
+        lines.insertAll(markerIndex + 1, validExports);
+      } else {
+        lines.addAll(validExports);
+      }
+    }
+
+    await file.writeAsString('${lines.join('\n')}\n');
   }
 
   int _findClassClosingBraceAST(String content) {
