@@ -1,0 +1,25 @@
+/* docs/.vitepress/theme/style.css */
+
+:root {
+  /* --- Warna Utama (Brand) --- */
+  --vp-c-brand-1: #0074C2;
+  --vp-c-brand-2: #22A7FF;
+  --vp-c-brand-3: #004776;
+
+  /* --- Background Light Mode --- */
+  --vp-c-bg: #FFFFFF;        /* Background utama area konten */
+  --vp-c-bg-alt: #F6F9FC;    /* Background sidebar dan card */
+  --vp-c-bg-soft: #EBF4FA;   /* Background elemen pendukung (hover/blok) */
+}
+
+.dark {
+  /* --- Warna Utama (Brand) Dark Mode --- */
+  --vp-c-brand-1: #22A7FF; 
+  --vp-c-brand-2: #0074C2;
+  --vp-c-brand-3: #004776;
+
+  /* --- Background Dark Mode --- */
+  --vp-c-bg: #0B1120;        /* Navy sangat gelap (utama) */
+  --vp-c-bg-alt: #0F172A;    /* Slate gelap (sidebar dan card) */
+  --vp-c-bg-soft: #1E293B;   /* Abu-abu kebiruan (elemen pendukung) */
+}

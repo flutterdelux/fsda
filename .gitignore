@@ -1,0 +1,10 @@
+cli/daylook_e2e.md
+cli/local_dev.md
+cli/ruviti_e2e.md
+
+# Mengabaikan dependensi
+node_modules/
+
+# Mengabaikan folder hasil generate VitePress
+.vitepress/dist/
+.vitepress/cache/

@@ -1,0 +1,83 @@
+title Mutation + Return + Param Sequence (Mrp) - Task / Task / Create
+
+actor User
+participant TaskCreatePage
+participant TaskCreateFormCubit
+participant TaskCreateCubit
+participant TaskCreateUseCase
+participant TaskRepositoryImpl
+participant TaskRemoteDataSourceImpl
+participant ApiClient
+
+entryspacing 0.5
+TaskCreatePage->TaskCreatePage: Compose UI + Logic
+activate TaskCreatePage
+TaskCreatePage->TaskCreateFormCubit: Create TaskCreateFormCubit
+activate TaskCreateFormCubit
+TaskCreateFormCubit->TaskCreateFormCubit: Emit initial state
+TaskCreateFormCubit-->TaskCreatePage: TaskCreateFormState(null, null)
+TaskCreatePage->TaskCreateCubit: Create TaskCreateCubit
+activate TaskCreateCubit
+TaskCreateCubit->TaskCreateCubit: Emit initial state
+TaskCreateCubit-->TaskCreatePage: TaskCreateState.initial()
+TaskCreatePage-->User: Task create page is visible
+
+User->TaskCreatePage: Fill title and description
+TaskCreatePage->TaskCreateFormCubit: update(TaskCreateParam, invalidMessage)
+User->TaskCreatePage: Tap button "Create Task"
+TaskCreatePage->TaskCreateFormCubit: Get TaskCreateParam
+TaskCreateFormCubit-->TaskCreatePage: TaskCreateParam
+deactivate TaskCreateFormCubit
+TaskCreatePage->TaskCreateCubit: createTask(TaskCreateParam)
+TaskCreateCubit->TaskCreateCubit: Emit loading state
+TaskCreateCubit-->TaskCreatePage: TaskCreateState.loading()
+
+TaskCreateCubit->TaskCreateUseCase: call(param)
+activate TaskCreateUseCase
+TaskCreateUseCase->TaskRepositoryImpl: createTask(param)
+activate TaskRepositoryImpl
+TaskRepositoryImpl->TaskRepositoryImpl: TaskCreateRequest.fromParam(param)
+TaskRepositoryImpl->TaskRemoteDataSourceImpl: createTask(request)
+activate TaskRemoteDataSourceImpl
+TaskRemoteDataSourceImpl->ApiClient: POST /tasks body: request.toJson()
+activate ApiClient
+ApiClient-->TaskRemoteDataSourceImpl: ApiResponse
+deactivate ApiClient
+
+alt response.statusCode == 200 and response.data != null
+    TaskRemoteDataSourceImpl->TaskRemoteDataSourceImpl: TaskCreateResponse.fromJson(response.body)
+    TaskRemoteDataSourceImpl->TaskRemoteDataSourceImpl: TaskDto.fromJson(TaskCreateResponse.data)
+    TaskRemoteDataSourceImpl-->TaskRepositoryImpl: TaskDto
+    deactivate TaskRemoteDataSourceImpl
+    TaskRepositoryImpl->TaskRepositoryImpl: dto.toEntity()
+    TaskRepositoryImpl-->TaskCreateUseCase: Result.success(TaskEntity)
+    deactivate TaskRepositoryImpl
+else response invalid or exception thrown
+    activate TaskRepositoryImpl
+    activate TaskRemoteDataSourceImpl
+    TaskRemoteDataSourceImpl->TaskRemoteDataSourceImpl: Throw TaskException.fromApiResponse()
+    TaskRemoteDataSourceImpl-->TaskRepositoryImpl: Throw Exception
+    deactivate TaskRemoteDataSourceImpl
+    TaskRepositoryImpl->TaskRepositoryImpl: handleException()
+    TaskRepositoryImpl-->TaskCreateUseCase: Result.failure(failure)
+    deactivate TaskRepositoryImpl
+end
+
+TaskCreateUseCase-->TaskCreateCubit: Forward Result
+deactivate TaskCreateUseCase
+
+alt Result.Success
+    TaskCreateCubit->TaskCreateCubit: Emit success state
+    TaskCreateCubit-->TaskCreatePage: TaskCreateState.success(data)
+    deactivate TaskCreateCubit
+    TaskCreatePage->TaskCreatePage: showSuccessSnackBar()
+else Result.Failure
+    activate TaskCreateCubit
+    TaskCreateCubit->TaskCreateCubit: Emit failure state
+    TaskCreateCubit-->TaskCreatePage: TaskCreateState.failure(failure)
+    deactivate TaskCreateCubit
+    TaskCreatePage->TaskCreatePage: showErrorSnackBar()
+end
+
+deactivate TaskCreateCubit
+deactivate TaskCreatePage

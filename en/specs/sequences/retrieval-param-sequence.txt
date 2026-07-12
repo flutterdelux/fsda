@@ -1,0 +1,69 @@
+title Retrieval + Param Sequence (Rp) - Product / Product / Detail
+
+actor User
+participant ProductDetailPage
+participant ProductDetailCubit
+participant ProductDetailUseCase
+participant ProductRepositoryImpl
+participant ProductRemoteDataSourceImpl
+participant ApiClient
+
+entryspacing 0.5
+ProductDetailPage->ProductDetailPage: Compose UI + Logic
+activate ProductDetailPage
+ProductDetailPage->ProductDetailCubit: Create ProductDetailCubit(id)
+activate ProductDetailCubit
+ProductDetailCubit-->ProductDetailPage: ProductDetailState.initial()
+ProductDetailPage-->User: Product detail page is visible
+
+ProductDetailPage->ProductDetailCubit: getProductDetail()
+ProductDetailCubit->ProductDetailCubit: Emit loading state
+ProductDetailCubit-->ProductDetailPage: ProductDetailState.loading()
+
+ProductDetailCubit->ProductDetailUseCase: call(ProductDetailParam(id))
+activate ProductDetailUseCase
+ProductDetailUseCase->ProductRepositoryImpl: getProductDetail(param)
+activate ProductRepositoryImpl
+ProductRepositoryImpl->ProductRepositoryImpl: ProductDetailRequest(param.id)
+ProductRepositoryImpl->ProductRemoteDataSourceImpl: getProductDetail(request)
+activate ProductRemoteDataSourceImpl
+ProductRemoteDataSourceImpl->ApiClient: GET /products/{request.id}
+activate ApiClient
+ApiClient-->ProductRemoteDataSourceImpl: ApiResponse
+deactivate ApiClient
+
+alt response.statusCode == 200 and response.data != null
+    ProductRemoteDataSourceImpl->ProductRemoteDataSourceImpl: ProductDetailResponse.fromJson(response.body)
+    ProductRemoteDataSourceImpl-->ProductRepositoryImpl: ProductDto
+    deactivate ProductRemoteDataSourceImpl
+    ProductRepositoryImpl->ProductRepositoryImpl: dto.toEntity()
+    ProductRepositoryImpl-->ProductDetailUseCase: Result.success(ProductEntity)
+    deactivate ProductRepositoryImpl
+else response invalid or exception thrown
+    activate ProductRepositoryImpl
+    activate ProductRemoteDataSourceImpl
+    ProductRemoteDataSourceImpl->ProductRemoteDataSourceImpl: throw ProductException.fromAPiResponse()
+    ProductRemoteDataSourceImpl-->ProductRepositoryImpl: Throw Exception
+    deactivate ProductRemoteDataSourceImpl
+    ProductRepositoryImpl->ProductRepositoryImpl: handleException()
+    ProductRepositoryImpl-->ProductDetailUseCase: Result.failure(failure)
+    deactivate ProductRepositoryImpl
+end
+
+ProductDetailUseCase-->ProductDetailCubit: Forward Result
+deactivate ProductDetailUseCase
+
+alt Result.Success
+    ProductDetailCubit->ProductDetailCubit: Emit loaded state
+    ProductDetailCubit-->ProductDetailPage: ProductDetailState.loaded(data)
+    deactivate ProductDetailCubit
+    ProductDetailPage->ProductDetailPage: Show ProductDetailContent
+else Result.Failure
+    activate ProductDetailCubit
+    ProductDetailCubit->ProductDetailCubit: Emit failure state
+    ProductDetailCubit-->ProductDetailPage: ProductDetailState.failure(failure)
+    deactivate ProductDetailCubit
+    ProductDetailPage->ProductDetailPage: Show ProductDetailError
+end
+
+deactivate ProductDetailPage
