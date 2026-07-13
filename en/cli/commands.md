@@ -53,7 +53,7 @@ Add one package template to workspace/packages and sync fsda.yaml.
 Important behavior:
 
 - if `name` matches a template exactly, it is used directly
-- if `name` is an infra short name (for example `dio`), CLI resolves it to `infra_dio`
+- if `name` is an infra short name (for example `http`), CLI resolves it to `infra_http`
 - packages commented in fsda.yaml are activated
 - packages missing in fsda.yaml are appended
 
@@ -239,7 +239,7 @@ cd fsda_base
 
 fsda configure
 fsda add-pckg app_core
-fsda add-pckg infra_dio
+fsda add-pckg infra_http
 
 fsda gen-app fsda_demo
 fsda configure-app fsda_demo

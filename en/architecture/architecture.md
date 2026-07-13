@@ -74,7 +74,6 @@ Workspace groups:
 - Apps
 - Modules
 - Shared Packages
-- Documentation
 
 Workspace is not where business logic is implemented.
 
@@ -185,11 +184,12 @@ Shared packages provide contracts, utilities, UI foundations, and technology int
 
 ## Architecture Layers
 
+*(Execution Flow)*
 ```
 UI
- ↓
+ ↓ (calls)
 Logic
- ↓
+ ↓ (calls)
 Domain
 
 Data
@@ -211,15 +211,20 @@ App as composition layer is described separately in:
 
 ## Dependency Overview
 
+*(Dependency Rule)*
 ```
-UI
- ↓
-Logic
- ↓
-Domain
- ↑
-Data
+App (Composition Root)
+ ├── UI
+ ├── Logic
+ ├── Domain
+ └── Data
+
+UI ──────┐
+Logic ───┼──► Domain
+Data ────┘
 ```
+
+**Important**: The arrow from UI to Logic in the execution flow is not a direct structural dependency from the UI layer, but merely method access. The layer responsible for composing UI and Logic is the **App** layer. The UI, Logic, and Data layers fundamentally depend on the Domain layer independently.
 
 Dependency rules are detailed in:
 
@@ -244,8 +249,7 @@ Examples:
 - Retrieval + Pagination
 - Retrieval + Stream
 - Retrieval + Stream + Param
-- Retrieval + Cache
-- Retrieval + Local First
+- Retrieval + Offline First
 
 Sequence patterns provide implementation that is consistent, predictable, and automation-friendly.
 

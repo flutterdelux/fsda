@@ -138,7 +138,7 @@ product detail
 → Retrieval + Param
 
 note list
-→ Retrieval + Local First
+→ Retrieval + Offline First
 ```
 
 Setiap feature slice harus mengikuti sequence yang sesuai.

@@ -26,9 +26,9 @@ fsda add-pckg app_ui
 fsda add-pckg app_l10n
 
 # add infra package
-fsda add-pckg infra_dio
+fsda add-pckg infra_http
 # infra short name is also supported (auto-resolved)
-fsda add-pckg dio
+fsda add-pckg http
 ```
 
 ## 3) Create App and Module
@@ -71,7 +71,7 @@ Sequence codes:
 - `Rpag` retrieval + pagination
 - `Rs` retrieval stream
 - `Rsp` retrieval stream + param
-- `Rof` retrieval local-first
+- `Rof` retrieval offline-first
 
 ## 5) Generate UI Only
 
@@ -153,7 +153,7 @@ cd fsda_base
 fsda configure
 fsda add-pckg app_core
 fsda add-pckg app_l10n
-fsda add-pckg infra_dio
+fsda add-pckg infra_http
 
 fsda gen-app daylook
 fsda configure-app daylook

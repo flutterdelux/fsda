@@ -48,7 +48,7 @@ Example:
 ```text
 packages/
 ├── infra_http
-├── infra_dio
+├── infra_http
 ├── infra_firebase
 ├── infra_supabase
 └── infra_storage
@@ -96,7 +96,7 @@ Choose technology stack.
 
 | Concern        | Technology    |
 | -------------- | ------------- |
-| ApiClient      | Dio           |
+| ApiClient      | Http           |
 | Local Storage  | Hive          |
 | Database       | Sqflite       |
 | BaaS           | Supabase      |
@@ -118,7 +118,7 @@ Example:
 
 ```dart
 Future<void> externalDI() async {
-  getIt.registerLazySingleton<Dio>(() => Dio());
+  getIt.registerLazySingleton<Client>(() => Client());
 }
 ```
 
@@ -181,8 +181,11 @@ If module displays user-facing text, module should own module-specific localizat
 
 Baseline module tools commonly include:
 
+dependencies:
 * `freezed_annotation`
 * `json_annotation`
+
+dev_dependencies:
 * `build_runner`
 * `freezed`
 * `json_serializable`
@@ -346,7 +349,7 @@ App page may represent a primary single-slice page or aggregate multiple slices.
 Add module route.
 
 ```dart
-class Module1Route {
+abstract final class Module1Route {
   RouteBase get base => ...;
 }
 ```
@@ -379,15 +382,23 @@ At this stage App decides which localization delegates are required and composes
 Add feature DI.
 
 ```dart
-Future<void> module1DI() async {
-  _feature1DI();
-}
+abstract final class Module1Di {
+  static void register() {
+    // reg feature di
+    _feature1Di();
+  }
 
-void _feature1DI() {
-  // Datasources
-  // Repositories
-  // Usecases
-  // Logics
+
+  // feature
+  static void _feature1Di() {
+    // Datasources
+
+    // Repositories
+
+    // Usecases
+
+    // Logic (Cubits/Blocs)
+  }
 }
 ```
 
@@ -398,7 +409,7 @@ Add module DI.
 ```dart
 Future<void> initDI() async {
   ...
-  await module1DI();
+  Module1Di.register();
 }
 ```
 

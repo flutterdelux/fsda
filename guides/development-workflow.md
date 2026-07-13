@@ -54,7 +54,7 @@ Contoh:
 ```text
 packages/
 ├── infra_http
-├── infra_dio
+├── infra_http
 ├── infra_firebase
 ├── infra_supabase
 └── infra_storage
@@ -120,7 +120,7 @@ Contoh:
 
 | Concern        | Technology    |
 | -------------- | ------------- |
-| ApiClient      | Dio           |
+| ApiClient      | Http           |
 | Local Storage  | Hive          |
 | Database       | Sqflite       |
 | BaaS           | Supabase      |
@@ -146,8 +146,8 @@ Contoh:
 
 ```dart
 Future<void> externalDI() async {
-  getIt.registerLazySingleton<Dio>(
-    () => Dio(),
+  getIt.registerLazySingleton<Client>(
+    () => Client(),
   );
 }
 ```
@@ -254,8 +254,11 @@ Selain itu, setiap module juga sebaiknya menyiapkan dependency dan dev dependenc
 
 Baseline package yang umum dibutuhkan:
 
+dependencies:
 * `freezed_annotation`
 * `json_annotation`
+
+dev_dependencies:
 * `build_runner`
 * `freezed`
 * `json_serializable`
@@ -478,7 +481,7 @@ Tambahkan route module.
 Contoh:
 
 ```dart
-class Module1Route {
+abstract final class Module1Route {
   RouteBase get base => ...
 }
 ```
@@ -519,19 +522,23 @@ Tambahkan feature DI.
 Contoh:
 
 ```dart
-Future<void> module1DI() async {
-  _feature1DI();
-  ...
-}
+abstract final class Module1Di {
+  static void register() {
+    // reg feature di
+    _feature1Di();
+  }
 
-void _feature1DI() {
-  // Datasources
 
-  // Repositories
+  // feature
+  static void _feature1Di() {
+    // Datasources
 
-  // Usecases
+    // Repositories
 
-  // Logics
+    // Usecases
+
+    // Logic (Cubits/Blocs)
+  }
 }
 ```
 
@@ -544,7 +551,7 @@ Contoh:
 ```dart
 Future<void> initDI() async {
   ...
-  await module1DI();
+  Module1Di.register();
 }
 ```
 

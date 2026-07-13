@@ -20,7 +20,7 @@ Dokumen ini memandu pembuatan project FSDA secara manual end-to-end tanpa comman
 
 - Flutter SDK terpasang
 - Dart SDK terpasang
-- Tooling yang disarankan: `flutter_bloc`, `get_it`, `dio`, `freezed` (opsional), `json_serializable` (opsional)
+- Tooling yang disarankan: `flutter_bloc`, `get_it`, `http`, `freezed` (opsional), `json_serializable` (opsional)
 
 ## 1) Inisialisasi Workspace Manual
 
@@ -37,7 +37,8 @@ packages:
   - app_core
   - app_l10n
   - app_ui
-  - infra_dio
+  - infra_http
+  - infra_logging
 ```
 
 ## 2) Buat Shared Packages Manual
@@ -48,7 +49,8 @@ Buat package foundation satu per satu.
 flutter create packages/app_core --template=package
 flutter create packages/app_l10n --template=package
 flutter create packages/app_ui --template=package
-flutter create packages/infra_dio --template=package
+flutter create packages/infra_http --template=package
+flutter create packages/infra_logging --template=package
 ```
 
 Minimal isi package:
@@ -56,7 +58,8 @@ Minimal isi package:
 - `app_core`: result/failure abstraction
 - `app_l10n`: localization foundation
 - `app_ui`: widget dasar reusable
-- `infra_dio`: wrapper HTTP client berbasis dio
+- `infra_http`: implementasi api client berbasis http
+- `infra_logging`: implementasi logger
 
 ## 3) Buat App dan Module Manual
 
@@ -81,8 +84,10 @@ dependencies:
     path: ../../packages/app_l10n
   app_ui:
     path: ../../packages/app_ui
-  infra_dio:
-    path: ../../packages/infra_dio
+  infra_http:
+    path: ../../packages/infra_http
+  infra_logging:
+    path: ../../packages/infra_logging
 ```
 
 Di `modules/travel/pubspec.yaml`, tambahkan dependency yang dibutuhkan feature `destination`.

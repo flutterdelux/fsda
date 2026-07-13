@@ -21,7 +21,7 @@ Use this flow:
 3. If not, start with `Retrieval` family.
 4. Does this slice require input?
 5. Does this slice return operation result?
-6. Does this slice need pagination, stream, cache, or local-first behavior?
+6. Does this slice need pagination, stream, or offline-first behavior?
 
 &nbsp;
 
@@ -52,17 +52,16 @@ Use:
 * `Retrieval + Pagination` if list requires paging
 * `Retrieval + Stream` if data changes continuously and must be observed
 * `Retrieval + Stream + Param` if stream also requires input
-* `Retrieval + Cache` if it reads with simple cache behavior
-* `Retrieval + Local First` if local source should be prioritized before remote source
+* `Retrieval + Offline First` if local source should be prioritized or requires cache mechanism
 
 Examples:
 
 * `popular` -> Retrieval
 * `detail` -> Retrieval + Param
 * `list` -> Retrieval + Pagination
+* `list` -> Retrieval + Stream
 * `status` -> Retrieval + Stream + Param
-* `mode` -> Retrieval + Cache
-* `note list` -> Retrieval + Local First
+* `list` -> Retrieval + Offline First
 
 &nbsp;
 

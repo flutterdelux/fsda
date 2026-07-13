@@ -53,7 +53,7 @@ Menambahkan satu template package ke workspace/packages dan sinkronkan fsda.yaml
 Perilaku penting:
 
 - jika `name` exact match template, langsung dipakai
-- jika `name` short infra (misalnya `dio`), CLI mencoba resolve ke `infra_dio`
+- jika `name` short infra (misalnya `http`), CLI mencoba resolve ke `infra_http`
 - package yang ter-comment di fsda.yaml akan diaktifkan
 - package yang belum ada di fsda.yaml akan ditambahkan
 
@@ -239,7 +239,7 @@ cd fsda_base
 
 fsda configure
 fsda add-pckg app_core
-fsda add-pckg infra_dio
+fsda add-pckg infra_http
 
 fsda gen-app fsda_demo
 fsda configure-app fsda_demo

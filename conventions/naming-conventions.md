@@ -10,47 +10,9 @@ Tujuan utama naming convention adalah:
 * Membuat struktur dapat diprediksi.
 * Mengurangi keputusan naming yang bersifat subjektif.
 
-## Contents:
-
-
-- [General Rules](#general-rules)
-
-- Modular
-    - [Module Naming](#module-naming)
-    - [Feature Naming](#feature-naming)
-    - [Slice Naming](#slice-naming)
-    - [Shared Naming](#shared-naming)
-    - [Failure Naming](#failure-naming)
-    - [Exception Naming](#exception-naming)
-    - [Failure Extension Naming](#failure-extension-naming)
-    - [Feature Barrel Naming](#feature-barrel-naming)
-    - [Module Barrel Naming](#module-barrel-naming)
-- Domain
-    - [Enum Naming](#enum-naming)
-    - [Entity Naming](#entity-naming)
-    - [Param Naming](#param-naming)
-    - [Repository Naming](#repository-naming)
-    - [Use Case Naming](#use-case-naming)
-- Data
-    - [Converter Naming](#converter-naming)
-    - [DTO Naming](#dto-naming)
-    - [Request Naming](#request-naming)
-    - [Response Naming](#response-naming)
-    - [Datasource Naming](#datasource-naming)
-    - [Repository Implementation Naming](#repository-implementation-naming)
-- Logic
-    - [Logic Naming](#logic-naming)
-- UI
-    - [UI Naming](#ui-naming)
-- Compose
-    - [Module Compose Naming](#module-compose-naming)
-    - [App Compose Naming](#app-compose-naming)
-
-&nbsp;
 
 ## General Rules
 
-Back to [Contents](#contents)
 
 ### File Naming
 
@@ -117,7 +79,6 @@ getRecentNote()
 
 ## Module Naming
 
-Back to [Contents](#contents)
 
 Gunakan nama domain bisnis.
 
@@ -142,7 +103,6 @@ travel
 
 ## Feature Naming
 
-Back to [Contents](#contents)
 
 Gunakan nama resource utama yang dimiliki module.
 
@@ -167,7 +127,6 @@ destination
 
 ## Slice Naming
 
-Back to [Contents](#contents)
 
 Feature slice adalah unit terkecil implementasi bisnis.
 
@@ -209,7 +168,6 @@ mode
 
 ## Shared Naming
 
-Back to [Contents](#contents)
 
 Shared mengikuti ownership boundary.
 
@@ -236,7 +194,6 @@ SharedStatusX
 
 ## Failure Naming
 
-Back to [Contents](#contents)
 
 ### File
 
@@ -298,7 +255,6 @@ noteNotFound
 
 ## Exception Naming
 
-Back to [Contents](#contents)
 
 ### File
 
@@ -371,7 +327,6 @@ ProductException.productNotFound()
 
 ## Failure Extension Naming
 
-Back to [Contents](#contents)
 
 ### File
 
@@ -405,30 +360,29 @@ FinanceFailureX
 Format:
 
 ```text
-<module>Failure<Feature><Slice><Result>
+failure<Feature><Slice><Result>
 
 atau
 
-<module>Failure<Feature><Result>
+failure<Feature><Result>
 ```
 
 Contoh:
 
 ```text
-financeFailureWalletDeleteFailed
+failureWalletDeleteFailed
 
-taskFailureTaskCreateFailed
+failureTaskCreateFailed
 
-inboxFailureInboxMarkAllReadFailed
+failureInboxMarkAllReadFailed
 
-travelFailureDestinationNotFound
+failureDestinationNotFound
 ```
 
 &nbsp;
 
 ## Feature Barrel Naming
 
-Back to [Contents](#contents)
 
 ### File
 
@@ -448,7 +402,6 @@ Feature barrel hanya mengekspor resource publik milik feature tersebut.
 
 ## Module Barrel Naming
 
-Back to [Contents](#contents)
 
 ### File
 
@@ -472,7 +425,6 @@ Module barrel meneruskan export dari feature barrel yang ingin diekspos keluar m
 
 ## Enum Naming
 
-Back to [Contents](#contents)
 
 ### File
 
@@ -522,7 +474,6 @@ Enum
 
 ## Entity Naming
 
-Back to [Contents](#contents)
 
 ### File
 
@@ -576,7 +527,6 @@ untuk menghindari collision dengan package eksternal.
 
 ## Param Naming
 
-Back to [Contents](#contents)
 
 ### Folder
 
@@ -620,7 +570,6 @@ Dipilih naming `Param` over `Params` (konvensi global) karena untuk menjaga kons
 
 ## Repository Naming
 
-Back to [Contents](#contents)
 
 ### Contract File
 
@@ -666,7 +615,6 @@ watchPaymentStatus()
 
 ## Use Case Naming
 
-Back to [Contents](#contents)
 
 ### File
 
@@ -714,7 +662,6 @@ Bukan action tambahan.
 
 ## Converter Naming
 
-Back to [Contents](#contents)
 
 ### File
 
@@ -754,7 +701,6 @@ DestinationPopularConverter
 
 ## DTO Naming
 
-Back to [Contents](#contents)
 
 ### File
 
@@ -802,7 +748,6 @@ DestinationPopularDto
 
 ## Request Naming
 
-Back to [Contents](#contents)
 
 ### File
 
@@ -834,7 +779,6 @@ TaskCreateRequest
 
 ## Response Naming
 
-Back to [Contents](#contents)
 
 ### File
 
@@ -866,7 +810,6 @@ PaymentStatusResponse
 
 ## Datasource Naming
 
-Back to [Contents](#contents)
 
 ### File
 
@@ -924,7 +867,6 @@ watchPaymentStatus()
 
 ## Repository Implementation Naming
 
-Back to [Contents](#contents)
 
 ### Implementation File
 
@@ -948,7 +890,6 @@ Format:
 
 ## Logic Naming
 
-Back to [Contents](#contents)
 
 ### Slice Folder
 
@@ -1012,7 +953,6 @@ Format:
 
 ## UI Naming
 
-Back to [Contents](#contents)
 
 ### Slice Folder
 
@@ -1098,7 +1038,6 @@ WalletDeleteDialog
 
 ## Module Compose Naming
 
-Back to [Contents](#contents)
 
 ### DI
 
@@ -1138,7 +1077,6 @@ task_route.dart
 
 ## App Compose Naming
 
-Back to [Contents](#contents)
 
 App bertanggung jawab meng-compose UI dan Logic.
 

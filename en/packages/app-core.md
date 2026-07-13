@@ -41,7 +41,7 @@ Place resources in `app_core` when they:
 * business features
 * widgets or design system components
 * repository implementation or datasource
-* concrete technology configuration such as Dio, Supabase, Firebase, and similar
+* concrete technology configuration such as Http, Supabase, Firebase, and similar
 
 &nbsp;
 

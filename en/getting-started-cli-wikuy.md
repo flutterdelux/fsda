@@ -40,7 +40,7 @@ cd Wikuy
 
 ```bash
 fsda configure
-fsda add-pckg infra_dio
+fsda add-pckg infra_http
 fsda add-pckg infra_logging
 ```
 
@@ -184,7 +184,7 @@ dart analyze
 fsda create Wikuy-CLI && \
 cd Wikuy-CLI && \
 fsda configure && \
-fsda add-pckg infra_dio && \
+fsda add-pckg infra_http && \
 fsda add-pckg infra_logging && \
 fsda gen-app wikuy_cli_app && \
 fsda configure-app wikuy_cli_app && \

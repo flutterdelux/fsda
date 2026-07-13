@@ -21,7 +21,7 @@ Gunakan alur berikut:
 3. Jika tidak, maka mulai dari keluarga `Retrieval`.
 4. Apakah slice membutuhkan input?
 5. Apakah slice mengembalikan data hasil operasi?
-6. Apakah slice membutuhkan pagination, stream, cache, atau local-first behavior?
+6. Apakah slice membutuhkan pagination, stream, atau offline-first behavior?
 
 &nbsp;
 
@@ -52,17 +52,16 @@ Gunakan:
 * `Retrieval + Pagination` jika daftar data perlu paging
 * `Retrieval + Stream` jika data terus berubah dan harus dipantau
 * `Retrieval + Stream + Param` jika stream juga membutuhkan input
-* `Retrieval + Cache` jika membaca data dengan mekanisme cache sederhana
-* `Retrieval + Local First` jika local source menjadi prioritas awal sebelum remote source
+* `Retrieval + Offline First` jika local source menjadi prioritas awal atau membutuhkan mekanisme cache
 
 Contoh:
 
 * `popular` → Retrieval
 * `detail` → Retrieval + Param
 * `list` → Retrieval + Pagination
+* `list` → Retrieval + Stream
 * `status` → Retrieval + Stream + Param
-* `mode` → Retrieval + Cache
-* `note list` → Retrieval + Local First
+* `list` → Retrieval + Offline First
 
 &nbsp;
 

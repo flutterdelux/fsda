@@ -172,7 +172,6 @@ Failure represents business failure.
 Failure should not know:
 
 * HTTP Error
-* Dio Error
 * SQLite Error
 
 Example:

@@ -33,7 +33,7 @@ Example focus:
 * Retrieval: success, empty state, failure, loading
 * Retrieval + Pagination: page progression, append behavior, end-of-list behavior
 * Retrieval + Stream: initial emission, update emission, failure emission when relevant
-* Retrieval + Local First: local hit, remote fallback, sync behavior when applicable
+* Retrieval + Offline First: local hit, remote fallback, sync behavior when applicable
 
 &nbsp;
 

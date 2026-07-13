@@ -20,7 +20,7 @@ This guide walks through creating an FSDA project manually end-to-end, without u
 
 - Flutter SDK installed
 - Dart SDK installed
-- Recommended tooling: `flutter_bloc`, `get_it`, `dio`, `freezed` (optional), `json_serializable` (optional)
+- Recommended tooling: `flutter_bloc`, `get_it`, `http`, `freezed` (optional), `json_serializable` (optional)
 
 ## 1) Initialize Workspace Manually
 
@@ -37,7 +37,8 @@ packages:
   - app_core
   - app_l10n
   - app_ui
-  - infra_dio
+  - infra_http
+  - infra_logging
 ```
 
 ## 2) Create Shared Packages Manually
@@ -48,7 +49,8 @@ Create each foundation package manually:
 flutter create packages/app_core --template=package
 flutter create packages/app_l10n --template=package
 flutter create packages/app_ui --template=package
-flutter create packages/infra_dio --template=package
+flutter create packages/infra_http --template=package
+flutter create packages/infra_logging --template=package
 ```
 
 Minimum package responsibilities:
@@ -56,7 +58,8 @@ Minimum package responsibilities:
 - `app_core`: result/failure abstraction
 - `app_l10n`: localization foundation
 - `app_ui`: reusable UI primitives
-- `infra_dio`: HTTP client wrapper using dio
+- `infra_http`: api client implementation using http
+- `infra_logging`: logger implementation
 
 ## 3) Create App and Module Manually
 
@@ -81,8 +84,10 @@ dependencies:
     path: ../../packages/app_l10n
   app_ui:
     path: ../../packages/app_ui
-  infra_dio:
-    path: ../../packages/infra_dio
+  infra_http:
+    path: ../../packages/infra_http
+  infra_logging:
+    path: ../../packages/infra_logging
 ```
 
 In `modules/travel/pubspec.yaml`, add dependencies required by `destination` feature.

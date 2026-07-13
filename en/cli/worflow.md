@@ -54,13 +54,13 @@ packages:
   - app_core
   - app_l10n
   - app_ui
-  - infra_dio
+  - infra_http
   - infra_logging
 ```
 
 Notes:
 - package list defines what fsda configure prepares
-- if you change infra stack (for example dio to http), edit this file first
+- if you change infra stack, edit this file first
 
 ## 3) Check Available Package and Infra Templates
 
@@ -97,7 +97,7 @@ packages/
 ├── app_core/
 ├── app_l10n/
 ├── app_ui/
-├── infra_dio/
+├── infra_http/
 └── infra_logging/
 ```
 

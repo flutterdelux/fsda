@@ -10,41 +10,6 @@ Primary goals:
 * make structure predictable
 * reduce subjective naming decisions
 
-## Contents
-
-- General Rules
-- Modular
-  - Module Naming
-  - Feature Naming
-  - Slice Naming
-  - Shared Naming
-  - Failure Naming
-  - Exception Naming
-  - Failure Extension Naming
-  - Feature Barrel Naming
-  - Module Barrel Naming
-- Domain
-  - Enum Naming
-  - Entity Naming
-  - Param Naming
-  - Repository Naming
-  - Use Case Naming
-- Data
-  - Converter Naming
-  - DTO Naming
-  - Request Naming
-  - Response Naming
-  - Datasource Naming
-  - Repository Implementation Naming
-- Logic
-  - Logic Naming
-- UI
-  - UI Naming
-- Compose
-  - Module Compose Naming
-  - App Compose Naming
-
-&nbsp;
 
 ## General Rules
 
@@ -330,14 +295,22 @@ Format:
 
 ```text
 failure<Feature><Slice><Result>
+
+atau
+
+failure<Feature><Result>
 ```
 
-Examples:
+Contoh:
 
 ```text
 failureWalletDeleteFailed
+
 failureTaskCreateFailed
-failureProductDetailNotFound
+
+failureInboxMarkAllReadFailed
+
+failureDestinationNotFound
 ```
 
 &nbsp;

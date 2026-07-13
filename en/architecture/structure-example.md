@@ -2,8 +2,6 @@
 
 This document is illustrative, not normative.
 
-Normative rules are defined in [Structure](structure.md), [Dependency Rules](dependency-rules.md), [Sequence Pattern](sequence-pattern.md), [Naming Conventions](../conventions/naming-conventions.md), and layer documents.
-
 For readability, this example focuses on core implementation structure and does not always repeat every module baseline file in full detail.
 
 App page examples should be read as composition surfaces. In real projects, pages can be single-slice pages or aggregate pages.

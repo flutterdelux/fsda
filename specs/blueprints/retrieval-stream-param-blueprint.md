@@ -4,7 +4,6 @@
 | ---- | ----------------------------- | ------------ | ----------- | ------------- | ------------------------ |
 | Rsp  | Retrieval + Stream + Param    | subscription | payment     | status        | watchPaymentStatus()     |
 
-![sequence](../sequences/images/r-s-p.png)
 
 ## **Layer: Data**
 

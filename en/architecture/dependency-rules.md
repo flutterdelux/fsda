@@ -82,7 +82,7 @@ ui/
 flutter/
 ```
 
-Wrong examples:
+Examples:
 
 ```dart
 import '../../data/dtos/task_dto.dart';

@@ -41,7 +41,7 @@ Letakkan sesuatu di `app_core` jika resource tersebut:
 * feature bisnis
 * widget atau design system
 * repository implementation atau datasource
-* konfigurasi teknologi konkret seperti Dio, Supabase, Firebase, dan sejenisnya
+* konfigurasi teknologi konkret seperti Http, Supabase, Firebase, dan sejenisnya
 
 &nbsp;
 

@@ -56,8 +56,7 @@ Example sequences:
 * Retrieval + Pagination
 * Retrieval + Stream
 * Retrieval + Stream + Param
-* Retrieval + Cache
-* Retrieval + Local First
+* Retrieval + Offline First
 
 Each feature slice must map to exactly one clear sequence.
 
@@ -128,31 +127,28 @@ Outer layers may know inner layers.
 
 Inner layers must not know outer layers.
 
-```text
-UI
- ↓
-Logic
- ↓
-Domain
- ↑
-Data
-```
 
-Or in dependency order:
 
 ```text
 (Inner)
 Domain
 
 ↑
-Logic
-
-↑
-UI
-
-↑
-Data
+Logic & UI & Data
 (Outer)
+```
+
+Or illustrated as the composition structure in the App layer:
+```text
+App (Composition Root)
+ ├── UI
+ ├── Logic
+ ├── Domain
+ └── Data
+
+UI ──────┐
+Logic ───┼──► Domain
+Data ────┘
 ```
 
 Domain becomes an independent business center, isolated from technical implementation.
@@ -173,8 +169,6 @@ Shared placement guidelines:
 * Used by multiple features in one module -> place in module shared boundary
 * Used by whole application -> place in app or suitable package boundary
 * Components should not be promoted to higher boundary only because higher boundaries access them. Ownership still follows primary usage boundary.
-
-Shared follows actual usage boundary, not future guesses.
 
 &nbsp;
 

@@ -4,7 +4,6 @@
 | ---- | ----------------------------- | ------------ | ----------- | ------------- | ------------------------ |
 | R    | Retrieval                     | travel       | destination | popular       | getPopularDestination()  |
 
-![sequence](../sequences/images/r.png)
 
 ## **Layer: Data**
 

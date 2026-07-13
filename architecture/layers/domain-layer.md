@@ -173,7 +173,6 @@ Failure merepresentasikan kegagalan bisnis.
 Failure tidak mengetahui:
 
 * HTTP Error
-* Dio Error
 * SQLite Error
 
 Contoh:

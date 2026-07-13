@@ -4,7 +4,6 @@
 | ---- | ----------------------------- | ------------ | ----------- | ------------- | ------------------------ |
 | Mrp  | Mutation + Return + Param     | task         | task        | create        | createTask()             |
 
-![sequence](../sequences/images/m-r-p.png)
 
 ## **Layer: Data**
 

@@ -43,18 +43,19 @@ Example:
 ```dart
 class ProductDetailCubit extends Cubit<ProductDetailState> {
   final ProductDetailUseCase _useCase;
-  final int id;
+  final int _id;
 
   ProductDetailCubit({
     required ProductDetailUseCase productDetailUseCase,
-    required this.id,
-  }) : _useCase = productDetailUseCase,
+    required int id,
+  }) : _id = id,
+       _useCase = productDetailUseCase,
        super(const ProductDetailState.initial());
 
   Future<void> getProductDetail() async {
     emit(const ProductDetailState.loading());
 
-    final param = ProductDetailParam(id: id);
+    final param = ProductDetailParam(id: _id);
     final result = await _useCase(param);
 
     emit(

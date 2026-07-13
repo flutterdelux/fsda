@@ -2,9 +2,21 @@ cli/daylook_e2e.md
 cli/local_dev.md
 cli/ruviti_e2e.md
 
-# Mengabaikan dependensi
+# Dependensi Node (Sangat penting)
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# Mengabaikan folder hasil generate VitePress
+# Hasil Build / Produksi VitePress
 .vitepress/dist/
 .vitepress/cache/
+
+# Sistem Operasi
+.DS_Store
+Thumbs.db
+
+# File konfigurasi lokal / rahasia (Opsional)
+.env
+.env.local

@@ -4,7 +4,6 @@
 | ---- | ----------------------------- | ------------ | ----------- | ------------- | ------------------------ |
 | Mr   | Mutation + Return             | queue        | queue       | take          | takeQueue()              |
 
-![sequence](../sequences/images/m-r.png)
 
 ## **Layer: Data**
 

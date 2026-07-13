@@ -4,7 +4,6 @@
 | ---- | ----------------------------- | ------------ | ----------- | ------------- | ------------------------ |
 | M    | Mutation                      | inbox        | inbox       | mark_all_read | markAllInboxRead()       |
 
-![m](../sequences/images/m.png)
 
 
 ## **Layer: Data**

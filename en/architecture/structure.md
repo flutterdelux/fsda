@@ -2,7 +2,7 @@
 
 This document is the global structure map of FSDA.
 
-Detailed rules are covered in dedicated documents such as dependency rules, sequence pattern, naming conventions, and layer docs.
+Detailed rules are covered in dedicated documents such as [dependency rules](dependency-rules.md), [sequence patterns](sequence-pattern.md), [naming conventions](../conventions/naming-conventions.md), and [layer docs](layers/domain-layer.md).
 
 This document explains:
 
@@ -105,7 +105,7 @@ Typical responsibilities:
 
 ### 2. app/
 
-Contains app composition root.
+Contains app bootstrap.
 
 ```text
 app/
@@ -127,15 +127,28 @@ Contains application technical needs.
 ```text
 core/
 ├── constants/
+│   ├── app_config.dart
+│   ├── app_assets.dart
+│   └── app_external_links.dart
 ├── di/
 │   ├── core_di.dart
 │   ├── di.dart
 │   ├── di_keys.dart
 │   └── external_di.dart
 ├── extensions/
+│   └── failure_x.dart
 ├── externals/
+│   ├── fdelux_mock_config.dart
+│   ├── logging_config.dart
+│   ├── network_timeout_config.dart
+│   ├── owm_config.dart
+│   ├── sqflite_config.dart
+│   └── supabase_config.dart
 ├── mixins/
+│   └── page_provider_mixin.dart
 └── pages/
+    ├── invalid_argument_page.dart
+    └── not_found_page.dart
 ```
 
 ### 4. modules/
@@ -387,6 +400,8 @@ Module-scoped Failure, Exception, and FailureX are placed in module shared for r
 lib/
 ├── app/
 ├── core/
+│   └── extensions/ => shared extensions
+│       └── ... 
 └── modules/
 ```
 

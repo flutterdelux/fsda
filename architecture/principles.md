@@ -56,8 +56,7 @@ Contoh sequence:
 * Retrieval + Pagination
 * Retrieval + Stream
 * Retrieval + Stream + Param
-* Retrieval + Cache
-* Retrieval + Local First
+* Retrieval + Offline First
 
 Setiap feature slice harus dapat dipetakan ke tepat satu sequence yang jelas.
 
@@ -106,7 +105,7 @@ Feature slice menjadi unit terkecil pengembangan dalam FSDA.
 
 &nbsp;
 
-## 5. Explicit Data Flow
+## 5. Aliran Data Eksplisit
 
 Aliran data harus selalu terlihat dan dapat ditelusuri.
 
@@ -128,31 +127,27 @@ Layer yang lebih luar boleh mengetahui layer yang lebih dalam.
 
 Layer yang lebih dalam tidak boleh mengetahui layer yang lebih luar.
 
-```
-UI
- ↓
-Logic
- ↓
-Domain
- ↑
-Data
-```
-
-atau secara dependency:
 
 ```
 (Dalam)
 Domain
 
 ↑
-Logic
-
-↑
-UI
-
-↑
-Data
+Logic & UI & Data
 (Luar)
+```
+
+Atau dapat digambarkan sebagai struktur composition di App:
+```
+App (Composition Root)
+ ├── UI
+ ├── Logic
+ ├── Domain
+ └── Data
+
+UI ──────┐
+Logic ───┼──► Domain
+Data ────┘
 ```
 
 Domain menjadi pusat bisnis yang independen terhadap implementasi teknis.
@@ -173,8 +168,6 @@ Shared Placement Guidelines:
 * Digunakan oleh beberapa feature dalam satu module → letakkan pada module shared.
 * Digunakan oleh seluruh aplikasi → letakkan pada app atau package yang sesuai.
 * Komponen tidak harus dipindahkan ke boundary yang lebih tinggi hanya karena diakses oleh boundary yang lebih tinggi. Ownership tetap mengikuti boundary penggunaan utamanya.
-
-Shared mengikuti boundary penggunaan aktual, bukan perkiraan penggunaan di masa depan.
 
 &nbsp;
 

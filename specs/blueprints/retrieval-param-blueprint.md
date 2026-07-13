@@ -4,7 +4,6 @@
 | ---- | ----------------------------- | ------------ | ----------- | ------------- | ------------------------ |
 | Rp   | Retrieval + Param             | product      | product     | detail        | getProductDetail()       |
 
-![sequence](../sequences/images/r-p.png)
 
 ## **Layer: Data**
 

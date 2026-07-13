@@ -2,8 +2,6 @@
 
 Dokumen ini bersifat ilustratif, bukan normatif.
 
-Acuan aturan tetap berada pada structure.md, dependency-rules.md, sequence-pattern.md, naming-conventions.md, dan layer docs.
-
 Untuk menjaga keterbacaan, beberapa bagian pada contoh ini menyorot struktur implementasi utama tanpa selalu mengulang seluruh baseline Flutter yang kini direkomendasikan untuk setiap module, seperti `l10n.yaml`, `lib/l10n/`, dan `lib/src/generated/`.
 
 Aturan normatif untuk baseline module tetap mengikuti [Structure](structure.md), [Development Workflow](../guides/development-workflow.md), dan [app_l10n](../packages/app-l10n.md).

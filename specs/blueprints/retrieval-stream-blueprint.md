@@ -5,7 +5,6 @@
 | Rs   | Retrieval + Stream            | attendance   | attendance  | list          | watchAttendanceList()    |
 
 
-![sequence](../sequences/images/r-s.png)
 
 ## **Layer: Data**
 

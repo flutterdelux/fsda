@@ -54,13 +54,13 @@ packages:
   - app_core
   - app_l10n
   - app_ui
-  - infra_dio
+  - infra_http
   - infra_logging
 ```
 
 Catatan:
 - daftar di packages menentukan apa yang akan disiapkan oleh fsda configure
-- kalau mau ganti stack infra (misal dari dio ke http), edit di sini dulu
+- kalau mau ganti stack infra (misal dari http ke http), edit di sini dulu
 
 ## 3) Cek Template Package dan Infra yang Tersedia
 
@@ -97,7 +97,7 @@ packages/
 ├── app_core/
 ├── app_l10n/
 ├── app_ui/
-├── infra_dio/
+├── infra_http/
 └── infra_logging/
 ```
 

@@ -1,8 +1,8 @@
-# Structure
+# Struktur
 
 Dokumen ini merupakan peta struktur global FSDA.
 
-Detail rule tetap dijelaskan pada dokumen khusus, seperti dependency-rules.md, sequence-pattern.md, naming-conventions.md, dan layer docs.
+Detail rule tetap dijelaskan pada dokumen khusus, seperti [dependency rules](dependency-rules.md), [sequence patterns](sequence-pattern.md), [naming conventions](../conventions/naming-conventions.md), dan [layer docs](layers/domain-layer.md).
 
 Dokumen ini menjelaskan:
 
@@ -18,7 +18,7 @@ Dokumen ini membantu melihat gambaran besar struktur proyek. Jika terjadi konfli
 
 &nbsp;
 
-## Workspace Structure
+## Struktur Workspace
 
 ```text
 root-workspace/
@@ -70,7 +70,7 @@ packages/
 
 &nbsp;
 
-## App Structure
+## Struktur App
 
 App bertanggung jawab sebagai composition root aplikasi.
 
@@ -105,7 +105,7 @@ Contoh tanggung jawab:
 
 ### 2. app/
 
-Berisi composition root aplikasi.
+Berisi bootstrap aplikasi.
 
 ```text
 app/
@@ -152,7 +152,7 @@ Berisi kebutuhan teknis aplikasi.
 core/
 ├── constants/
 │   ├── app_config.dart
-│   ├── app_constants.dart
+│   ├── app_assets.dart
 │   └── app_external_links.dart
 ├── di/
 │   ├── core_di.dart
@@ -198,7 +198,7 @@ modules/
 
 &nbsp;
 
-## Module Structure
+## Struktur Module
 
 Module merupakan business boundary utama.
 
@@ -255,7 +255,7 @@ Detail teknis seperti package dependency, `Freezed`, `json_serializable`, `build
 
 &nbsp;
 
-## Feature Structure
+## Struktur Feature
 
 Feature merupakan business capability dalam suatu module.
 
@@ -283,7 +283,7 @@ features/
 
 &nbsp;
 
-## Layer Structure
+## Struktur Layer
 
 Setiap feature menggunakan empat layer:
 
@@ -358,7 +358,7 @@ ui/
 
 &nbsp;
 
-## Feature Slice Structure
+## Struktur Feature Slice
 
 Feature Slice merupakan unit implementasi terkecil dalam FSDA.
 
@@ -417,7 +417,7 @@ Seluruh object modeling seperti DTO, Entity, Request, Response, dan Param diperl
 
 &nbsp;
 
-## Shared Structure
+## Struktur Shared
 
 * Feature Shared
 
@@ -459,7 +459,7 @@ Digunakan oleh beberapa compose module dalam satu aplikasi.
 lib/
 ├── app/
 ├── core/
-│   └── shared/
+│   └── extensions/ => shared extensions
 │       └── ... 
 └── modules/
 ```

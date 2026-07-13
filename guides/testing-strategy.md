@@ -33,7 +33,7 @@ Contoh fokus pengujian:
 * Retrieval: success, empty state, failure, loading
 * Retrieval + Pagination: page progression, append behavior, end-of-list behavior
 * Retrieval + Stream: initial emission, update emission, failure emission bila relevan
-* Retrieval + Local First: local hit, remote fallback, sync behavior bila ada
+* Retrieval + Offline First: local hit, remote fallback, sync behavior bila ada
 
 &nbsp;
 

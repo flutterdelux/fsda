@@ -1,10 +1,10 @@
 # Feature Slice Driven Architecture (FSDA)
 
-> A pragmatic, rule-driven Flutter architecture focused on consistency, discoverability, maintainability, scalability, and automation.
+> Arsitektur Flutter yang pragmatis dan digerakkan oleh aturan, berfokus pada konsistensi, kemudahan pencarian, pemeliharaan, skalabilitas, dan automasi.
 
 &nbsp;
 
-## What is Feature Slice Driven Architecture (FSDA)?
+## Apa itu Feature Slice Driven Architecture (FSDA)?
 
 FSDA adalah arsitektur Flutter yang dirancang untuk membangun aplikasi yang konsisten, mudah dipahami, mudah dipelihara, dan mudah dikembangkan dalam jangka panjang.
 
@@ -26,7 +26,7 @@ Sebaliknya, FSDA berfokus pada bagaimana membangun struktur proyek yang konsiste
 
 &nbsp;
 
-## Why FSDA?
+## Mengapa FSDA?
 
 Banyak arsitektur menjelaskan:
 
@@ -50,7 +50,7 @@ FSDA hadir untuk mengurangi ambiguitas tersebut melalui aturan implementasi yang
 
 &nbsp;
 
-## Structural Overview
+## Ringkasan Struktur
 
 FSDA menggunakan pendekatan Modular Monorepo.
 
@@ -74,7 +74,6 @@ Workspace mengelompokkan:
 - Apps
 - Modules
 - Shared Packages
-- Documentation
 
 Workspace bukan tempat implementasi business logic.
 
@@ -183,13 +182,14 @@ Shared Package menyediakan kontrak, utilitas, fondasi UI, dan integrasi teknolog
 
 &nbsp;
 
-## Architecture Layers
+## Layer Arsitektur
 
+*(Execution Flow)*
 ```
 UI
- ↓
+ ↓ (calls)
 Logic
- ↓
+ ↓ (calls)
 Domain
 
 Data
@@ -209,17 +209,22 @@ App sebagai composition layer dijelaskan terpisah pada:
 
 &nbsp;
 
-## Dependency Overview
+## Ringkasan Dependency
 
+*(Dependency Rule)*
 ```
-UI
- ↓
-Logic
- ↓
-Domain
- ↑
-Data
+App (Composition Root)
+ ├── UI
+ ├── Logic
+ ├── Domain
+ └── Data
+
+UI ──────┐
+Logic ───┼──► Domain
+Data ────┘
 ```
+
+**Penting**: Arah panah dari UI ke Logic pada eksekusi flow bukanlah sebuah dependency struktural langsung dari layer UI, melainkan sebatas akses *method*. Yang bertugas merakit (compose) UI dan Logic adalah layer **App**. Layer UI, Logic, dan Data pada dasarnya bergantung (depend) ke layer Domain secara independen.
 
 Detail aturan dependency dijelaskan pada:
 
@@ -227,7 +232,7 @@ Detail aturan dependency dijelaskan pada:
 
 &nbsp;
 
-## Sequence-Based Development
+## Pengembangan Berbasis Sequence
 
 FSDA menggunakan pendekatan Sequence-Based Development.
 
@@ -244,14 +249,13 @@ Contoh:
 - Retrieval + Pagination
 - Retrieval + Stream
 - Retrieval + Stream + Param
-- Retrieval + Cache
-- Retrieval + Local First
+- Retrieval + Offline First
 
 Sequence menyediakan pola implementasi yang konsisten, dapat diprediksi, dan mudah diautomasi.
 
 &nbsp;
 
-## Principles
+## Prinsip
 
 Seluruh prinsip dasar FSDA dijelaskan pada:
 
@@ -259,7 +263,7 @@ Seluruh prinsip dasar FSDA dijelaskan pada:
 
 &nbsp;
 
-## Structure
+## Struktur
 
 Struktur folder, module, feature, feature slice, dan sequence dijelaskan pada:
 
@@ -267,7 +271,7 @@ Struktur folder, module, feature, feature slice, dan sequence dijelaskan pada:
 
 &nbsp;
 
-## Shared Packages
+## Shared Packages 
 
 Dokumentasi shared package disusun terpisah per package agar tanggung jawab tiap fondasi tetap eksplisit.
 
@@ -278,7 +282,7 @@ Dokumentasi shared package disusun terpisah per package agar tanggung jawab tiap
 
 &nbsp;
 
-## Conventions
+## Konvensi
 
 Dokumen konvensi yang tersedia saat ini:
 
@@ -290,7 +294,7 @@ Konvensi lain akan dipublikasikan terpisah sesuai kebutuhan dokumentasi.
 
 &nbsp;
 
-## Supporting Docs
+## Dokumen Pendukung
 
 Dokumen pendukung berikut membantu menjelaskan fondasi, pengambilan keputusan, testing, dan arah tooling FSDA.
 
@@ -302,11 +306,11 @@ Dokumen pendukung berikut membantu menjelaskan fondasi, pengambilan keputusan, t
 
 &nbsp;
 
-## Philosophy
+## Filosofi
 
-> A good architecture helps developers make decisions.
+> Arsitektur yang baik membantu developer membuat keputusan.
 
-> A great architecture reduces the number of decisions developers need to make.
+> Arsitektur yang hebat mengurangi jumlah keputusan yang perlu dibuat oleh developer.
 
 FSDA dibangun berdasarkan filosofi tersebut.
 
@@ -316,6 +320,6 @@ Dengan aturan yang jelas, struktur yang konsisten, dan batasan yang eksplisit, d
 
 ## Status
 
-🚧 Under Active Development
+🚧 Sedang Dalam Pengembangan Aktif
 
 FSDA terus berkembang berdasarkan pengalaman nyata dalam pengembangan aplikasi Flutter dan kebutuhan untuk menjaga konsistensi, skalabilitas, dan kemudahan automasi dalam jangka panjang.

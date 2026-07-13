@@ -1,10 +1,10 @@
-# Foundations
+# Fondasi
 
 Dokumen ini menjelaskan fondasi abstraksi yang sering muncul pada contoh-contoh FSDA.
 
 &nbsp;
 
-## Purpose
+## Tujuan
 
 FSDA tidak hanya bergantung pada struktur folder, tetapi juga pada beberapa abstraction dasar yang membantu menjaga alur implementasi tetap konsisten.
 
@@ -12,7 +12,7 @@ Dokumen ini tidak mengunci implementasi final satu package tertentu, tetapi menj
 
 &nbsp;
 
-## Core Concepts
+## Konsep Inti
 
 Abstraction yang sering muncul antara lain:
 
@@ -98,7 +98,7 @@ Jika logging dibutuhkan lintas banyak boundary, letakkan abstraction-nya pada fo
 
 &nbsp;
 
-## Placement Guidance
+## Panduan Penempatan
 
 Tidak semua abstraction harus diletakkan di tempat yang sama untuk semua project.
 

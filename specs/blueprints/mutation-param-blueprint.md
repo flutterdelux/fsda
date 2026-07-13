@@ -4,7 +4,6 @@
 | ---- | ----------------------------- | ------------ | ----------- | ------------- | ------------------------ |
 | Mp   | Mutation + Param              | finance      | wallet      | delete        | deleteWallet()           |
 
-![sequence](../sequences/images/m-p.png)
 
 ## **Layer: Data**
 

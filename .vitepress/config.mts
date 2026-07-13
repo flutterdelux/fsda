@@ -40,17 +40,6 @@ const idSidebar = [
     ],
   },
   {
-    text: 'FSDA CLI',
-    collapsed: false,
-    items: [
-      { text: 'Commands', link: '/cli/commands' },
-      { text: 'Workflow', link: '/cli/worflow' },
-      { text: 'UI Slice', link: '/cli/ui_slice' },
-      { text: 'Cheat Sheet', link: '/cli/cheat_sheet_fsda_cli' },
-      { text: 'Local Dev', link: '/cli/local_dev' },
-    ],
-  },
-  {
     text: 'Conventions & Guides',
     collapsed: true,
     items: [
@@ -60,6 +49,17 @@ const idSidebar = [
       { text: 'Development Workflow', link: '/guides/development-workflow' },
       { text: 'Testing Strategy', link: '/guides/testing-strategy' },
       { text: 'Anti Patterns', link: '/guides/anti-patterns' },
+    ],
+  },
+  {
+    text: 'FSDA CLI',
+    collapsed: false,
+    items: [
+      { text: 'Commands', link: '/cli/commands' },
+      { text: 'Workflow', link: '/cli/worflow' },
+      { text: 'UI Slice', link: '/cli/ui_slice' },
+      { text: 'Cheat Sheet', link: '/cli/cheat_sheet_fsda_cli' },
+      { text: 'Local Dev', link: '/cli/local_dev' },
     ],
   },
 ]
@@ -113,17 +113,6 @@ const enSidebar = [
     ],
   },
   {
-    text: 'FSDA CLI',
-    collapsed: false,
-    items: [
-      { text: 'Commands', link: '/en/cli/commands' },
-      { text: 'Workflow', link: '/en/cli/worflow' },
-      { text: 'UI Slice', link: '/en/cli/ui_slice' },
-      { text: 'Cheat Sheet', link: '/en/cli/cheat_sheet_fsda_cli' },
-      { text: 'Local Dev', link: '/en/cli/local_dev' },
-    ],
-  },
-  {
     text: 'Conventions & Guides',
     collapsed: true,
     items: [
@@ -145,6 +134,17 @@ const enSidebar = [
       },
       { text: 'Testing Strategy', link: '/en/guides/testing-strategy' },
       { text: 'Anti Patterns', link: '/en/guides/anti-patterns' },
+    ],
+  },
+  {
+    text: 'FSDA CLI',
+    collapsed: false,
+    items: [
+      { text: 'Commands', link: '/en/cli/commands' },
+      { text: 'Workflow', link: '/en/cli/worflow' },
+      { text: 'UI Slice', link: '/en/cli/ui_slice' },
+      { text: 'Cheat Sheet', link: '/en/cli/cheat_sheet_fsda_cli' },
+      { text: 'Local Dev', link: '/en/cli/local_dev' },
     ],
   },
 ]

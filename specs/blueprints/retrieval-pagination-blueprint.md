@@ -4,7 +4,6 @@
 | ---- | ----------------------------- | ------------ | ----------- | ------------- | ------------------------ |
 | Rpag | Retrieval + Pagination        | location     | city        | list          | getCityList()            |
 
-![sequence](../sequences/images/r-pag.png)
 
 ## **Layer: Data**
 

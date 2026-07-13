@@ -1,10 +1,9 @@
-# Retrieval + Local First Blueprint
+# Retrieval + Offline First Blueprint
 
 | Code | Sequence                      | Module       | Feature     | Feature Slice | Example Method           |
 | ---- | ----------------------------- | ------------ | ----------- | ------------- | ------------------------ |
-| Rloc | Retrieval + Local First       | note         | note        | list          | getNoteList()            |
+| Rloc | Retrieval + Offline First       | note         | note        | list          | getNoteList()            |
 
-![sequence](../sequences/images/r-loc.png)
 
 ## **Layer: Data**
 

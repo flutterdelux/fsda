@@ -86,7 +86,7 @@ ui/
 flutter/
 ```
 
-Contoh salah:
+Contoh:
 
 ```dart
 import '../../data/dtos/task_dto.dart';
@@ -279,7 +279,7 @@ import '../../domain/usecases/task_create_use_case.dart';
 import '../../domain/params/task_create_param.dart';
 ```
 
-✅ Dependency on another logic file in same slice
+✅ Dependency on another logic file
 
 ```dart
 import 'task_create_state.dart';
