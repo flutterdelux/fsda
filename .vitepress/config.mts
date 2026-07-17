@@ -6,8 +6,8 @@ const idSidebar = [
     items: [
       { text: 'Getting Started', link: '/getting-started' },
       {
-        text: 'Wikuy Manual E2E (Tanpa CLI)',
-        link: '/getting-started-manual-wikuy',
+        text: 'Wikuy E2E',
+        link: '/getting-started-wikuy',
       },
       {
         text: 'Wikuy CLI-Driven E2E',
@@ -55,11 +55,11 @@ const idSidebar = [
     text: 'FSDA CLI',
     collapsed: false,
     items: [
+      { text: 'Installation', link: '/cli/installation' },
       { text: 'Commands', link: '/cli/commands' },
-      { text: 'Workflow', link: '/cli/worflow' },
+      { text: 'Workflow', link: '/cli/workflow' },
       { text: 'UI Slice', link: '/cli/ui_slice' },
       { text: 'Cheat Sheet', link: '/cli/cheat_sheet_fsda_cli' },
-      { text: 'Local Dev', link: '/cli/local_dev' },
     ],
   },
 ]
@@ -70,12 +70,12 @@ const enSidebar = [
     items: [
       { text: 'Getting Started', link: '/en/getting-started' },
       {
-        text: 'Wikuy Manual E2E (No CLI)',
-        link: '/en/getting-started-manual-wikuy',
+        text: 'Wikuy E2E',
+        link: '/getting-started-wikuy',
       },
       {
         text: 'Wikuy CLI-Driven E2E',
-        link: '/en/getting-started-cli-wikuy',
+        link: '/getting-started-cli-wikuy',
       },
     ],
   },
@@ -140,11 +140,11 @@ const enSidebar = [
     text: 'FSDA CLI',
     collapsed: false,
     items: [
+      { text: 'Installation', link: '/en/cli/installation' },
       { text: 'Commands', link: '/en/cli/commands' },
-      { text: 'Workflow', link: '/en/cli/worflow' },
+      { text: 'Workflow', link: '/en/cli/workflow' },
       { text: 'UI Slice', link: '/en/cli/ui_slice' },
       { text: 'Cheat Sheet', link: '/en/cli/cheat_sheet_fsda_cli' },
-      { text: 'Local Dev', link: '/en/cli/local_dev' },
     ],
   },
 ]

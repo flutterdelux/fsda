@@ -1,8 +1,8 @@
 # App
 
-App is a hidden composition layer that orchestrates Logic and UI, routing management, and concerns that do not belong to domain, logic, or UI directly.
+The App is a hidden layer that orchestrates Logic and UI, routing management, and other necessities that do not fall under the domain, logic, or UI layers.
 
-It is not categorized as a primary layer, so the primary layering remains in four forms:
+It is not categorized as a main layer, keeping the layering structure at 4 forms, which are:
 
 ```text
 Data  ─────┐
@@ -13,21 +13,21 @@ UI ────────┘
 ```
 
 ```text
-App knows modules.
-Modules do not know App.
+The App knows the module.
+The module does not know the App. 
 ```
 
-This relation makes App the highest composition point in the application.
+This relationship makes the App the highest composition point in the application.
 
-&nbsp;
+
 
 ## Composition
 
-UI and Logic are composed by App.
+UI and Logic will eventually be combined by the App.
 
-A page in App may represent one primary slice or an aggregate surface combining multiple slices.
+A Page in the App can represent one primary slice or become an aggregate surface that combines several slices at once.
 
-Logic can also be registered at page scope or higher scope (such as root/global) when lifecycle and composition needs require it.
+Logic can also be registered at the page scope or a higher scope such as the root/global scope if the lifecycle and composition needs require it.
 
 Example:
 
@@ -37,7 +37,7 @@ ProductDetailPage
  └── ProductDetailView
 ```
 
-Routing management is also App responsibility. Module routes are grouped per module, then merged together.
+Routing management is also the responsibility of the App. The route of each module is arranged in the App by grouping each module, then combined into one.
 
 Example:
 
@@ -59,7 +59,7 @@ routes: [
 ],
 ```
 
-Localization composition is also App responsibility. App composes shared localization from `app_l10n` together with module localizations used by the application.
+Localization composition is also the responsibility of the App. The App arranges general localization from `app_l10n` along with localizations belonging to the modules used by the application.
 
 Example:
 
@@ -73,7 +73,7 @@ MaterialApp(
 )
 ```
 
-Dependency injection is also App responsibility. App initializes each module DI and merges them.
+Likewise, with dependency injection, the App is responsible for initializing the dependency injection of each module and combining them into one.
 
 ```dart
 Future<void> initDI() async {
@@ -93,7 +93,7 @@ Future<void> initDI() async {
 }
 ```
 
-&nbsp;
+
 
 ## Dependency Rules
 
@@ -111,10 +111,10 @@ Forbidden:
 other apps
 ```
 
-&nbsp;
+
 
 ## Why This Layer Is Hidden
 
-App does not represent specific business or technical concern. App only orchestrates and composes components from other layers, so it is not categorized as a primary FSDA layer.
+The App does not represent a specific business or technical concern. The App is only tasked with orchestrating and arranging components from other layers. Therefore, the App is not categorized as a main layer in FSDA.
 
-Hidden but essential. Hidden layer here means App depends on other layers so features can be applied in an application and used by users. App is the main application project itself. Because there can be many App projects with different composition styles, App is not treated as a primary layer.
+Hidden but important. The term hidden layer here is because the App depends on other layers so that features can be applied to the application and used by the user. The actual form of the App is the main project of the application. There can be many App projects and the way they are composed can be different, so it is not categorized as a main layer.

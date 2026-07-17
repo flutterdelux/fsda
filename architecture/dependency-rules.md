@@ -10,7 +10,7 @@ Tujuan utama dependency rules adalah:
 - Memastikan automation dapat dilakukan secara deterministik.
 - Menjaga scalability jangka panjang.
 
-&nbsp;
+
 
 ## Dependency Direction
 
@@ -28,7 +28,7 @@ Domain tidak mengetahui layer lain.
 
 Domain adalah pusat kontrak aplikasi.
 
-&nbsp;
+
 
 ## Layer Dependency Matrix
 
@@ -39,7 +39,7 @@ Domain adalah pusat kontrak aplikasi.
 | Logic  | Domain, Logic   |
 | UI     | Domain, UI      |
 
-&nbsp;
+
 
 ## Domain Layer Rules
 
@@ -56,7 +56,7 @@ Domain mendefinisikan:
 
 Domain tidak boleh mengetahui implementasi.
 
-&nbsp;
+---
 
 ### Domain Can Depend On
 
@@ -73,7 +73,7 @@ import '../entities/task.dart';
 import '../repositories/task_repository.dart';
 ```
 
-&nbsp;
+---
 
 ### Domain Cannot Depend On
 
@@ -100,7 +100,7 @@ import '../../logic/create/task_create_cubit.dart';
 import 'package:flutter/material.dart';
 ```
 
-&nbsp;
+---
 
 ### Correct Example
 
@@ -117,7 +117,7 @@ class TaskCreateUseCase {
 }
 ```
 
-&nbsp;
+---
 
 ### Wrong Example
 
@@ -139,7 +139,7 @@ import '../../logic/create/task_create_cubit.dart';
 import '../../ui/create/pages/task_create_page.dart';
 ```
 
-&nbsp;
+
 
 ## Data Layer Rules
 
@@ -156,7 +156,7 @@ Data bertanggung jawab terhadap:
 - Converter
 - Repository Implementation
 
-&nbsp;
+---
 
 ### Data Can Depend On
 
@@ -174,7 +174,7 @@ import '../../domain/entities/task.dart';
 import '../dtos/task_dto.dart';
 ```
 
-&nbsp;
+---
 
 ### Correct Examples
 
@@ -196,7 +196,7 @@ import '../../domain/entities/task.dart';
 import '../converters/task_converter.dart';
 ```
 
-&nbsp;
+---
 
 ### Data Cannot Depend On
 
@@ -207,7 +207,7 @@ logic/
 ui/
 ```
 
-&nbsp;
+---
 
 ### Wrong Examples
 
@@ -229,7 +229,7 @@ import '../../logic/create/task_create_state.dart';
 import '../../ui/create/pages/task_create_page.dart';
 ```
 
-&nbsp;
+
 
 ## Logic Layer Rules
 
@@ -246,7 +246,7 @@ Logic bertanggung jawab terhadap:
 
 Logic tidak boleh mengetahui implementasi data.
 
-&nbsp;
+---
 
 ### Logic Can Depend On
 
@@ -263,7 +263,7 @@ Contoh:
 import '../../domain/usecases/task_create_use_case.dart';
 ```
 
-&nbsp;
+---
 
 ### Correct Examples
 
@@ -285,7 +285,7 @@ import '../../domain/params/task_create_param.dart';
 import 'task_create_state.dart';
 ```
 
-&nbsp;
+---
 
 ### Logic Cannot Depend On
 
@@ -296,7 +296,7 @@ data/
 ui/
 ```
 
-&nbsp;
+---
 
 ### Wrong Examples
 
@@ -318,7 +318,7 @@ import '../../data/repositories/task_repository_impl.dart';
 import '../../ui/create/pages/task_create_page.dart';
 ```
 
-&nbsp;
+
 
 ## UI Layer Rules
 
@@ -337,7 +337,7 @@ import '../../ui/create/pages/task_create_page.dart';
 
 App Layer bertugas meng-compose UI dengan Logic.
 
-&nbsp;
+---
 
 ### UI Can Depend On
 
@@ -350,7 +350,7 @@ flutter/
 app_ui/
 ```
 
-&nbsp;
+---
 
 ### Correct Examples
 
@@ -378,7 +378,7 @@ import '../extensions/task_status_x.dart';
 import 'package:app_ui/app_ui.dart';
 ```
 
-&nbsp;
+---
 
 ### UI Cannot Depend On
 
@@ -389,7 +389,7 @@ data/
 logic/
 ```
 
-&nbsp;
+---
 
 ### Wrong Examples
 
@@ -411,7 +411,7 @@ import '../../domain/usecases/task_create_use_case.dart';
 import '../../logic/create/task_create_cubit.dart';
 ```
 
-&nbsp;
+
 
 ## App Layer Rules
 
@@ -425,7 +425,7 @@ App Layer bertanggung jawab terhadap:
 - Module Composition
 - Global State Composition
 
-&nbsp;
+---
 
 ### App Can Depend On
 
@@ -436,7 +436,7 @@ modules/
 packages/
 ```
 
-&nbsp;
+---
 
 ### Correct Examples
 
@@ -456,7 +456,7 @@ await inboxDI();
 await taskDI();
 ```
 
-&nbsp;
+
 
 ## Cross Feature Rules
 
@@ -475,7 +475,7 @@ Akses lintas feature untuk kebutuhan modeling seperti DTO, Entity, Param, Reques
 
 Jika `featureC` membutuhkan operasi yang berada di `featureD`, misalnya `createTransaction` membutuhkan `createTransactionItems`, maka akses tersebut diperbolehkan selama alasan keterkaitannya jelas, flow-nya tetap sederhana, dan tidak menciptakan circular dependence.
 
-&nbsp;
+---
 
 ### Allowed
 
@@ -497,7 +497,7 @@ Penjelasan singkat:
 
 Allowed bukan berarti semua file internal bebas diakses dari mana saja. Tetap jaga agar alasan aksesnya jelas, sederhana, dan tidak sampai membentuk circular dependence.
 
-&nbsp;
+---
 
 ### Wrong Example
 
@@ -524,13 +524,13 @@ feature_c memanggil banyak file internal feature_d
 tanpa boundary yang jelas
 ```
 
-&nbsp;
+
 
 ## Cross Module Rules
 
 Module tidak boleh mengakses internal module lain.
 
-&nbsp;
+---
 
 ### Allowed
 
@@ -544,7 +544,7 @@ Contoh:
 import 'package:task/task.dart';
 ```
 
-&nbsp;
+---
 
 ### Wrong Example
 
@@ -554,13 +554,13 @@ import 'package:task/task.dart';
 import 'package:task/src/features/task/...';
 ```
 
-&nbsp;
+
 
 ## Shared Rules
 
 Shared mengikuti boundary penggunaan aktual.
 
-&nbsp;
+---
 
 ### Feature Shared
 
@@ -571,7 +571,7 @@ feature/
  └── shared/
 ```
 
-&nbsp;
+---
 
 ### Module Shared
 
@@ -582,7 +582,7 @@ module/
  └── shared/
 ```
 
-&nbsp;
+---
 
 ### App Shared
 
@@ -594,13 +594,13 @@ core/
 packages/
 ```
 
-&nbsp;
+
 
 Komponen tidak harus dipindahkan ke boundary yang lebih tinggi hanya karena dibaca oleh boundary yang lebih tinggi.
 
 Ownership tetap mengikuti boundary penggunaan utamanya.
 
-&nbsp;
+
 
 ## Golden Rule
 

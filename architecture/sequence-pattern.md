@@ -7,7 +7,8 @@ Sequence adalah pola implementasi yang mendefinisikan aliran data, struktur impl
 ## Mengapa Sequence Ada
 
 Sequence ada untuk memastikan seluruh implementasi feature slice mengikuti pola yang konsisten, sehingga seluruh implementasi menjadi:
-* predictable
+
+* mudah diprediksi
 * konsisten
 * mudah dipelajari
 * mudah diautomasi

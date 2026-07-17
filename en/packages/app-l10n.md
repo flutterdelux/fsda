@@ -2,15 +2,11 @@
 
 Foundation package for localization and language resources shared across applications.
 
-&nbsp;
-
 ## Purpose
 
 `app_l10n` centralizes cross-application text management so localization is not scattered across App, Module, or specific widgets.
 
 `app_l10n` is not a replacement for module localization. It serves as shared localization foundation at app/system level.
-
-&nbsp;
 
 ## Typical Responsibilities
 
@@ -21,8 +17,6 @@ Examples of resources suitable for `app_l10n`:
 * shared localized messages used across modules
 * locale and fallback locale configuration used across applications
 
-&nbsp;
-
 ## Shared L10n vs Module L10n
 
 Responsibility split:
@@ -31,8 +25,6 @@ Responsibility split:
 * each module can and usually should maintain its own localization for module-specific UI text
 
 If a module renders user-facing text, the module should own its l10n resources so text ownership stays near module boundary.
-
-&nbsp;
 
 ## Module L10n Baseline
 
@@ -65,8 +57,6 @@ output-dir: lib/src/generated
 untranslated-messages-file: missing_keys.json
 ```
 
-&nbsp;
-
 ## Good Candidates
 
 Place resources in `app_l10n` when they:
@@ -74,8 +64,6 @@ Place resources in `app_l10n` when they:
 * are directly related to language or translation
 * are shared by more than one module or app
 * do not carry specific business feature ownership
-
-&nbsp;
 
 ## Not For
 
@@ -86,8 +74,6 @@ Place resources in `app_l10n` when they:
 * datasource or repository
 * messages relevant only to one feature/module and not yet cross-boundary
 
-&nbsp;
-
 ## Dependency Position
 
 `app_l10n` can be used by App and Module when shared localization resources are needed.
@@ -97,8 +83,6 @@ Keep system-wide localization here so language changes do not stick to specific 
 For truly module-specific text, keep localization in that module.
 
 In current Flutter baseline, modules commonly depend on `app_l10n` for general localization used across apps/modules.
-
-&nbsp;
 
 ## Composition In App
 

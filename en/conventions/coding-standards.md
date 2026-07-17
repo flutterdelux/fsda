@@ -2,13 +2,11 @@
 
 This document defines baseline coding guidelines for FSDA.
 
-&nbsp;
 
 ## Purpose
 
 Coding standards keep implementation consistent, make reviews easier, and reduce unnecessary variation across the codebase.
 
-&nbsp;
 
 ## General Principles
 
@@ -20,7 +18,6 @@ Use the following as your baseline:
 * keep naming aligned with active conventions
 * avoid hidden side effects
 
-&nbsp;
 
 ## Layer Discipline
 
@@ -34,7 +31,6 @@ Each layer must stay within its responsibility:
 
 If a change blurs layer responsibilities, the implementation structure usually needs to be revisited.
 
-&nbsp;
 
 ## Code Style
 
@@ -46,7 +42,6 @@ Use a consistent writing style:
 * add comments only when they clarify decisions or non-obvious flow
 * avoid files or classes with too many responsibilities
 
-&nbsp;
 
 ## Flow Clarity
 
@@ -59,7 +54,6 @@ Keep these rules:
 * do not place business orchestration in UI
 * do not place composition concerns in Module
 
-&nbsp;
 
 ## Shared Placement
 
@@ -73,7 +67,6 @@ Promote a boundary only when:
 
 If a resource is still specific to one feature or one module, keep it in its nearest boundary.
 
-&nbsp;
 
 ## Testing Awareness
 

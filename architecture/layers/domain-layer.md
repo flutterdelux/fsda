@@ -16,7 +16,7 @@ Logic ─────┼──► Domain
 UI ────────┘
 ```
 
-&nbsp;
+
 
 ## Responsibilities
 
@@ -38,7 +38,7 @@ Domain tidak bertanggung jawab terhadap:
 * State Management
 * Framework Implementation
 
-&nbsp;
+
 
 ## Domain Structure
 
@@ -60,7 +60,7 @@ shared/
         └── <module>_failure.dart
 ```
 
-&nbsp;
+
 
 ## Entities
 
@@ -89,7 +89,7 @@ Entity tidak mengetahui:
 * Response
 * Flutter Widget
 
-&nbsp;
+
 
 ## Repository Contracts
 
@@ -109,7 +109,7 @@ Repository tidak memiliki implementasi.
 
 Implementasi berada di data layer.
 
-&nbsp;
+
 
 ## Param
 
@@ -127,7 +127,7 @@ final class ProductDetailParam {
 }
 ```
 
-&nbsp;
+
 
 ## Use Cases
 
@@ -152,7 +152,7 @@ class ProductDetailUseCase extends UseCase<ProductEntity, ProductDetailParam> {
 ```
 
 
-&nbsp;
+
 
 ## Business Enums
 
@@ -164,7 +164,7 @@ Contoh:
 enum PaymentStatus { unpaid, paid, expired }
 ```
 
-&nbsp;
+
 
 ## Failures
 
@@ -183,7 +183,7 @@ enum ProductFailure implements Failure { productNotFound }
 
 Pada FSDA, failure diletakkan di `module/shared/domain/errors` karena merupakan domain concern yang dapat diakses bersama oleh seluruh feature di bawah module yang sama.
 
-&nbsp;
+
 
 ## Dependency Rules
 
@@ -204,13 +204,13 @@ ui/
 flutter/
 ```
 
-&nbsp;
+
 
 ## Why This Layer Exists
 
 Domain ada untuk memisahkan kontrak bisnis dari implementasi.
 
-&nbsp;
+
 
 ## Key Principle
 

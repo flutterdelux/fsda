@@ -8,7 +8,7 @@ UI harus fokus pada presentation.
 
 UI tidak boleh mengandung business orchestration.
 
-&nbsp;
+
 
 ## Responsibilities
 
@@ -25,7 +25,7 @@ UI tidak bertanggung jawab terhadap:
 * Business Logic
 * State Management
 
-&nbsp;
+
 
 ## UI Structure
 
@@ -39,7 +39,7 @@ ui/
 └── shared/
 ```
 
-&nbsp;
+
 
 ## View
 
@@ -58,7 +58,7 @@ View tidak memanggil repository.
 
 View tidak memanggil datasource.
 
-&nbsp;
+
 
 ## Widget
 
@@ -71,7 +71,7 @@ class ProductDetailCard extends StatelessWidget {
 }
 ```
 
-&nbsp;
+
 
 ## Shared UI
 
@@ -97,7 +97,7 @@ shared/
 
 Jika UI pada module menampilkan text ke user, module tersebut sebaiknya memiliki resource localization sendiri. `app_l10n` tetap digunakan untuk text yang sifatnya umum atau shared lintas module.
 
-&nbsp;
+
 
 ## Dependency Rules
 
@@ -117,13 +117,13 @@ data/
 logic/
 ```
 
-&nbsp;
+
 
 ## Why This Layer Exists
 
 UI ada untuk menyajikan informasi kepada user.
 
-&nbsp;
+
 
 ## Key Principle
 

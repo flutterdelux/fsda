@@ -1,20 +1,20 @@
 # Dependency Rules
 
-This document defines dependency rules in FSDA.
+This document defines the dependency rules in FSDA.
 
-Primary goals of dependency rules:
+The main goals of dependency rules are:
 
-- keep dependency direction consistent
-- prevent cross-layer coupling
-- keep features movable
-- ensure deterministic automation
-- preserve long-term scalability
+- Maintain a consistent dependency direction.
+- Prevent coupling between layers.
+- Ensure features remain easy to move (portable).
+- Ensure automation can be performed deterministically.
+- Maintain long-term scalability.
 
-&nbsp;
+
 
 ## Dependency Direction
 
-Dependencies always point inward.
+Dependencies always point inwards.
 
 ```text
 Data  ─────┐
@@ -24,11 +24,11 @@ Logic ─────┼──► Domain
 UI ────────┘
 ```
 
-Domain does not know other layers.
+The Domain does not know about other layers.
 
-Domain is the contract center of the application.
+The Domain is the center of application contracts.
 
-&nbsp;
+
 
 ## Layer Dependency Matrix
 
@@ -39,13 +39,13 @@ Domain is the contract center of the application.
 | Logic  | Domain, Logic        |
 | UI     | Domain, UI           |
 
-&nbsp;
+
 
 ## Domain Layer Rules
 
-Domain is the most stable layer.
+The Domain is the most stable layer.
 
-Domain defines:
+The Domain defines:
 
 - Entity
 - Repository Contract
@@ -54,7 +54,9 @@ Domain defines:
 - Failure
 - Business Enum
 
-Domain must not know implementation details.
+The Domain must not know about implementations.
+
+---
 
 ### Domain Can Depend On
 
@@ -71,6 +73,8 @@ import '../entities/task.dart';
 import '../repositories/task_repository.dart';
 ```
 
+---
+
 ### Domain Cannot Depend On
 
 Forbidden:
@@ -82,15 +86,25 @@ ui/
 flutter/
 ```
 
-Examples:
+Example:
 
 ```dart
 import '../../data/dtos/task_dto.dart';
+```
+
+```dart
 import '../../logic/create/task_create_cubit.dart';
+```
+
+```dart
 import 'package:flutter/material.dart';
 ```
 
+---
+
 ### Correct Example
+
+✅ Dependency on domain contract
 
 ```dart
 import '../repositories/task_repository.dart';
@@ -103,19 +117,33 @@ class TaskCreateUseCase {
 }
 ```
 
+---
+
 ### Wrong Example
+
+❌ Dependency on data implementation
 
 ```dart
 import '../../data/repositories/task_repository_impl.dart';
+```
+
+❌ Dependency on logic layer
+
+```dart
 import '../../logic/create/task_create_cubit.dart';
+```
+
+❌ Dependency on UI
+
+```dart
 import '../../ui/create/pages/task_create_page.dart';
 ```
 
-&nbsp;
+
 
 ## Data Layer Rules
 
-Data implements domain contracts.
+Data is the implementation of domain contracts.
 
 Data is responsible for:
 
@@ -128,6 +156,8 @@ Data is responsible for:
 - Converter
 - Repository Implementation
 
+---
+
 ### Data Can Depend On
 
 Allowed:
@@ -137,20 +167,36 @@ domain/
 data/
 ```
 
-Examples:
+Example:
 
 ```dart
 import '../../domain/entities/task.dart';
 import '../dtos/task_dto.dart';
 ```
 
+---
+
 ### Correct Examples
+
+✅ Dependency on domain contract
 
 ```dart
 import '../../domain/repositories/task_repository.dart';
+```
+
+✅ Dependency on domain entity
+
+```dart
 import '../../domain/entities/task.dart';
+```
+
+✅ Dependency on another data resource
+
+```dart
 import '../converters/task_converter.dart';
 ```
+
+---
 
 ### Data Cannot Depend On
 
@@ -161,15 +207,29 @@ logic/
 ui/
 ```
 
+---
+
 ### Wrong Examples
+
+❌ Dependency on cubit
 
 ```dart
 import '../../logic/create/task_create_cubit.dart';
+```
+
+❌ Dependency on state
+
+```dart
 import '../../logic/create/task_create_state.dart';
+```
+
+❌ Dependency on page
+
+```dart
 import '../../ui/create/pages/task_create_page.dart';
 ```
 
-&nbsp;
+
 
 ## Logic Layer Rules
 
@@ -182,9 +242,11 @@ Logic is responsible for:
 - Bloc
 - Provider
 - Controller
-- other state-management adapters
+- Other state management
 
-Logic must not know Data implementation details.
+Logic must not know about data implementations.
+
+---
 
 ### Logic Can Depend On
 
@@ -201,13 +263,29 @@ Example:
 import '../../domain/usecases/task_create_use_case.dart';
 ```
 
+---
+
 ### Correct Examples
+
+✅ Dependency on use case
 
 ```dart
 import '../../domain/usecases/task_create_use_case.dart';
+```
+
+✅ Dependency on params
+
+```dart
 import '../../domain/params/task_create_param.dart';
+```
+
+✅ Dependency on another logic file
+
+```dart
 import 'task_create_state.dart';
 ```
+
+---
 
 ### Logic Cannot Depend On
 
@@ -218,35 +296,46 @@ data/
 ui/
 ```
 
+---
+
 ### Wrong Examples
+
+❌ Dependency on DTO
 
 ```dart
 import '../../data/dtos/task_dto.dart';
+```
+
+❌ Dependency on repository implementation
+
+```dart
 import '../../data/repositories/task_repository_impl.dart';
+```
+
+❌ Dependency on page
+
+```dart
 import '../../ui/create/pages/task_create_page.dart';
 ```
 
-&nbsp;
+
 
 ## UI Layer Rules
 
-UI is the user-facing presentation layer.
+- UI is the view seen by the user.
+- UI should be as simple as possible.
+- UI is responsible for:
+  - View
+  - Widget
+  - Dialogs, bottom sheets, and other UI components
+- UI must not access the data layer.
+- UI must not access the logic layer.
+- UI can access the domain only in the form of stable presentation models, such as entity, enum, or param.
+- UI must not access repository contracts or domain use cases.
 
-UI should be as simple as possible.
+The App Layer is responsible for composing UI with Logic.
 
-UI is responsible for:
-
-- View
-- Widget
-- Dialog, bottom sheet, and other UI components
-
-UI must not access Data or Logic layers directly.
-
-UI may use Domain only as stable presentation models: entity, enum, param.
-
-UI must not access domain repository contract or use case.
-
-App layer composes UI with Logic.
+---
 
 ### UI Can Depend On
 
@@ -259,14 +348,35 @@ flutter/
 app_ui/
 ```
 
+---
+
 ### Correct Examples
+
+✅ Dependency on domain models
 
 ```dart
 import '../../domain/params/task_create_param.dart';
+```
+
+✅ Dependency on widget
+
+```dart
 import '../widgets/task_form.dart';
+```
+
+✅ Dependency on extension
+
+```dart
 import '../extensions/task_status_x.dart';
+```
+
+✅ Dependency on app_ui
+
+```dart
 import 'package:app_ui/app_ui.dart';
 ```
+
+---
 
 ### UI Cannot Depend On
 
@@ -277,27 +387,43 @@ data/
 logic/
 ```
 
+---
+
 ### Wrong Examples
+
+❌ Dependency on repository
 
 ```dart
 import '../../domain/repositories/task_repository.dart';
+```
+
+❌ Dependency on use case
+
+```dart
 import '../../domain/usecases/task_create_use_case.dart';
+```
+
+❌ Dependency on cubit
+
+```dart
 import '../../logic/create/task_create_cubit.dart';
 ```
 
-&nbsp;
+
 
 ## App Layer Rules
 
-App layer is the orchestrator.
+The App Layer is the orchestrator.
 
-App layer is responsible for:
+The App Layer is responsible for:
 
 - Routing
 - Dependency Injection
 - Navigation
 - Module Composition
 - Global State Composition
+
+---
 
 ### App Can Depend On
 
@@ -308,7 +434,11 @@ modules/
 packages/
 ```
 
+---
+
 ### Correct Examples
+
+✅ Compose route
 
 ```dart
 routes: [
@@ -317,33 +447,37 @@ routes: [
 ]
 ```
 
+✅ Compose DI
+
 ```dart
 await inboxDI();
 await taskDI();
 ```
 
-&nbsp;
+
 
 ## Cross Feature Rules
 
-Feature-to-feature access is allowed only inside the same module.
+A feature may access another feature as long as both reside within the same module.
 
-This is allowed because module is the primary business boundary. In some cases, operations are tightly related across features while ownership remains clear at module level.
+This is allowed because the module serves as the primary business boundary. In certain cases, there are operations that are difficult to isolate completely between features, but their business ownership remains clear at the module level.
 
-Cross-feature access must remain:
+However, cross-feature access must still be:
 
-- simple
-- explicit
-- aligned with layer dependency rules
-- free from circular dependency
+- As simple as possible
+- As clear as possible
+- Compliant with their respective layer dependencies
+- Free of circular dependencies between features
 
-Cross-feature modeling cascade for DTO, Entity, Param, Request, Response, Enum, or other explicit references is acceptable when flow stays clear.
+Cross-feature access for modeling needs such as DTO, Entity, Param, Request, Response, enum, or other cascade references is normal. This is similar to reference or cascade requirements in databases, provided that the flow remains explicit and easy to trace.
 
-If `featureC` needs operation in `featureD` (for example, `createTransaction` needs `createTransactionItems`), access is allowed when relation is clear and does not create circular dependency.
+If `featureC` requires an operation residing in `featureD`, for example `createTransaction` requires `createTransactionItems`, such access is permitted as long as the reason for interrelation is clear, the flow remains simple, and it does not create a circular dependence.
+
+---
 
 ### Allowed
 
-Within same module, cross-feature access can use:
+Within the same module, cross-feature access can be accomplished through the following patterns:
 
 ```text
 modeling cascade
@@ -351,66 +485,102 @@ shared/
 domain contract
 ```
 
-Feature barrel may be used for discoverability, but within one module direct imports can be acceptable when explicit and readable.
+Brief explanation:
 
-Allowed does not mean all internal files are free to access. Keep access explicit and ownership clear.
+- `modeling cascade` for DTO, Entity, Param, Request, Response, enum, or other naturally interrelated references
+- `shared/` for module-scope or feature-scope resources that are indeed shared
+- `domain contract` for entities, enums, params, or other stable contracts that are safe to use as shared references
+
+`feature barrel` files may be used if they help discoverability, but within the same module, they are not strictly required as the sole form of import. Since they are still within the same Flutter package, direct imports to clear resources can sometimes be easier to read and less confusing for import suggestions. However, following a consistent import linting format remains recommended.
+
+Being allowed does not mean every internal file can be freely accessed from anywhere. Always ensure the reason for access is clear, simple, and avoids forming circular dependencies.
+
+---
 
 ### Wrong Example
 
+❌ Circular dependence between features
+
 ```text
-feature_c -> feature_d
-feature_d -> feature_c
+feature_c
+  -> feature_d
+
+feature_d
+  -> feature_c
 ```
+
+❌ Cross-feature access that violates layer dependencies
 
 ```dart
 import '../feature_d/data/repositories/feature_d_repository_impl.dart';
 ```
 
-Avoid cross-feature access that makes ownership and flow unclear.
+❌ Cross-feature access that blurs flow ownership and makes tracing difficult
 
-&nbsp;
+```text
+feature_c calls many internal files of feature_d
+without a clear boundary
+```
+
+
 
 ## Cross Module Rules
 
-Modules must not access internals of other modules.
+A module must not access the internal files of another module.
+
+---
 
 ### Allowed
 
-Use public barrel exports.
+Through the public barrel.
+
+This rule applies to access between modules or between packages, not to access between features that remain within the same module.
+
+Example:
 
 ```dart
 import 'package:task/task.dart';
 ```
 
+---
+
 ### Wrong Example
+
+❌ Internal access
 
 ```dart
 import 'package:task/src/features/task/...';
 ```
 
-&nbsp;
+
 
 ## Shared Rules
 
-Shared placement follows actual usage boundary.
+Shared resources follow their actual usage boundary.
+
+---
 
 ### Feature Shared
 
-Used by multiple slices in one feature.
+Used by multiple slices within a single feature.
 
 ```text
 feature/
  └── shared/
 ```
 
+---
+
 ### Module Shared
 
-Used by multiple features in one module.
+Used by multiple features within a single module.
 
 ```text
 module/
  └── shared/
 ```
+
+---
 
 ### App Shared
 
@@ -422,18 +592,18 @@ core/
 packages/
 ```
 
-Do not move components to higher boundary only because higher boundaries read them.
+Components do not need to be moved to a higher boundary simply because they are read by a higher boundary.
 
-Ownership should follow primary usage boundary.
+Ownership always follows its primary usage boundary.
 
-&nbsp;
+
 
 ## Golden Rule
 
-Dependency must always point to more stable contracts.
+Dependencies must always point toward more stable contracts.
 
-Do not depend on implementation.
+Do not depend on implementations.
 
 Depend on contract, not implementation.
 
-Domain is effectively shared contract space for entity, enum, and param.
+The Domain is essentially a shared contract for things like entities, enums, and params.

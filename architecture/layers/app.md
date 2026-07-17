@@ -19,7 +19,7 @@ Module tidak mengetahui App.
 
 Hubungan tersebut membuat App menjadi titik komposisi tertinggi dalam aplikasi.
 
-&nbsp;
+
 
 ## Composition
 
@@ -93,7 +93,7 @@ Future<void> initDI() async {
 }
 ```
 
-&nbsp;
+
 
 ## Dependency Rules
 
@@ -111,7 +111,7 @@ Forbidden:
 other apps
 ```
 
-&nbsp;
+
 
 ## Why This Layer Is Hidden
 

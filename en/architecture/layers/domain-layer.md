@@ -1,12 +1,12 @@
 # Domain Layer
 
-Domain is the business contract center in FSDA.
+The Domain is the center of the business contract in FSDA.
 
-Domain defines what the application does, not how it does it.
+The Domain defines what the application does, not how the application does it.
 
-Domain is the most stable layer and the dependency center for all other layers.
+The Domain is the most stable layer and acts as the dependency center for all other layers.
 
-Examples in this document are simplified to focus on architecture. Current Flutter baseline technical details are documented in [Development Workflow](../../guides/development-workflow.md).
+The examples in this document are simplified to focus on architecture. Current Flutter baseline technical details are explained in [Development Workflow](../../guides/development-workflow.md).
 
 ```text
 Data  ─────┐
@@ -16,11 +16,11 @@ Logic ─────┼──► Domain
 UI ────────┘
 ```
 
-&nbsp;
+
 
 ## Responsibilities
 
-Domain is responsible for:
+The Domain is responsible for:
 
 * Entity
 * Repository Contract
@@ -29,7 +29,7 @@ Domain is responsible for:
 * Failure
 * Business Enum
 
-Domain is not responsible for:
+The Domain is not responsible for:
 
 * API
 * Database
@@ -38,7 +38,7 @@ Domain is not responsible for:
 * State Management
 * Framework Implementation
 
-&nbsp;
+
 
 ## Domain Structure
 
@@ -51,7 +51,7 @@ domain/
 └── usecases/
 ```
 
-Failure remains a domain concern, but in FSDA it is placed at module scope so it can be shared by all features in the same module.
+Failure remains a domain concern, but in FSDA it is placed at the module scope so that it can be shared by all features within the same module.
 
 ```text
 shared/
@@ -60,11 +60,11 @@ shared/
         └── <module>_failure.dart
 ```
 
-&nbsp;
+
 
 ## Entities
 
-Entity represents core business model.
+Entities represent the core business models of the application.
 
 Example:
 
@@ -82,20 +82,20 @@ final class ProductEntity {
 }
 ```
 
-Entity does not know:
+Entities do not know about:
 
 * DTO
 * Request
 * Response
 * Flutter Widget
 
-&nbsp;
+
 
 ## Repository Contracts
 
-Repository in Domain is a contract.
+A Repository in the domain is a contract.
 
-Repository defines business operations required by application.
+A Repository defines the business operations required by the application.
 
 Example:
 
@@ -105,17 +105,17 @@ abstract interface class ProductRepository {
 }
 ```
 
-Repository has no implementation.
+A Repository has no implementation.
 
-Implementation belongs in Data layer.
+The implementation is in the data layer.
 
-&nbsp;
+
 
 ## Param
 
-Param carries use case input.
+Param is used to carry use case inputs.
 
-Param should be immutable. Current Flutter baseline technical details are documented in [Development Workflow](../../guides/development-workflow.md).
+Param must be immutable. Current Flutter baseline technical details are explained in [Development Workflow](../../guides/development-workflow.md).
 
 Example:
 
@@ -127,13 +127,13 @@ final class ProductDetailParam {
 }
 ```
 
-&nbsp;
+
 
 ## Use Cases
 
-Use Case is business entry point.
+Use Cases are the business entry points.
 
-Use Case orchestrates repository contract.
+Use Cases orchestrate repository contracts.
 
 Example:
 
@@ -151,11 +151,12 @@ class ProductDetailUseCase extends UseCase<ProductEntity, ProductDetailParam> {
 }
 ```
 
-&nbsp;
+
+
 
 ## Business Enums
 
-Enum defines business values.
+Enums are used to define business values.
 
 Example:
 
@@ -163,13 +164,13 @@ Example:
 enum PaymentStatus { unpaid, paid, expired }
 ```
 
-&nbsp;
+
 
 ## Failures
 
-Failure represents business failure.
+Failures represent business failures.
 
-Failure should not know:
+Failures do not know about:
 
 * HTTP Error
 * SQLite Error
@@ -180,13 +181,13 @@ Example:
 enum ProductFailure implements Failure { productNotFound }
 ```
 
-In FSDA, failure is placed at `module/shared/domain/errors` because it is a domain concern shared by all features under the same module.
+In FSDA, failures are placed in `module/shared/domain/errors` because they are a domain concern that can be accessed collectively by all features under the same module.
 
-&nbsp;
+
 
 ## Dependency Rules
 
-Domain may only depend on domain.
+The Domain can only depend on the domain.
 
 Allowed:
 
@@ -203,20 +204,20 @@ ui/
 flutter/
 ```
 
-&nbsp;
+
 
 ## Why This Layer Exists
 
-Domain exists to separate business contracts from implementation details.
+The Domain exists to separate business contracts from implementations.
 
-&nbsp;
+
 
 ## Key Principle
 
-Domain is contract.
+The Domain is a contract.
 
-Domain does not know implementation.
+The Domain does not know about implementation.
 
-Other layers may know domain.
+Other layers can know about the domain.
 
-Domain must not know other layers.
+The Domain must not know about other layers.

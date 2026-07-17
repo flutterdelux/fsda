@@ -16,8 +16,6 @@ Dokumen ini menjelaskan:
 
 Dokumen ini membantu melihat gambaran besar struktur proyek. Jika terjadi konflik pada aturan detail, maka dokumen khusus yang membahas concern tersebut menjadi acuan utama.
 
-&nbsp;
-
 ## Struktur Workspace
 
 ```text
@@ -67,8 +65,6 @@ packages/
 ├── app_l10n/
 └── app_ui/
 ```
-
-&nbsp;
 
 ## Struktur App
 
@@ -196,8 +192,6 @@ modules/
 └── <module>/
 ```
 
-&nbsp;
-
 ## Struktur Module
 
 Module merupakan business boundary utama.
@@ -253,8 +247,6 @@ Dalam baseline Flutter saat ini, module umumnya juga bergantung pada shared pack
 
 Detail teknis seperti package dependency, `Freezed`, `json_serializable`, `build.yaml`, dan `l10n.yaml` dijelaskan pada [Development Workflow](../guides/development-workflow.md).
 
-&nbsp;
-
 ## Struktur Feature
 
 Feature merupakan business capability dalam suatu module.
@@ -280,8 +272,6 @@ features/
 │   └── ui/
 └── <feature>/
 ```
-
-&nbsp;
 
 ## Struktur Layer
 
@@ -356,8 +346,6 @@ ui/
         └── ..._<widget>.dart
 ```
 
-&nbsp;
-
 ## Struktur Feature Slice
 
 Feature Slice merupakan unit implementasi terkecil dalam FSDA.
@@ -414,8 +402,6 @@ features/
 Untuk lebih detailnya bisa dilihat pada dokumentasi per sequence atau cek contoh project.
 
 Seluruh object modeling seperti DTO, Entity, Request, Response, dan Param diperlakukan sebagai contract yang harus mudah dirawat dalam jangka panjang. Untuk baseline Flutter saat ini, detail implementasi seperti `Freezed`, `json_serializable`, dan konfigurasi code generation dijelaskan pada [Development Workflow](../guides/development-workflow.md).
-
-&nbsp;
 
 ## Struktur Shared
 

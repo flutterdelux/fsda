@@ -2,15 +2,11 @@
 
 Package fondasi untuk localization dan semua resource bahasa yang digunakan bersama oleh aplikasi.
 
-&nbsp;
-
 ## Purpose
 
 `app_l10n` menjadi tempat untuk mengelola teks lintas aplikasi secara konsisten agar localization tidak tersebar acak di App, Module, atau widget tertentu.
 
 `app_l10n` bukan pengganti localization milik module. Package ini berfungsi sebagai fondasi localization bersama pada level aplikasi atau sistem.
-
-&nbsp;
 
 ## Typical Responsibilities
 
@@ -21,8 +17,6 @@ Contoh isi yang cocok berada di `app_l10n`:
 * shared localized message yang dipakai lintas module
 * konfigurasi locale dan fallback locale yang berlaku lintas aplikasi
 
-&nbsp;
-
 ## Shared L10n vs Module L10n
 
 Pemisahan tanggung jawabnya sebagai berikut:
@@ -31,8 +25,6 @@ Pemisahan tanggung jawabnya sebagai berikut:
 * setiap module tetap dapat dan biasanya memang perlu memiliki localization sendiri untuk text UI yang spesifik ke module tersebut
 
 Jika sebuah module memiliki UI yang menampilkan text ke user, maka module tersebut sebaiknya memiliki resource l10n sendiri agar ownership text tetap berada dekat dengan boundary modulenya.
-
-&nbsp;
 
 ## Module L10n Baseline
 
@@ -65,8 +57,6 @@ output-dir: lib/src/generated
 untranslated-messages-file: missing_keys.json
 ```
 
-&nbsp;
-
 ## Good Candidates
 
 Letakkan sesuatu di `app_l10n` jika resource tersebut:
@@ -74,8 +64,6 @@ Letakkan sesuatu di `app_l10n` jika resource tersebut:
 * berkaitan langsung dengan bahasa atau terjemahan
 * dipakai bersama oleh lebih dari satu module atau app
 * tidak membawa business ownership feature tertentu
-
-&nbsp;
 
 ## Not For
 
@@ -86,8 +74,6 @@ Letakkan sesuatu di `app_l10n` jika resource tersebut:
 * datasource atau repository
 * message yang hanya relevan untuk satu feature atau satu module dan belum menjadi kebutuhan lintas boundary
 
-&nbsp;
-
 ## Dependency Position
 
 `app_l10n` dapat digunakan oleh App dan Module saat membutuhkan resource localization bersama.
@@ -97,8 +83,6 @@ Pisahkan localization lintas sistem di sini agar perubahan bahasa tidak menempel
 Namun untuk text yang benar-benar spesifik ke suatu module, lebih baik letakkan localization-nya tetap di module tersebut.
 
 Dalam baseline Flutter saat ini, module umumnya bergantung pada `app_l10n` untuk akses localization umum yang dipakai lintas app maupun module.
-
-&nbsp;
 
 ## Composition In App
 

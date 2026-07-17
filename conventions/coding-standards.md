@@ -2,13 +2,11 @@
 
 Dokumen ini menjelaskan pedoman coding dasar pada FSDA.
 
-&nbsp;
 
 ## Purpose
 
 Coding standards digunakan untuk menjaga konsistensi implementasi, memudahkan review, dan mengurangi variasi yang tidak perlu di dalam codebase.
 
-&nbsp;
 
 ## General Principles
 
@@ -20,7 +18,6 @@ Gunakan pedoman berikut sebagai baseline:
 * pertahankan naming sesuai convention yang berlaku
 * hindari side effect tersembunyi
 
-&nbsp;
 
 ## Layer Discipline
 
@@ -34,7 +31,6 @@ Setiap layer harus tetap berada pada tanggung jawabnya:
 
 Jika sebuah perubahan membuat tanggung jawab layer menjadi kabur, biasanya struktur implementasinya perlu ditinjau ulang.
 
-&nbsp;
 
 ## Code Style
 
@@ -46,7 +42,6 @@ Gunakan gaya penulisan yang konsisten:
 * komentar hanya ditambahkan jika benar-benar membantu menjelaskan keputusan atau alur yang tidak langsung terbaca
 * hindari file atau class yang memegang terlalu banyak tanggung jawab
 
-&nbsp;
 
 ## Flow Clarity
 
@@ -59,7 +54,6 @@ Pertahankan aturan berikut:
 * jangan taruh business orchestration di UI
 * jangan taruh composition concern di Module
 
-&nbsp;
 
 ## Shared Placement
 
@@ -73,7 +67,6 @@ Naikkan boundary hanya jika:
 
 Jika resource masih spesifik untuk satu feature atau satu module, simpan tetap pada boundary terdekatnya.
 
-&nbsp;
 
 ## Testing Awareness
 

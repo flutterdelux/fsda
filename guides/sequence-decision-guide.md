@@ -2,15 +2,11 @@
 
 Dokumen ini membantu memilih sequence yang paling sesuai untuk sebuah feature slice.
 
-&nbsp;
-
 ## Purpose
 
 Pertanyaan pertama saat memulai implementasi di FSDA bukan lokasi folder, melainkan sequence apa yang paling tepat.
 
 Dokumen ini membantu mempercepat keputusan tersebut.
-
-&nbsp;
 
 ## Quick Decision Flow
 
@@ -22,8 +18,6 @@ Gunakan alur berikut:
 4. Apakah slice membutuhkan input?
 5. Apakah slice mengembalikan data hasil operasi?
 6. Apakah slice membutuhkan pagination, stream, atau offline-first behavior?
-
-&nbsp;
 
 ## Mutation Family
 
@@ -40,8 +34,6 @@ Contoh:
 * `delete` → Mutation + Param
 * `take` → Mutation + Return
 * `create` → Mutation + Return + Param
-
-&nbsp;
 
 ## Retrieval Family
 
@@ -62,8 +54,6 @@ Contoh:
 * `list` → Retrieval + Stream
 * `status` → Retrieval + Stream + Param
 * `list` → Retrieval + Offline First
-
-&nbsp;
 
 ## Selection Rule
 

@@ -23,3 +23,37 @@
   --vp-c-bg-alt: #0F172A;    /* Slate gelap (sidebar dan card) */
   --vp-c-bg-soft: #1E293B;   /* Abu-abu kebiruan (elemen pendukung) */
 }
+
+/* Menentukan batas tinggi maksimal kode blok */
+div[class*='language-'] pre {
+  max-height: 450px; /* Sesuaikan ukuran tinggi (dalam px atau rem) sesuai keinginan Anda */
+  overflow-y: auto;  /* Memunculkan scrollbar vertikal jika kode melebihi batas tinggi */
+}
+
+/* Mempercantik tampilan scrollbar di dalam code block */
+div[class*='language-'] pre::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+div[class*='language-'] pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+div[class*='language-'] pre::-webkit-scrollbar-thumb {
+  background: #ffffff30;
+  border-radius: 4px;
+}
+
+/* Memperbolehkan tab judul code group turun ke baris baru */
+.vp-code-group .tabs {
+  flex-wrap: wrap !important;
+  height: auto !important;
+}
+
+/* Mengatur ulang layout internal tab agar rapi saat membungkus */
+.vp-code-group .tabs label {
+  white-space: normal !important;
+  height: auto !important;
+  padding: 8px 12px !important;
+}

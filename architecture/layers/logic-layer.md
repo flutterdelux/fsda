@@ -2,7 +2,7 @@
 
 Logic adalah layer yang berfokus pada state management dan menjadi penghubung antara domain dengan UI. Orkestrasi tertingginya tetap berada pada App, sehingga Logic hanya menyediakan kebutuhan state management dan membiarkan App menyusunnya bersama UI.
 
-&nbsp;
+
 
 ## Responsibilities
 
@@ -17,7 +17,7 @@ Logic tidak bertanggung jawab terhadap:
 * Database
 * UI Rendering
 
-&nbsp;
+
 
 ## Logic Structure
 
@@ -30,7 +30,7 @@ logic/
     └── feature_slice_state.dart
 ```
 
-&nbsp;
+
 
 ## Cubit
 
@@ -68,7 +68,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
 }
 ```
 
-&nbsp;
+
 
 ## State
 
@@ -115,7 +115,7 @@ final class ProductDetailFailure extends ProductDetailState {
 }
 ```
 
-&nbsp;
+
 
 ## Flow
 
@@ -133,7 +133,7 @@ Repository Impl
 Datasource
 ```
 
-&nbsp;
+
 
 ## Dependency Rules
 
@@ -151,13 +151,13 @@ data/
 ui/
 ```
 
-&nbsp;
+
 
 ## Why This Layer Exists
 
 Logic ada untuk mengelola state dan alur interaksi aplikasi.
 
-&nbsp;
+
 
 ## Key Principle
 

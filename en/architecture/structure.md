@@ -2,7 +2,7 @@
 
 This document is the global structure map of FSDA.
 
-Detailed rules are covered in dedicated documents such as [dependency rules](dependency-rules.md), [sequence patterns](sequence-pattern.md), [naming conventions](../conventions/naming-conventions.md), and [layer docs](layers/domain-layer.md).
+Detailed rules are still explained in specific documents, such as [dependency rules](dependency-rules.md), [sequence patterns](sequence-pattern.md), [naming conventions](../conventions/naming-conventions.md), and [layer docs](layers/domain-layer.md).
 
 This document explains:
 
@@ -14,9 +14,7 @@ This document explains:
 * Feature Slice Structure
 * Shared Structure
 
-If a rule conflicts with detailed docs, detailed docs take precedence.
-
-&nbsp;
+This document helps to see the big picture of the project structure. If there is a conflict regarding detailed rules, the specific document discussing that concern is the primary reference.
 
 ## Workspace Structure
 
@@ -40,7 +38,7 @@ apps/
 
 ### 2. modules/
 
-Contains business modules. Module is the primary business boundary in the system.
+Contains business modules. A module is the main business boundary in the system.
 
 Example:
 
@@ -56,7 +54,7 @@ modules/
 
 Contains shared packages. Packages do not contain business features.
 
-Packages contain reusable components used by all applications.
+Packages only contain reusable components that can be used by all applications.
 
 Example:
 
@@ -68,20 +66,18 @@ packages/
 └── app_ui/
 ```
 
-&nbsp;
-
 ## App Structure
 
-App is the application composition root.
+The App is responsible for acting as the composition root of the application.
 
-App responsibilities:
+The App is tasked to:
 
-* bootstrap application
-* configure dependencies
-* configure routing
-* configure MaterialApp
-* compose modules
-* provide global state
+* Bootstrap application
+* Configure dependencies
+* Configure routing
+* Configure MaterialApp
+* Compose modules
+* Provide global state
 
 ```text
 lib/
@@ -93,19 +89,19 @@ lib/
 
 ### 1. main.dart
 
-Application entry point.
+The application entry point.
 
-Typical responsibilities:
+Example responsibilities:
 
 * WidgetsFlutterBinding.ensureInitialized()
-* logging initialization
-* database initialization
-* dependency initialization
+* Logging initialization
+* Database initialization
+* Dependency initialization
 * runApp()
 
 ### 2. app/
 
-Contains app bootstrap.
+Contains the application bootstrap.
 
 ```text
 app/
@@ -115,14 +111,38 @@ app/
 └── dashboard/
 ```
 
-- app_router.dart: composes all module routes
-- main_app.dart: configures root widget
-- startup.dart: splash/initial loading surface
-- dashboard/: main app shell UI for module entry points
+- app_router.dart
+
+    Arranges all module routes.
+
+- main_app.dart
+
+    Configures the root widget.
+
+- startup.dart
+
+  Usually used as:
+
+    * Splash Screen
+    * Initial Loading Screen
+
+- dashboard/
+
+    The Dashboard is the main UI shell of the application. The Dashboard is in the App Structure because it is responsible for arranging access to various modules.
+
+    ```text
+    dashboard/
+    ├── dashboard_route.dart
+    ├── pages/
+    │   ├── dashboard.dart
+    │   └── home_page.dart
+    └── widgets/
+        └── bottom_nav_bar.dart
+    ```
 
 ### 3. core/
 
-Contains application technical needs.
+Contains the technical needs of the application.
 
 ```text
 core/
@@ -153,13 +173,13 @@ core/
 
 ### 4. modules/
 
-Contains module composition adapters. Each module has:
+Contains module compositions. Each module has:
 
 ```text
 <module>_di.dart
 <module>_route.dart
 ```
-
+    
 ```text
 modules/
 ├── <module>/
@@ -168,19 +188,15 @@ modules/
 │   └── features/
 │       └── <feature>/
 │           └── pages/
-│               └── <page>.dart
+│               └── <page>.dart (compose UI & logic; can represent a single-slice or aggregate page)
 └── <module>/
 ```
 
-App page can represent single-slice page or aggregate page.
-
-&nbsp;
-
 ## Module Structure
 
-Module is the primary business boundary.
+A module is the primary business boundary.
 
-Examples:
+Example:
 
 ```text
 attendance
@@ -193,48 +209,47 @@ Structure:
 
 ```text
 modules/
-├── <module>/
+├── <module>/ (module name)
 │   ├── analysis_options.yaml
 │   ├── build.yaml
 │   ├── l10n.yaml
 │   ├── pubspec.yaml
 │   └── lib/
-│       ├── <module>.dart
+│       ├── <module>.dart (module barrel)
 │       ├── l10n/
 │       │   ├── <module>_en.arb
 │       │   └── <module>_id.arb
 │       └── src/
 │           ├── features/
 │           ├── generated/
+│           │   └── <module>_localizations.dart
 │           └── shared/
 │               ├── data/
 │               │   └── errors/
-│               │       └── <module>_exception.dart
+│               │       └── <module>_exception.dart (module exception)
 │               ├── domain/
 │               │   └── errors/
-│               │       └── <module>_failure.dart
+│               │       └── <module>_failure.dart (module failure)
 │               ├── logic/
 │               └── ui/
 │                   └── extensions/
-│                       └── <module>_failure_x.dart
+│                       └── <module>_failure_x.dart (extension for module failure)
 └── <module>/
 ```
 
-Each module is an independent Flutter package.
+Each module becomes an independent Flutter package, so baseline files like `build.yaml`, `l10n.yaml`, and dependencies for Freezed and serialization need to be prepared at the module level.
 
-In current baseline, modules commonly depend on:
+In the current Flutter baseline, modules generally also depend on the following shared packages:
 
-* `app_core` for shared contracts/abstractions
-* `app_l10n` for shared localization
-* `app_ui` for shared UI standards
+* `app_core` for contracts and abstractions across apps and modules
+* `app_l10n` for general localization across apps and modules
+* `app_ui` for standard UI needs across apps and modules
 
-Technical details for package dependencies, Freezed, json_serializable, build.yaml, and l10n.yaml are covered in [Development Workflow](../guides/development-workflow.md).
-
-&nbsp;
+Technical details like package dependencies, `Freezed`, `json_serializable`, `build.yaml`, and `l10n.yaml` are explained in [Development Workflow](../guides/development-workflow.md).
 
 ## Feature Structure
 
-Feature is a business capability within a module.
+A feature is a business capability within a module.
 
 Example:
 
@@ -249,16 +264,14 @@ Structure:
 
 ```text
 features/
-├── <feature>/
-│   ├── <feature>_feature.dart
+├── <feature>/ (feature name)
+│   ├── <feature>_feature.dart (feature barrel)
 │   ├── data/
 │   ├── domain/
 │   ├── logic/
 │   └── ui/
 └── <feature>/
 ```
-
-&nbsp;
 
 ## Layer Structure
 
@@ -273,29 +286,40 @@ ui
 
 ### 1. Data
 
-Contains data-access implementation.
+Contains data access implementations. Object modeling such as DTOs, Requests, and Responses must be consistent, maintainable, and in accordance with the baseline stack used.
 
 ```text
 data/
 ├── converters/
+│   └── ..._converter.dart
 ├── datasources/
+│   └── ..._data_source.dart
 ├── dtos/
+│   └── ..._dto.dart
 ├── repositories/
+│   └── ..._repository_impl.dart
 ├── requests/
+│   └── ..._request.dart
 └── responses/
+    └── ..._response.dart
 ```
 
 ### 2. Domain
 
-Contains business contracts.
+Contains business contracts. Object modeling such as Entities and Params must be consistent, maintainable, and in accordance with the baseline stack used.
 
 ```text
 domain/
 ├── entities/
+│   └── ..._entity.dart
 ├── enums/
+│   └── ..._enum.dart
 ├── params/
+│   └── ..._param.dart
 ├── repositories/
+│   └── ..._repository.dart
 └── usecases/
+    └── ..._use_case.dart
 ```
 
 ### 3. Logic
@@ -311,22 +335,23 @@ logic/
 
 ### 4. UI
 
-Contains views and presentation components.
+Contains displays in the form of views and presentation components.
 
 ```text
 ui/
 └── <feature_slice>/
     ├── views/
+    │   └── ..._view.dart
     └── widgets/
+        └── ..._<widget>.dart
 ```
-
-&nbsp;
 
 ## Feature Slice Structure
 
-Feature slice is the smallest implementation unit in FSDA.
+A Feature Slice is the smallest implementation unit in FSDA.
 
-Feature slice aligns with business use-case flow. In practice, slice folder emphasis is strongest in Logic and UI, while Data and Domain often use per-file methods and models.
+This feature slice is directly proportional to the business use case flow. However, its folder structure implementation leans more towards Logic and UI. Meanwhile, implementations in other layers (Data & Domain) are directly created per file and also exist as methods.
+
 
 ```text
 features/
@@ -334,23 +359,27 @@ features/
     ├── <feature>_feature.dart
     ├── data/
     │   ├── converters/
+    │   │   └── <...>_converter.dart
     │   ├── datasources/
-    │   │   ├── <feature>_remote_data_source.dart
-    │   │   └── <feature>_remote_data_source_impl.dart
+    │   │   ├── <feature>_remote_data_source.dart (slice method)
+    │   │   └── <feature>_remote_data_source_impl.dart (slice method)
     │   ├── dtos/
+    │   │   └── <feature>_dto.dart
     │   ├── repositories/
-    │   │   └── <feature>_repository_impl.dart
+    │   │   └── <feature>_repository_impl.dart (slice method)
     │   ├── requests/
     │   │   └── <feature>_<slice>_request.dart
     │   └── responses/
     │       └── <feature>_<slice>_response.dart
     ├── domain/
     │   ├── entities/
+    │   │   └── <...>_entity.dart
     │   ├── enums/
+    │   │   └── <...>_enum.dart
     │   ├── params/
     │   │   └── <feature>_<slice>_param.dart
     │   ├── repositories/
-    │   │   └── <feature>_repository.dart
+    │   │   └── <feature>_repository.dart (slice method)
     │   └── usecases/
     │       └── <feature>_<slice>_use_case.dart
     ├── logic/
@@ -366,35 +395,51 @@ features/
         │       └── <feature>_<slice>_form.dart
         └── shared/
             └── widgets/
+                ├── <feature>_<column>_field.dart
+                └── <feature>_<column>_field.dart
 ```
 
-Detailed per-sequence references are available in blueprint docs and example projects.
+For more details, refer to the documentation per sequence or check the example project.
 
-&nbsp;
+All object modeling such as DTO, Entity, Request, Response, and Param are treated as contracts that must be easily maintainable in the long run. For the current Flutter baseline, implementation details like `Freezed`, `json_serializable`, and code generation configurations are explained in [Development Workflow](../guides/development-workflow.md).
 
 ## Shared Structure
 
-* Feature Shared: used by several slices in one feature
+* Feature Shared
+
+Used by multiple slices within a single feature.
 
 ```text
 feature/
 └── shared/
 ```
 
-* Module Shared: used by several features in one module
+* Module Shared
+
+Used by multiple features within a single module.
 
 ```text
 module/
 ├── features/
+│   └── feature1/
 └── shared/
-    ├── data/errors/<module>_exception.dart
-    ├── domain/errors/<module>_failure.dart
-    └── ui/extensions/<module>_failure_x.dart
+    ├── data/
+    │   └── errors/
+    │       └── <module>_exception.dart
+    ├── domain/
+    │   └── errors/
+    │       └── <module>_failure.dart
+    ├── logic/
+    └── ui/
+        └── extensions/
+            └── <module>_failure_x.dart
 ```
 
-Module-scoped Failure, Exception, and FailureX are placed in module shared for reuse across all features in the same module.
+Failures, Exceptions, and FailureX that are module-scoped are placed in the module shared so they can be used together by all features within the same module.
 
-* App Shared: used by several composed modules in one app
+* App Shared
+
+Used by several composed modules within a single application.
 
 ```text
 lib/
@@ -410,14 +455,16 @@ or
 ```text
 lib/
 ├── app/
-├── core/
+├── core/ 
 ├── modules/
 └── shared/
 ```
 
-First pattern is generally preferred for app shared concerns.
+The primary reference is prioritized for the app shared. Because the folder name is not `shared` but rather a specific form of the shared itself, for example `extensions/`.
 
-* Package Shared: used by all applications
+* Package Shared
+
+Used by the entire application. All packages are shared because they can be used by all applications and serve as the main reference.
 
 ```text
 packages/
@@ -427,4 +474,4 @@ packages/
 └── app_ui/
 ```
 
-See [Structure Example](structure-example.md) for a concrete sample layout.
+A complete example of the structure can be seen in [Structure Example](structure-example.md).

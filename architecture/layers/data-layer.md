@@ -6,7 +6,7 @@ Data bertanggung jawab untuk memperoleh, menyimpan, dan mengubah data dari berba
 
 Contoh pada dokumen ini disederhanakan agar fokus pada arsitektur. Detail teknis baseline Flutter saat ini dijelaskan pada [Development Workflow](../../guides/development-workflow.md).
 
-&nbsp;
+
 
 ## Responsibilities
 
@@ -21,7 +21,7 @@ Data bertanggung jawab terhadap:
 * Converter
 * Repository Implementation
 
-&nbsp;
+
 
 ## Data Structure
 
@@ -35,7 +35,7 @@ data/
 └── responses/
 ```
 
-&nbsp;
+
 
 ## Datasource
 
@@ -49,7 +49,7 @@ abstract interface class ProductRemoteDataSource {
 }
 ```
 
-&nbsp;
+
 
 ## DTO
 
@@ -91,7 +91,7 @@ DTO adalah detail implementasi data layer.
 
 Entity adalah kontrak yang boleh keluar menuju layer lain.
 
-&nbsp;
+
 
 ## Request
 
@@ -111,7 +111,7 @@ final class ProductDetailRequest {
 }
 ```
 
-&nbsp;
+
 
 ## Response
 
@@ -139,7 +139,7 @@ final class ProductDetailResponse {
 }
 ```
 
-&nbsp;
+
 
 ## Converter
 
@@ -172,7 +172,7 @@ class PaymentStatusConverter extends JsonConverter<PaymentStatus, String> {
 }
 ```
 
-&nbsp;
+
 
 ## Repository Implementation
 
@@ -268,7 +268,7 @@ Contoh:
                     └── <module>_exception.dart
 ```
 
-&nbsp;
+
 
 ## Dependency Rules
 
@@ -286,13 +286,13 @@ logic/
 ui/
 ```
 
-&nbsp;
+
 
 ## Why This Layer Exists
 
 Data ada untuk mengisolasi detail teknis dari bisnis.
 
-&nbsp;
+
 
 ## Key Principle
 

@@ -2,11 +2,11 @@
 
 ## 1. Modular First
 
-Applications are built from independent modules.
+Applications are built from a collection of independent modules.
 
-Each module represents one business domain that can be developed, tested, maintained, and reused independently.
+Each module represents a single business domain that can be developed, tested, maintained, and reused independently.
 
-Module is the primary organizational unit in the codebase.
+Modules serve as the primary organizational unit within the codebase.
 
 Examples:
 
@@ -15,17 +15,15 @@ Examples:
 * Finance Module
 * Product Module
 
-App does not contain business logic.
+The App does not contain business logic.
 
-App only composes required modules.
-
-&nbsp;
+The App only composes the required modules.
 
 ## 2. Feature-Oriented Design
 
 Each module consists of one or more features.
 
-Feature is a clear functional boundary inside a business domain.
+A feature serves as a clear functional boundary within a business domain.
 
 Example in Task Module:
 
@@ -33,19 +31,17 @@ Example in Task Module:
 * Task Category Feature
 * Task Milestone Feature
 
-Features are not globally organized by layer.
+Features are not globally divided by layers.
 
-Feature is the center of code organization.
-
-&nbsp;
+Features are the center of code organization.
 
 ## 3. Sequence-Driven Development
 
-Feature slice implementation must follow predefined sequence patterns.
+The implementation of a feature slice must follow a defined sequence pattern.
 
-Sequence defines data flow pattern, implementation structure, and layer interaction.
+A sequence defines the data flow pattern, implementation structure, and interaction form between layers.
 
-Example sequences:
+Sequence examples:
 
 * Mutation
 * Mutation + Param
@@ -58,11 +54,11 @@ Example sequences:
 * Retrieval + Stream + Param
 * Retrieval + Offline First
 
-Each feature slice must map to exactly one clear sequence.
+Every feature slice must map to exactly one clear sequence.
 
 Example:
 
-```text
+```
 mark_all_read  -> Mutation
 
 delete         -> Mutation + Param
@@ -74,22 +70,20 @@ detail         -> Retrieval + Param
 list           -> Retrieval + Pagination
 ```
 
-With this approach, implementation becomes:
+With this approach, all implementations become:
 
 * predictable
 * consistent
 * easy to learn
 * easy to automate
 
-&nbsp;
-
 ## 4. Single Responsibility per Feature Slice
 
 Each feature slice represents only one specific business goal.
 
-A feature slice must not combine multiple different goals in one implementation.
+A feature slice must not combine multiple distinct goals into a single implementation.
 
-Examples of feature slices:
+Feature slice examples:
 
 * create
 * update
@@ -99,37 +93,32 @@ Examples of feature slices:
 * status
 * mark_all_read
 
-Each feature slice must have clear responsibility, be independently understandable, and map to one defined sequence.
+Each feature slice must have a clear responsibility, be understandable on its own, and map to a defined sequence.
 
-Feature slice is the smallest development unit in FSDA.
-
-&nbsp;
+A feature slice is the smallest development unit in FSDA.
 
 ## 5. Explicit Data Flow
 
 Data flow must always be visible and traceable.
 
-Data moves explicitly through layers.
+Data moves explicitly through layers:
 
-UI -> Logic -> Domain -> Data
+UI → Logic → Domain → Data
 
-Hidden, hard-to-follow flows are not allowed.
+Hidden flows that are difficult to understand are not allowed.
 
-Developers should easily trace data from UI to source.
-
-&nbsp;
+Developers must be able to easily trace the journey of data from the UI to the data source.
 
 ## 6. Dependency Inward
 
 Dependencies always point inward.
 
-Outer layers may know inner layers.
+Outer layers can know about inner layers.
 
-Inner layers must not know outer layers.
+Inner layers must not know about outer layers.
 
 
-
-```text
+```
 (Inner)
 Domain
 
@@ -138,8 +127,8 @@ Logic & UI & Data
 (Outer)
 ```
 
-Or illustrated as the composition structure in the App layer:
-```text
+Or illustrated as a composition structure in App:
+```
 App (Composition Root)
  ├── UI
  ├── Logic
@@ -151,87 +140,75 @@ Logic ───┼──► Domain
 Data ────┘
 ```
 
-Domain becomes an independent business center, isolated from technical implementation.
-
-&nbsp;
+Domain becomes an independent business core that is decoupled from technical implementation details.
 
 ## 7. Shared by Boundary
 
-Shared components should be placed in the nearest boundary that actually needs them.
+Shared components must be placed at the nearest boundary that requires them.
 
-Shared is not unlimited common storage.
+Shared is not a dumping ground for unlimited general code.
 
-Each shared component must have clear usage scope.
+Each shared component must have a clear usage scope.
 
-Shared placement guidelines:
+Shared Placement Guidelines:
 
-* Used by multiple slices in one feature -> place in feature shared boundary
-* Used by multiple features in one module -> place in module shared boundary
-* Used by whole application -> place in app or suitable package boundary
-* Components should not be promoted to higher boundary only because higher boundaries access them. Ownership still follows primary usage boundary.
-
-&nbsp;
+* Used by multiple slices within a single feature → place in the shared directory within that feature boundary.
+* Used by multiple features within a single module → place in module shared.
+* Used across the entire app → place in app or appropriate package.
+* Components do not need to be moved to a higher boundary simply because they are accessed by a higher boundary. Ownership follows its primary usage boundary.
 
 ## 8. Consistency Over Preference
 
 Consistency is more important than personal preference.
 
-If a pattern is chosen, the entire codebase should follow it.
+Once a pattern is chosen, the entire codebase must follow it.
 
-Developers should not introduce style variations only due to personal preference.
+Developers must not introduce new variations simply because they prefer a specific style.
 
-Consistent codebase is easier to learn and maintain than highly varied codebase.
-
-&nbsp;
+A consistent codebase is easier to learn and maintain than a codebase with many variations.
 
 ## 9. Discoverability First
 
-Code structure should help developers find things quickly without deep searching.
+Code structure must make it easy for developers to find things without searching too far.
 
-Developers should quickly answer:
+Developers should be able to quickly answer questions like:
 
-* where is this feature?
-* where is this use case?
-* where is this state?
-* where is this widget?
+* Where is this feature located?
+* Where is this use case located?
+* Where is this state located?
+* Where is this widget located?
 
-Code navigation should be prioritized over overly complex structural optimization.
-
-&nbsp;
+Code navigation must be prioritized over overly complex structural optimizations.
 
 ## 10. Convention Over Configuration
 
-Repeated decisions should be solved by convention.
+Repetitive decisions should be resolved through conventions.
 
-Developers should not repeatedly decide:
+Developers should not have to constantly think about:
 
-* folder naming
-* file naming
-* class placement
-* state placement
-* widget placement
+* folder names
+* file names
+* class locations
+* state locations
+* widget locations
 
 Clear conventions reduce repeated discussions and speed up development.
 
-&nbsp;
-
 ## 11. Scalable by Default
 
-Structure should stay comfortable as project grows.
+The structure must remain comfortable to use as the project grows.
 
-Good structure should still work when the app has:
+A good structure must hold up whether the application has:
 
-* dozens of modules
+* tens of modules
 * hundreds of features
 * thousands of files
 
-Architecture decisions should work across different scales, so when project grows or shrinks, structure and principles remain consistent.
-
-&nbsp;
+Architectural decisions must apply to various application scales, ensuring consistency whether the project grows or shrinks.
 
 ## 12. Automation Friendly
 
-Architecture should be understandable by both humans and tooling.
+The architecture must be understandable by both humans and tooling.
 
 Consistent conventions enable:
 
@@ -241,4 +218,4 @@ Consistent conventions enable:
 * validation
 * automation
 
-The fewer structural exceptions, the easier architecture automation becomes.
+The fewer exceptions in the structure, the easier it is to automate.

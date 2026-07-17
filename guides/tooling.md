@@ -2,15 +2,11 @@
 
 Dokumen ini menjelaskan arah tooling pada FSDA.
 
-&nbsp;
-
 ## Status
 
 Tooling FSDA saat ini masih berada pada tahap development.
 
 Bentuk akhirnya belum dipatok, baik dari sisi flow, delivery model, maupun bentuk implementasinya.
-
-&nbsp;
 
 ## Current Direction
 
@@ -21,8 +17,6 @@ Secara umum, tooling diarahkan untuk membantu:
 * validasi dependency rules
 * code generation atau template application
 * automation workflow yang berulang
-
-&nbsp;
 
 ## Current Expectation
 
@@ -35,8 +29,6 @@ Selama tooling belum final, implementasi tetap mengandalkan:
 * review manual terhadap structure dan flow
 
 Dengan kata lain, dokumentasi saat ini tetap menjadi source utama sampai tooling benar-benar matang.
-
-&nbsp;
 
 ## Non-Final Decisions
 

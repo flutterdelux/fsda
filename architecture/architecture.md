@@ -2,7 +2,7 @@
 
 > Arsitektur Flutter yang pragmatis dan digerakkan oleh aturan, berfokus pada konsistensi, kemudahan pencarian, pemeliharaan, skalabilitas, dan automasi.
 
-&nbsp;
+
 
 ## Apa itu Feature Slice Driven Architecture (FSDA)?
 
@@ -24,7 +24,7 @@ Namun FSDA tidak dimaksudkan sebagai salinan utuh dari satu filosofi tertentu.
 
 Sebaliknya, FSDA berfokus pada bagaimana membangun struktur proyek yang konsisten, dapat diprediksi, mudah ditemukan, mudah dipahami, dan mudah diautomasi.
 
-&nbsp;
+
 
 ## Mengapa FSDA?
 
@@ -48,7 +48,7 @@ Akibatnya dua project yang mengaku menggunakan arsitektur yang sama sering kali 
 
 FSDA hadir untuk mengurangi ambiguitas tersebut melalui aturan implementasi yang eksplisit dan konsisten.
 
-&nbsp;
+
 
 ## Ringkasan Struktur
 
@@ -63,7 +63,7 @@ Workspace
 
 Setiap layer memiliki tanggung jawab yang jelas dan batasan yang eksplisit.
 
-&nbsp;
+---
 
 ### Workspace
 
@@ -77,7 +77,7 @@ Workspace mengelompokkan:
 
 Workspace bukan tempat implementasi business logic.
 
-&nbsp;
+---
 
 ### App
 
@@ -104,7 +104,7 @@ lib/
 └── modules/
 ```
 
-&nbsp;
+---
 
 ### Module
 
@@ -123,7 +123,7 @@ task/
 
 Module dapat digunakan oleh satu atau lebih aplikasi.
 
-&nbsp;
+---
 
 ### Feature
 
@@ -142,7 +142,7 @@ destination
 
 Feature menjadi boundary utama implementasi domain.
 
-&nbsp;
+---
 
 ### Feature Slice
 
@@ -162,7 +162,7 @@ mark_all_read
 
 Feature Slice memiliki satu tujuan yang jelas dan mengikuti satu sequence yang jelas.
 
-&nbsp;
+---
 
 ### Shared Package
 
@@ -180,7 +180,7 @@ packages/
 
 Shared Package menyediakan kontrak, utilitas, fondasi UI, dan integrasi teknologi yang dapat digunakan oleh seluruh aplikasi dan module.
 
-&nbsp;
+
 
 ## Layer Arsitektur
 
@@ -207,7 +207,7 @@ App sebagai composition layer dijelaskan terpisah pada:
 
 * [App Layer](layers/app.md)
 
-&nbsp;
+
 
 ## Ringkasan Dependency
 
@@ -230,7 +230,7 @@ Detail aturan dependency dijelaskan pada:
 
 * [Dependency Rules](dependency-rules.md)
 
-&nbsp;
+
 
 ## Pengembangan Berbasis Sequence
 
@@ -253,7 +253,7 @@ Contoh:
 
 Sequence menyediakan pola implementasi yang konsisten, dapat diprediksi, dan mudah diautomasi.
 
-&nbsp;
+
 
 ## Prinsip
 
@@ -261,7 +261,7 @@ Seluruh prinsip dasar FSDA dijelaskan pada:
 
 * [Principles](principles.md)
 
-&nbsp;
+
 
 ## Struktur
 
@@ -269,7 +269,7 @@ Struktur folder, module, feature, feature slice, dan sequence dijelaskan pada:
 
 * [Structure](structure.md)
 
-&nbsp;
+
 
 ## Shared Packages 
 
@@ -280,7 +280,7 @@ Dokumentasi shared package disusun terpisah per package agar tanggung jawab tiap
 * [app_ui](../packages/app-ui.md)
 * [infra_...](../packages/infrastructure.md)
 
-&nbsp;
+
 
 ## Konvensi
 
@@ -292,7 +292,7 @@ Dokumen konvensi yang tersedia saat ini:
 
 Konvensi lain akan dipublikasikan terpisah sesuai kebutuhan dokumentasi.
 
-&nbsp;
+
 
 ## Dokumen Pendukung
 
@@ -304,7 +304,7 @@ Dokumen pendukung berikut membantu menjelaskan fondasi, pengambilan keputusan, t
 * [Anti-Patterns](../guides/anti-patterns.md)
 * [Tooling](../guides/tooling.md)
 
-&nbsp;
+
 
 ## Filosofi
 
@@ -316,7 +316,7 @@ FSDA dibangun berdasarkan filosofi tersebut.
 
 Dengan aturan yang jelas, struktur yang konsisten, dan batasan yang eksplisit, developer dapat lebih fokus menyelesaikan masalah bisnis tanpa harus terus-menerus memikirkan bagaimana proyek seharusnya disusun.
 
-&nbsp;
+
 
 ## Status
 

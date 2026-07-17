@@ -1,15 +1,15 @@
 # Logic Layer
 
-Logic is the layer focused on state management and acts as a bridge between Domain and UI. Highest orchestration still belongs to App, so Logic provides state needs and lets App compose it with UI.
+Logic is the layer focused on state management and acts as a bridge between the domain and UI. Its highest orchestration remains in the App, so Logic only provides state management needs and lets the App assemble them with the UI.
 
-&nbsp;
+
 
 ## Responsibilities
 
 Logic is responsible for providing:
 
 * State
-* Cubit / Bloc / Provider / Controller or other state management units
+* Cubit / Bloc / Provider / Controller or other state management
 
 Logic is not responsible for:
 
@@ -17,11 +17,11 @@ Logic is not responsible for:
 * Database
 * UI Rendering
 
-&nbsp;
+
 
 ## Logic Structure
 
-Grouping in logic layer can be done by feature slice.
+Grouping within the logic layer can be done based on feature slices.
 
 ```text
 logic/
@@ -30,13 +30,13 @@ logic/
     └── feature_slice_state.dart
 ```
 
-&nbsp;
+
 
 ## Cubit
 
-Logic orchestrates use cases through chosen state management. One Cubit typically accesses one use case so state management remains focused and simple.
+Logic orchestrates use cases through the state management being used. A single Cubit typically accesses only one use case, keeping its state management needs focused and simple.
 
-In more complex scenarios, one Cubit may access multiple use cases, as long as state management remains focused and use cases are related.
+However, in more complex situations, a single Cubit may access more than one use case, provided that its state management remains focused and the use cases are interrelated.
 
 Example:
 
@@ -68,13 +68,13 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
 }
 ```
 
-&nbsp;
+
 
 ## State
 
-State is data/snapshot representing application condition at a point in time. State is immutable, so every value change produces a new state. If grouped by Mutation and Retrieval operations, baseline state status may look like this:
+State is data or a snapshot representing the application's condition at a specific moment. State is immutable, meaning every change in value or data results in a new state. State usually consists of several statuses, which, when categorized into Mutation and Retrieval operations, can be illustrated as follows:
 
-Current Flutter baseline state details are documented in [Development Workflow](../../guides/development-workflow.md).
+In the current Flutter baseline, state implementation details are explained in the [Development Workflow](../../guides/development-workflow.md).
 
 | Mutation        | Retrieval       |
 |-----------------|-----------------|
@@ -83,9 +83,9 @@ Current Flutter baseline state details are documented in [Development Workflow](
 | Success         | Loaded          |
 | Failure         | Failure         |
 
-State status does not have to be exactly these four. Count may vary by needs. Most important is clear and consistent state semantics.
+State statuses do not always have to be four like the example above. The number can be more or less depending on the needs. Most importantly, the state status must clearly and consistently describe the application's condition.
 
-State should remain pure and independent from specific state management implementation. If state management changes later, only management layer changes while state model can stay.
+State is made pure without being tied to the state management being used. Thus, if there is a need to change state management in the future, only the state management needs to be changed without having to alter the state itself.
 
 Example:
 
@@ -115,7 +115,7 @@ final class ProductDetailFailure extends ProductDetailState {
 }
 ```
 
-&nbsp;
+
 
 ## Flow
 
@@ -133,7 +133,7 @@ Repository Impl
 Datasource
 ```
 
-&nbsp;
+
 
 ## Dependency Rules
 
@@ -151,16 +151,16 @@ data/
 ui/
 ```
 
-&nbsp;
+
 
 ## Why This Layer Exists
 
-Logic exists to manage state and interaction flow.
+Logic exists to manage state and application interaction flows.
 
-&nbsp;
+
 
 ## Key Principle
 
-State in Logic should be pure and independent from concrete state management implementation.
+State in Logic is created purely without being tied to the state management implementation being used.
 
-Logic acts only as bridge between Domain and UI, so it must not know datasource technical implementation or UI rendering implementation.
+Logic solely acts as a bridge between the domain and UI, and therefore must not know the technical implementations of datasources or the UI.

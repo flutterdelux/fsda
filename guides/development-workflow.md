@@ -10,13 +10,13 @@ Tujuan workflow ini adalah:
 * Mempermudah kolaborasi tim.
 * Mempermudah automation dan code generation.
 
-&nbsp;
+
 
 ## Phase 1 — Workspace Setup
 
 Phase ini dilakukan satu kali pada awal project.
 
-&nbsp;
+---
 
 ### 1.1 Create Workspace
 
@@ -31,7 +31,7 @@ workspace_name/
 └── packages/
 ```
 
-&nbsp;
+---
 
 ### 1.2 Create Shared Packages
 
@@ -60,7 +60,7 @@ packages/
 └── infra_storage
 ```
 
-&nbsp;
+---
 
 ### 1.3 Create App Project
 
@@ -74,7 +74,7 @@ apps/
 └── admin_app
 ```
 
-&nbsp;
+---
 
 ### 1.4 Setup App Foundation
 
@@ -110,7 +110,7 @@ lib/
 └── modules/
 ```
 
-&nbsp;
+---
 
 ### 1.5 Determine Infrastructure
 
@@ -126,7 +126,7 @@ Contoh:
 | BaaS           | Supabase      |
 | Authentication | Firebase Auth |
 
-&nbsp;
+---
 
 ### 1.6 Compose Infrastructure
 
@@ -154,13 +154,13 @@ Future<void> externalDI() async {
 
 Infrastructure dapat ditambah atau diubah kembali selama pengembangan berlangsung.
 
-&nbsp;
+
 
 ## Phase 2 — Module Development
 
 Phase ini dilakukan berulang selama pengembangan aplikasi.
 
-&nbsp;
+---
 
 ### 2.1 Identify Requirement
 
@@ -175,7 +175,7 @@ Contoh:
 | Product detail       | product      | product | detail |
 | Watch payment status | subscription | payment | status |
 
-&nbsp;
+---
 
 ### 2.2 Determine Sequence
 
@@ -188,7 +188,7 @@ Tentukan sequence yang sesuai.
 | detail | Retrieval + Param            | Rp   |
 | status | Retrieval + Stream + Param   | Rsp  |
 
-&nbsp;
+---
 
 ### 2.3 Create Module Skeleton
 
@@ -271,7 +271,7 @@ Selain dependency teknis tersebut, module umumnya juga bergantung pada shared pa
 * `app_l10n` untuk localization umum lintas app maupun module
 * `app_ui` untuk kebutuhan standard UI lintas app maupun module
 
-&nbsp;
+---
 
 ### 2.4 Create Module Shared Resources
 
@@ -296,7 +296,7 @@ FailureX
 → menerjemahkan Failure ke kebutuhan presentasi
 ```
 
-&nbsp;
+---
 
 ### 2.5 Create Feature Skeleton
 
@@ -326,7 +326,7 @@ feature1/
 └── ui/
 ```
 
-&nbsp;
+---
 
 ### 2.6 Create Slice Skeleton
 
@@ -344,7 +344,7 @@ atau
 create/
 ```
 
-&nbsp;
+---
 
 ### 2.7 Create Domain
 
@@ -362,7 +362,7 @@ Repository Contract
 Use Case
 ```
 
-&nbsp;
+---
 
 ### 2.8 Create Data
 
@@ -390,7 +390,7 @@ Datasource
 Repository Implementation
 ```
 
-&nbsp;
+---
 
 ### 2.9 Create Logic
 
@@ -402,7 +402,7 @@ State
 Cubit / Bloc / Controller
 ```
 
-&nbsp;
+---
 
 ### 2.10 Create UI
 
@@ -416,7 +416,7 @@ Widgets
 Shared UI
 ```
 
-&nbsp;
+---
 
 ### 2.11 Validate Against Blueprint
 
@@ -434,13 +434,13 @@ flow
 
 sesuai dengan blueprint.
 
-&nbsp;
+
 
 ## Phase 3 — App Composition
 
 Phase ini menghubungkan module ke aplikasi.
 
-&nbsp;
+---
 
 ### 3.1 Create App Composition Page
 
@@ -472,7 +472,7 @@ ProductDetailPage
 └── ProductDetailView
 ```
 
-&nbsp;
+---
 
 ### 3.2 Compose Module Route
 
@@ -493,7 +493,7 @@ routes: [
 ],
 ```
 
-&nbsp;
+---
 
 ### 3.3 Compose Localization
 
@@ -513,7 +513,7 @@ MaterialApp(
 
 Pada tahap ini App bertugas menentukan localization mana saja yang benar-benar dipakai pada aplikasi, lalu menyusunnya ke dalam composition root.
 
-&nbsp;
+---
 
 ### 3.4 Compose Feature DI
 
@@ -555,13 +555,13 @@ Future<void> initDI() async {
 }
 ```
 
-&nbsp;
+---
 
 ### 3.6 Run Application
 
 Verifikasi bahwa feature dapat berjalan.
 
-&nbsp;
+
 
 ## Solo Developer Workflow
 
@@ -597,7 +597,7 @@ Next Module
 
 Dengan pendekatan ini feedback loop menjadi lebih cepat.
 
-&nbsp;
+
 
 ## Team Workflow
 
@@ -636,7 +636,7 @@ Compose
 Main Apps Integration
 ```
 
-&nbsp;
+
 
 ## Golden Rule
 

@@ -19,8 +19,6 @@ App tidak berisi business logic.
 
 App hanya mengkomposisikan module yang dibutuhkan.
 
-&nbsp;
-
 ## 2. Feature-Oriented Design
 
 Setiap module terdiri dari satu atau lebih feature.
@@ -36,8 +34,6 @@ Contoh pada Task Module:
 Feature tidak dibagi berdasarkan layer secara global.
 
 Feature menjadi pusat organisasi kode.
-
-&nbsp;
 
 ## 3. Sequence-Driven Development
 
@@ -81,8 +77,6 @@ Dengan pendekatan ini seluruh implementasi menjadi:
 * mudah dipelajari
 * mudah diautomasi
 
-&nbsp;
-
 ## 4. Single Responsibility per Feature Slice
 
 Setiap feature slice hanya merepresentasikan satu tujuan bisnis yang spesifik.
@@ -103,8 +97,6 @@ Setiap feature slice harus memiliki tanggung jawab yang jelas, dapat dipahami se
 
 Feature slice menjadi unit terkecil pengembangan dalam FSDA.
 
-&nbsp;
-
 ## 5. Aliran Data Eksplisit
 
 Aliran data harus selalu terlihat dan dapat ditelusuri.
@@ -116,8 +108,6 @@ UI → Logic → Domain → Data
 Tidak diperbolehkan membuat alur tersembunyi yang sulit dipahami.
 
 Developer harus dapat mengikuti perjalanan data dari UI sampai sumber data dengan mudah.
-
-&nbsp;
 
 ## 6. Dependency Inward
 
@@ -152,8 +142,6 @@ Data ────┘
 
 Domain menjadi pusat bisnis yang independen terhadap implementasi teknis.
 
-&nbsp;
-
 ## 7. Shared by Boundary
 
 Komponen yang digunakan bersama harus ditempatkan pada boundary terdekat yang membutuhkannya.
@@ -169,8 +157,6 @@ Shared Placement Guidelines:
 * Digunakan oleh seluruh aplikasi → letakkan pada app atau package yang sesuai.
 * Komponen tidak harus dipindahkan ke boundary yang lebih tinggi hanya karena diakses oleh boundary yang lebih tinggi. Ownership tetap mengikuti boundary penggunaan utamanya.
 
-&nbsp;
-
 ## 8. Consistency Over Preference
 
 Konsistensi lebih penting daripada preferensi pribadi.
@@ -180,8 +166,6 @@ Jika suatu pola sudah dipilih, seluruh codebase harus mengikuti pola tersebut.
 Developer tidak boleh membuat variasi baru hanya karena lebih menyukai gaya tertentu.
 
 Codebase yang konsisten lebih mudah dipelajari dan dipelihara dibanding codebase yang memiliki banyak variasi.
-
-&nbsp;
 
 ## 9. Discoverability First
 
@@ -195,8 +179,6 @@ Developer harus dapat menjawab pertanyaan berikut dengan cepat:
 * Di mana widget ini berada?
 
 Navigasi kode harus lebih diutamakan dibanding optimasi struktur yang terlalu kompleks.
-
-&nbsp;
 
 ## 10. Convention Over Configuration
 
@@ -212,8 +194,6 @@ Developer tidak perlu terus-menerus memikirkan:
 
 Convention yang jelas mengurangi diskusi yang berulang dan mempercepat pengembangan.
 
-&nbsp;
-
 ## 11. Scalable by Default
 
 Struktur harus tetap nyaman digunakan ketika project berkembang.
@@ -225,8 +205,6 @@ Struktur yang baik harus tetap dapat digunakan saat aplikasi memiliki:
 * ribuan file
 
 Keputusan arsitektur harus dapat diterapkan pada berbagai skala aplikasi, sehingga ketika project berkembang maupun menyusut, struktur dan prinsip arsitektur tetap konsisten.
-
-&nbsp;
 
 ## 12. Automation Friendly
 

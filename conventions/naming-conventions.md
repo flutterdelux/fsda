@@ -31,7 +31,7 @@ product_detail_view.dart
 inbox_mark_all_read_cubit.dart
 ```
 
-&nbsp;
+---
 
 ### Class Naming
 
@@ -50,7 +50,7 @@ ProductDetailView
 InboxMarkAllReadCubit
 ```
 
-&nbsp;
+---
 
 ### Method Naming
 
@@ -75,7 +75,7 @@ getPopularDestination()
 getRecentNote()
 ```
 
-&nbsp;
+
 
 ## Module Naming
 
@@ -99,7 +99,7 @@ location
 travel
 ```
 
-&nbsp;
+
 
 ## Feature Naming
 
@@ -123,14 +123,14 @@ city
 destination
 ```
 
-&nbsp;
+
 
 ## Slice Naming
 
 
 Feature slice adalah unit terkecil implementasi bisnis.
 
-&nbsp;
+---
 
 ### Mutation Slice
 
@@ -147,7 +147,7 @@ generate
 mark_all_read
 ```
 
-&nbsp;
+---
 
 ### Retrieval Slice
 
@@ -164,7 +164,7 @@ popular
 mode
 ```
 
-&nbsp;
+
 
 ## Shared Naming
 
@@ -190,7 +190,7 @@ shared_status_x.dart
 SharedStatusX
 ```
 
-&nbsp;
+
 
 ## Failure Naming
 
@@ -203,7 +203,7 @@ Format:
 <module>_failure.dart
 ```
 
-&nbsp;
+---
 
 ### Enum
 
@@ -221,7 +221,7 @@ FinanceFailure
 TaskFailure
 ```
 
-&nbsp;
+---
 
 ### Enum Value
 
@@ -251,7 +251,7 @@ paymentStatusUnavailable
 noteNotFound
 ```
 
-&nbsp;
+
 
 ## Exception Naming
 
@@ -271,7 +271,7 @@ inbox_exception.dart
 finance_exception.dart
 ```
 
-&nbsp;
+---
 
 ### Class
 
@@ -288,7 +288,7 @@ InboxException
 FinanceException
 ```
 
-&nbsp;
+---
 
 ### Factory
 
@@ -323,7 +323,7 @@ ProductException.productUnavailable()
 ProductException.productNotFound()
 ```
 
-&nbsp;
+
 
 ## Failure Extension Naming
 
@@ -336,7 +336,7 @@ Format:
 <module>_failure_x.dart
 ```
 
-&nbsp;
+---
 
 ### Class
 
@@ -353,7 +353,7 @@ InboxFailureX
 FinanceFailureX
 ```
 
-&nbsp;
+---
 
 ### Localization Key
 
@@ -379,7 +379,7 @@ failureInboxMarkAllReadFailed
 failureDestinationNotFound
 ```
 
-&nbsp;
+
 
 ## Feature Barrel Naming
 
@@ -392,13 +392,13 @@ Format:
 <feature>_feature.dart
 ```
 
-&nbsp;
+---
 
 ### Export Scope
 
 Feature barrel hanya mengekspor resource publik milik feature tersebut.
 
-&nbsp;
+
 
 ## Module Barrel Naming
 
@@ -421,7 +421,7 @@ finance.dart
 
 Module barrel meneruskan export dari feature barrel yang ingin diekspos keluar module.
 
-&nbsp;
+
 
 ## Enum Naming
 
@@ -444,7 +444,7 @@ theme_mode.dart
 task_priority.dart
 ```
 
-&nbsp;
+---
 
 ### Enum
 
@@ -470,7 +470,7 @@ Enum tidak menggunakan suffix:
 Enum
 ```
 
-&nbsp;
+
 
 ## Entity Naming
 
@@ -489,7 +489,7 @@ atau
 <feature>_<slice>_entity.dart
 ```
 
-&nbsp;
+---
 
 ### Class
 
@@ -523,7 +523,7 @@ Entity
 
 untuk menghindari collision dengan package eksternal.
 
-&nbsp;
+
 
 ## Param Naming
 
@@ -544,7 +544,7 @@ Format:
 <feature>_<slice>_param.dart
 ```
 
-&nbsp;
+---
 
 ### Class
 
@@ -566,7 +566,7 @@ ProductDetailParam
 
 Dipilih naming `Param` over `Params` (konvensi global) karena untuk menjaga konsistensi object modelling (Entity - Param - Dto - Request - Response) yang semuanya menggunakan bentuk singular.
 
-&nbsp;
+
 
 ## Repository Naming
 
@@ -579,7 +579,7 @@ Format:
 <feature>_repository.dart
 ```
 
-&nbsp;
+---
 
 ### Contract Class
 
@@ -589,7 +589,7 @@ Format:
 <Feature>Repository
 ```
 
-&nbsp;
+---
 
 ### Method
 
@@ -611,7 +611,7 @@ getCityList()
 watchPaymentStatus()
 ```
 
-&nbsp;
+
 
 ## Use Case Naming
 
@@ -634,7 +634,7 @@ wallet_delete_use_case.dart
 product_detail_use_case.dart
 ```
 
-&nbsp;
+---
 
 ### Class
 
@@ -658,7 +658,7 @@ Use case menggunakan slice.
 
 Bukan action tambahan.
 
-&nbsp;
+
 
 ## Converter Naming
 
@@ -675,7 +675,7 @@ atau
 <feature>_<slice>_converter.dart
 ```
 
-&nbsp;
+---
 
 ### Class
 
@@ -697,7 +697,7 @@ TaskConverter
 DestinationPopularConverter
 ```
 
-&nbsp;
+
 
 ## DTO Naming
 
@@ -722,7 +722,7 @@ city_dto.dart
 destination_popular_dto.dart
 ```
 
-&nbsp;
+---
 
 ### Class
 
@@ -744,7 +744,7 @@ CityDto
 DestinationPopularDto
 ```
 
-&nbsp;
+
 
 ## Request Naming
 
@@ -757,7 +757,7 @@ Format:
 <feature>_<slice>_request.dart
 ```
 
-&nbsp;
+---
 
 ### Class
 
@@ -775,7 +775,7 @@ WalletDeleteRequest
 TaskCreateRequest
 ```
 
-&nbsp;
+
 
 ## Response Naming
 
@@ -788,7 +788,7 @@ Format:
 <feature>_<slice>_response.dart
 ```
 
-&nbsp;
+---
 
 ### Class
 
@@ -806,7 +806,7 @@ ProductDetailResponse
 PaymentStatusResponse
 ```
 
-&nbsp;
+
 
 ## Datasource Naming
 
@@ -825,7 +825,7 @@ Format:
 <feature>_local_data_source_impl.dart
 ```
 
-&nbsp;
+---
 
 ### Class
 
@@ -841,7 +841,7 @@ Format:
 <Feature>LocalDataSourceImpl
 ```
 
-&nbsp;
+---
 
 ### Method
 
@@ -863,7 +863,7 @@ getCityList()
 watchPaymentStatus()
 ```
 
-&nbsp;
+
 
 ## Repository Implementation Naming
 
@@ -876,7 +876,7 @@ Format:
 <feature>_repository_impl.dart
 ```
 
-&nbsp;
+---
 
 ### Implementation Class
 
@@ -886,7 +886,7 @@ Format:
 <Feature>RepositoryImpl
 ```
 
-&nbsp;
+
 
 ## Logic Naming
 
@@ -909,7 +909,7 @@ list
 status
 ```
 
-&nbsp;
+---
 
 ### State File
 
@@ -919,7 +919,7 @@ Format:
 <feature>_<slice>_state.dart
 ```
 
-&nbsp;
+---
 
 ### State Class
 
@@ -929,7 +929,7 @@ Format:
 <Feature><Slice>State
 ```
 
-&nbsp;
+---
 
 ### Cubit File
 
@@ -939,7 +939,7 @@ Format:
 <feature>_<slice>_cubit.dart
 ```
 
-&nbsp;
+---
 
 ### Cubit Class
 
@@ -949,7 +949,7 @@ Format:
 <Feature><Slice>Cubit
 ```
 
-&nbsp;
+
 
 ## UI Naming
 
@@ -962,7 +962,7 @@ Format:
 <slice>
 ```
 
-&nbsp;
+---
 
 ### View File
 
@@ -972,7 +972,7 @@ Format:
 <feature>_<slice>_view.dart
 ```
 
-&nbsp;
+---
 
 ### View Class
 
@@ -1004,7 +1004,7 @@ Page
 
 karena Page merupakan responsibility App Layer.
 
-&nbsp;
+---
 
 ### Widget File
 
@@ -1014,7 +1014,7 @@ Format:
 <feature>_<slice>_<widget>.dart
 ```
 
-&nbsp;
+---
 
 ### Widget Class
 
@@ -1034,7 +1034,7 @@ InboxMarkAllReadPopupMenuItem
 WalletDeleteDialog
 ```
 
-&nbsp;
+
 
 ## Module Compose Naming
 
@@ -1055,7 +1055,7 @@ inbox_di.dart
 task_di.dart
 ```
 
-&nbsp;
+---
 
 ### Route
 
@@ -1073,7 +1073,7 @@ inbox_route.dart
 task_route.dart
 ```
 
-&nbsp;
+
 
 ## App Compose Naming
 
@@ -1084,7 +1084,7 @@ Page dapat merepresentasikan satu primary slice atau menjadi aggregate surface y
 
 Logic juga dapat diregistrasikan pada page scope atau scope yang lebih tinggi seperti root/global scope bila lifecycle dan kebutuhan composition mengharuskannya.
 
-&nbsp;
+---
 
 ### Page File
 
@@ -1113,7 +1113,7 @@ product_page.dart
 dashboard_page.dart
 ```
 
-&nbsp;
+---
 
 ### Page Class
 

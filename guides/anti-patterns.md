@@ -2,13 +2,11 @@
 
 Dokumen ini merangkum pola yang sebaiknya dihindari saat menggunakan FSDA.
 
-&nbsp;
 
 ## Purpose
 
 Anti-pattern membantu menjaga arsitektur tetap konsisten dengan menunjukkan bentuk-bentuk implementasi yang tampak praktis di awal, tetapi biasanya menimbulkan drift di kemudian hari.
 
-&nbsp;
 
 ## Common Anti-Patterns
 
@@ -23,7 +21,6 @@ Hindari pola berikut:
 * menggabungkan beberapa tujuan bisnis berbeda ke dalam satu slice
 * membiarkan circular dependence antar feature
 
-&nbsp;
 
 ## Folder First vs Sequence First
 
@@ -53,7 +50,6 @@ Pendekatan yang benar:
 
 Dengan kata lain, folder tetap dibuat, tetapi folder mengikuti keputusan sequence, bukan sebaliknya.
 
-&nbsp;
 
 ## App vs Module Confusion
 
@@ -65,7 +61,6 @@ Contoh yang perlu dihindari:
 * menaruh route aggregation di Module package
 * menaruh dependency injection App ke boundary feature
 
-&nbsp;
 
 ## Shared Misuse
 
@@ -77,7 +72,6 @@ Sebelum memindahkan sesuatu ke shared, pastikan:
 * ownership-nya jelas
 * boundary terdekatnya memang sudah tidak cukup
 
-&nbsp;
 
 ## Sequence Misuse
 

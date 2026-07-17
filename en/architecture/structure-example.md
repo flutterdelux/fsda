@@ -12,7 +12,15 @@ App page examples should be read as composition surfaces. In real projects, page
 fsda-base/
 ├── apps/
 │   └── fsda_base/
+│       ├── analysis_options.yaml
+│       ├── flutter_launcher_icons.yaml
+│       ├── package_rename_config.yaml
 │       ├── pubspec.yaml
+│       ├── assets/
+│       │   └── images/
+│       │       └── launcher-icon-foreground.png
+│       │       └── launcher-icon.png
+│       │       └── logo.png
 │       └── lib/
 │           ├── main.dart
 │           ├── app/
@@ -28,32 +36,31 @@ fsda-base/
 │           │           └── bottom_nav_bar.dart
 │           ├── core/
 │           │   ├── constants/
+│           │   │   ├── app_assets.dart
+│           │   │   └── app_external_links.dart
 │           │   ├── di/
 │           │   │   ├── core_di.dart
 │           │   │   ├── di.dart
 │           │   │   ├── di_keys.dart
 │           │   │   └── external_di.dart
 │           │   ├── extensions/
+│           │   │   └── failure_x.dart
 │           │   ├── externals/
+│           │   │   ├── fdelux_mock_config.dart
+│           │   │   ├── logging_config.dart
+│           │   │   └── network_timeout_config.dart
 │           │   ├── mixins/
+│           │   │   └── page_provider_mixin.dart
 │           │   └── pages/
+│           │       ├── invalid_argument_page.dart
+│           │       └── not_found_page.dart
 │           └── modules/
 │               ├── attendance/
 │               │   ├── attendance_di.dart
 │               │   ├── attendance_route.dart
 │               │   └── features/attendance/pages/attendance_list_page.dart
-│               ├── finance/
-│               │   ├── finance_di.dart
-│               │   ├── finance_route.dart
-│               │   └── features/wallet/pages/wallet_detail_page.dart
-│               ├── product/
-│               │   ├── product_di.dart
-│               │   ├── product_route.dart
-│               │   └── features/product/pages/product_detail_page.dart
-│               └── task/
-│                   ├── task_di.dart
-│                   ├── task_route.dart
-│                   └── features/task/pages/task_create_page.dart
+│               └── finance/
+│                   └── ... (same compose module pattern)
 ├── modules/
 │   ├── attendance/
 │   │   ├── analysis_options.yaml
@@ -101,31 +108,3 @@ fsda-base/
     ├── app_ui/
     └── infra_.../
 ```
-
-## Reading This Example
-
-Use this example to understand where artifacts typically live.
-
-When implementation details differ between sequences, the sequence blueprint is the source of truth.
-
-## Sequence-Oriented Reminder
-
-Even with a clear folder structure, implementation should still begin with:
-
-```text
-requirement
-→ module
-→ feature
-→ slice
-→ sequence
-→ blueprint
-→ implementation
-```
-
-## Related Documents
-
-- [Structure](structure.md)
-- [Dependency Rules](dependency-rules.md)
-- [Sequence Pattern](sequence-pattern.md)
-- [Naming Conventions](../conventions/naming-conventions.md)
-- [Development Workflow](../guides/development-workflow.md)

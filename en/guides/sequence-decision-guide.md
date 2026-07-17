@@ -2,15 +2,11 @@
 
 This document helps choose the most suitable sequence for a feature slice.
 
-&nbsp;
-
 ## Purpose
 
 The first question in FSDA is not folder location, but which sequence is most appropriate.
 
 This guide speeds up that decision.
-
-&nbsp;
 
 ## Quick Decision Flow
 
@@ -22,8 +18,6 @@ Use this flow:
 4. Does this slice require input?
 5. Does this slice return operation result?
 6. Does this slice need pagination, stream, or offline-first behavior?
-
-&nbsp;
 
 ## Mutation Family
 
@@ -40,8 +34,6 @@ Examples:
 * `delete` -> Mutation + Param
 * `take` -> Mutation + Return
 * `create` -> Mutation + Return + Param
-
-&nbsp;
 
 ## Retrieval Family
 
@@ -62,8 +54,6 @@ Examples:
 * `list` -> Retrieval + Stream
 * `status` -> Retrieval + Stream + Param
 * `list` -> Retrieval + Offline First
-
-&nbsp;
 
 ## Selection Rule
 

@@ -8,20 +8,22 @@ This page helps you understand how FSDA works before building features.
 
 FSDA is a modular Flutter architecture built on these principles:
 
-- Feature First
-- Domain Centered
-- Sequence Driven
-- Automation Friendly
+* Feature First
+* Domain Centered
+* Sequence Driven
+* Automation Friendly
 
 Its primary goals are:
 
-- Easy-to-understand structure
-- Predictable implementation
-- Controlled dependencies
-- Portable features
-- Tooling-friendly generation
+* Easy-to-understand structure
+* Predictable implementation
+* Controlled dependencies
+* Portable features
+* Tooling-friendly generation
 
-## Recommended Read Order
+## Read Order
+
+Before starting feature development, read the documentation in the following order:
 
 1. [Architecture Overview](/en/architecture/architecture)
 2. [Principles](/en/architecture/principles)
@@ -39,11 +41,11 @@ Its primary goals are:
 
 Then continue with supporting documents:
 
-- [Foundations](/en/architecture/foundations)
-- [Sequence Decision Guide](/en/guides/sequence-decision-guide)
-- [Testing Strategy](/en/guides/testing-strategy)
-- [Anti-Patterns](/en/guides/anti-patterns)
-- [Tooling](/en/guides/tooling)
+* [Foundations](/en/architecture/foundations)
+* [Sequence Decision Guide](/en/guides/sequence-decision-guide)
+* [Testing Strategy](/en/guides/testing-strategy)
+* [Anti-Patterns](/en/guides/anti-patterns)
+* [Tooling](/en/guides/tooling)
 
 ## Getting Started Paths (Wikuy)
 
@@ -54,24 +56,12 @@ For practical end-to-end onboarding, choose one path:
 
 Both paths target the same output:
 
-- Workspace: `Wikuy`
-- App: `wikuy`
-- Module: `travel`
-- Feature: `destination`
-- Slice: `list`
-- Sequence: `R`
-- UI: `lsv`
-- Main page class: `DestinationListPage`
-- API source: `GET /destinations`
-
-## Golden Rule
-
-When in doubt:
-
-1. Define the feature slice.
-2. Pick the proper sequence.
-3. Open the matching blueprint.
-4. Follow naming conventions.
-5. Follow dependency rules.
-
-Avoid creating new patterns when an existing sequence is already suitable.
+* Workspace: `Wikuy`
+* App: `wikuy`
+* Module: `travel`
+* Feature: `destination`
+* Slice: `list`
+* Sequence: `R`
+* UI: `lsv`
+* Main page class: `DestinationListPage`
+* API source: `GET /destinations`

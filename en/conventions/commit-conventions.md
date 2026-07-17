@@ -2,13 +2,11 @@
 
 This document defines baseline commit conventions for FSDA.
 
-&nbsp;
 
 ## Purpose
 
 Commit conventions keep repository history readable, traceable, and review-friendly.
 
-&nbsp;
 
 ## General Rules
 
@@ -18,7 +16,6 @@ Use commits that:
 * explain change intent briefly
 * do not mix refactor, formatting, and major behavior changes without clear reason
 
-&nbsp;
 
 ## Recommended Format
 
@@ -36,7 +33,6 @@ fix: align param naming in structure docs
 refactor: simplify module shared placement examples
 ```
 
-&nbsp;
 
 ## Suggested Types
 
@@ -50,7 +46,6 @@ Use the most representative type:
 * `chore` for general maintenance work
 * `build` for build, tooling, or dependency setup changes
 
-&nbsp;
 
 ## Scope Guidance
 
@@ -64,7 +59,6 @@ fix: align domain failure placement
 refactor: simplify note list page example
 ```
 
-&nbsp;
 
 ## What To Avoid
 
@@ -77,7 +71,6 @@ Avoid commits such as:
 
 Also avoid oversized commits that combine too many unrelated concerns.
 
-&nbsp;
 
 ## Documentation Changes
 

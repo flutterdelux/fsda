@@ -2,13 +2,11 @@
 
 This document summarizes patterns that should be avoided when using FSDA.
 
-&nbsp;
 
 ## Purpose
 
 Anti-patterns help keep architecture consistent by highlighting implementation choices that look practical at first but usually cause drift later.
 
-&nbsp;
 
 ## Common Anti-Patterns
 
@@ -23,7 +21,6 @@ Avoid the following:
 * combining multiple business goals into one slice
 * allowing circular dependency across features
 
-&nbsp;
 
 ## Folder First vs Sequence First
 
@@ -53,7 +50,6 @@ Correct approach:
 
 In short: folders still matter, but folders should follow sequence decisions, not the other way around.
 
-&nbsp;
 
 ## App vs Module Confusion
 
@@ -65,7 +61,6 @@ Avoid cases such as:
 * placing route aggregation in module package
 * placing app-level dependency injection in feature boundary
 
-&nbsp;
 
 ## Shared Misuse
 
@@ -77,7 +72,6 @@ Before moving something into shared, make sure:
 * ownership is clear
 * nearest boundary is truly insufficient
 
-&nbsp;
 
 ## Sequence Misuse
 

@@ -2,15 +2,11 @@
 
 Dokumen ini menjelaskan fondasi abstraksi yang sering muncul pada contoh-contoh FSDA.
 
-&nbsp;
-
 ## Tujuan
 
 FSDA tidak hanya bergantung pada struktur folder, tetapi juga pada beberapa abstraction dasar yang membantu menjaga alur implementasi tetap konsisten.
 
 Dokumen ini tidak mengunci implementasi final satu package tertentu, tetapi menjelaskan peran abstraction yang umum dipakai.
-
-&nbsp;
 
 ## Konsep Inti
 
@@ -24,8 +20,6 @@ Abstraction yang sering muncul antara lain:
 * `RepositoryExceptionHandler`
 * `AppLogger`
 
-&nbsp;
-
 ## Failure
 
 `Failure` merepresentasikan kegagalan di sisi domain.
@@ -37,8 +31,6 @@ Pada FSDA, failure yang bersifat module-scope diletakkan di:
 ```text
 module/shared/domain/errors/
 ```
-
-&nbsp;
 
 ## Exception
 
@@ -52,15 +44,11 @@ Pada FSDA, exception yang bersifat module-scope diletakkan di:
 module/shared/data/errors/
 ```
 
-&nbsp;
-
 ## Result dan AsyncResult
 
 `Result` atau `AsyncResult` membantu menjaga hasil operasi tetap eksplisit.
 
 Pendekatan ini biasanya digunakan agar keberhasilan dan kegagalan dapat diperlakukan secara konsisten tanpa melemparkan error ke layer atas secara sembarangan.
-
-&nbsp;
 
 ## UseCase
 
@@ -72,15 +60,11 @@ UseCase biasanya:
 * memanggil `Repository Contract`
 * mengembalikan `Result` atau `AsyncResult`
 
-&nbsp;
-
 ## Repository Contract
 
 Repository contract berada pada Domain.
 
 Repository contract mendefinisikan operasi bisnis yang dibutuhkan, tanpa mengetahui bagaimana detail implementasinya dilakukan.
-
-&nbsp;
 
 ## RepositoryExceptionHandler
 
@@ -88,15 +72,11 @@ Abstraction ini biasanya digunakan pada Data layer untuk membantu menerjemahkan 
 
 Implementasi konkretnya dapat berbeda, tetapi perannya tetap sama: menjaga alur error translation tetap konsisten.
 
-&nbsp;
-
 ## AppLogger
 
 `AppLogger` atau abstraction logging sejenis dipakai untuk mencatat kejadian teknis tanpa mencampurkan detail logging ke setiap flow bisnis secara acak.
 
 Jika logging dibutuhkan lintas banyak boundary, letakkan abstraction-nya pada fondasi yang stabil seperti `app_core` atau package shared yang sesuai.
-
-&nbsp;
 
 ## Panduan Penempatan
 

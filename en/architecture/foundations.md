@@ -1,20 +1,16 @@
 # Foundations
 
-This document explains the foundational abstractions that commonly appear in FSDA examples.
+This document explains the foundational abstractions that frequently appear in FSDA examples.
 
-&nbsp;
+## Objective
 
-## Purpose
+FSDA does not only depend on folder structures, but also on several basic abstractions that help maintain a consistent implementation flow.
 
-FSDA depends not only on folder structure, but also on baseline abstractions that keep implementation flow consistent.
-
-This document does not lock a single final package implementation. It explains commonly used abstraction roles.
-
-&nbsp;
+This document does not lock the final implementation to one specific package, but explains the role of commonly used abstractions.
 
 ## Core Concepts
 
-Frequently used abstractions include:
+Abstractions that frequently appear include:
 
 * `Failure`
 * `Exception`
@@ -24,86 +20,70 @@ Frequently used abstractions include:
 * `RepositoryExceptionHandler`
 * `AppLogger`
 
-&nbsp;
-
 ## Failure
 
-`Failure` represents failure on domain side.
+`Failure` represents a failure on the domain side.
 
-Failure is used by layers above Data as error already translated into business language or a more stable boundary.
+Failure is used by layers above Data as a form of error that has been translated into business language or a more stable boundary.
 
-In FSDA, module-scoped failures are placed at:
+In FSDA, module-scope failures are placed in:
 
 ```text
 module/shared/domain/errors/
 ```
 
-&nbsp;
-
 ## Exception
 
-`Exception` represents technical failure in Data layer.
+`Exception` represents technical failures in the Data layer.
 
-Exception must not leak into Logic or UI. It should be translated into Failure first.
+Exceptions must not leak to Logic or UI. Exceptions must first be translated into Failures.
 
-In FSDA, module-scoped exceptions are placed at:
+In FSDA, module-scope exceptions are placed in:
 
 ```text
 module/shared/data/errors/
 ```
 
-&nbsp;
-
 ## Result and AsyncResult
 
-`Result` or `AsyncResult` helps keep operation outcomes explicit.
+`Result` or `AsyncResult` helps keep the outcome of operations explicit.
 
-This approach is commonly used so success and failure can be handled consistently without throwing errors upward arbitrarily.
-
-&nbsp;
+This approach is usually used so that successes and failures can be treated consistently without arbitrarily throwing errors to upper layers.
 
 ## UseCase
 
-`UseCase` is the business entry point in Domain layer.
+`UseCase` acts as the business entry point in the Domain layer.
 
-UseCase commonly:
+A UseCase typically:
 
-* accepts input as `Param`
-* calls `Repository Contract`
-* returns `Result` or `AsyncResult`
-
-&nbsp;
+* receives input in the form of a `Param`
+* calls the `Repository Contract`
+* returns a `Result` or `AsyncResult`
 
 ## Repository Contract
 
-Repository contract belongs in Domain.
+Repository contracts reside in the Domain.
 
-It defines required business operations without knowing implementation details.
-
-&nbsp;
+A Repository contract defines the required business operations without knowing the details of how they are implemented.
 
 ## RepositoryExceptionHandler
 
-This abstraction is commonly used in Data layer to translate technical exceptions into stable failures.
+This abstraction is usually used in the Data layer to help translate technical exceptions into more stable failures.
 
-Concrete implementation may vary, but the role remains the same: keep error translation flow consistent.
-
-&nbsp;
+Its concrete implementation may vary, but its role remains the same: keeping the error translation flow consistent.
 
 ## AppLogger
 
-`AppLogger` (or equivalent logging abstraction) records technical events without mixing logging details randomly into each business flow.
+`AppLogger` or similar logging abstractions are used to log technical events without randomly mixing logging details into every business flow.
 
-If logging is needed across many boundaries, place the abstraction in a stable foundation like `app_core` or an appropriate shared package.
+If logging is needed across many boundaries, place its abstraction in a stable foundation like `app_core` or an appropriate shared package.
 
-&nbsp;
+## Placement Guidelines
 
-## Placement Guidance
+Not all abstractions must be placed in the same location for all projects.
 
-Not all abstractions must be placed in the same location for every project.
+Use the following principles:
 
-Use these principles:
-
-* system-wide stable abstractions fit shared packages like `app_core`
-* abstractions relevant to one module should remain in that module boundary
-* do not promote abstractions to higher boundaries before reuse and ownership are truly clear
+* abstractions that cross the system and are stable belong in a shared package like `app_core`
+* abstractions that are only relevant in one module are better kept within that module's boundary
+* do not move foundations to a higher boundary until their reuse and ownership are completely clear

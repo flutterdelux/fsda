@@ -1,19 +1,20 @@
 # Naming Conventions
 
-This document defines naming conventions for FSDA.
+This document defines the naming conventions used in FSDA.
 
-Primary goals:
+The primary goals of these conventions are:
 
-* keep project structure consistent
-* improve code navigation
-* support automation and code generation
-* make structure predictable
-* reduce subjective naming decisions
+- Maintain a consistent project structure.
+- Improve code navigation.
+- Simplify automation and code generation.
+- Make the project structure predictable.
+- Reduce subjective naming decisions.
 
+---
 
-## General Rules
+# General Rules
 
-### File Naming
+## File Naming
 
 Use:
 
@@ -30,7 +31,9 @@ product_detail_view.dart
 inbox_mark_all_read_cubit.dart
 ```
 
-### Class Naming
+---
+
+## Class Naming
 
 Use:
 
@@ -47,7 +50,9 @@ ProductDetailView
 InboxMarkAllReadCubit
 ```
 
-### Method Naming
+---
+
+## Method Naming
 
 Use:
 
@@ -61,16 +66,20 @@ Examples:
 createTask()
 deleteWallet()
 markAllInboxRead()
+
 getProductDetail()
 getCityList()
 watchPaymentStatus()
+
+getPopularDestination()
+getRecentNote()
 ```
 
-&nbsp;
+---
 
-## Module Naming
+# Module Naming
 
-Use business-domain names.
+Use the business domain name.
 
 Format:
 
@@ -89,9 +98,11 @@ location
 travel
 ```
 
-## Feature Naming
+---
 
-Use primary resource names owned by the module.
+# Feature Naming
+
+Use the primary resource owned by the module.
 
 Format:
 
@@ -110,13 +121,15 @@ city
 destination
 ```
 
-## Slice Naming
+---
 
-Feature slice is the smallest business implementation unit.
+# Slice Naming
 
-### Mutation Slice
+A feature slice is the smallest unit of business implementation.
 
-Use action/verb.
+## Mutation Slice
+
+Use an action (verb).
 
 Examples:
 
@@ -129,9 +142,11 @@ generate
 mark_all_read
 ```
 
-### Retrieval Slice
+---
 
-Use retrieved target/data intent.
+## Retrieval Slice
+
+Use the target data being retrieved.
 
 Examples:
 
@@ -144,9 +159,13 @@ popular
 mode
 ```
 
-## Shared Naming
+---
 
-Shared naming should follow ownership boundary.
+# Shared Naming
+
+Shared components follow the ownership boundary.
+
+Their names should retain the originating feature or domain.
 
 Examples:
 
@@ -158,24 +177,30 @@ payment_status.dart
 PaymentStatus
 ```
 
-Avoid generic/unowned names such as:
+Not:
 
 ```text
 shared_status_x.dart
 SharedStatusX
 ```
 
-&nbsp;
+---
 
-## Failure Naming
+# Failure Naming
 
-### File
+## File
+
+Format:
 
 ```text
 <module>_failure.dart
 ```
 
-### Enum
+---
+
+## Enum
+
+Format:
 
 ```text
 <Module>Failure
@@ -189,17 +214,17 @@ FinanceFailure
 TaskFailure
 ```
 
-### Enum Value
+---
+
+## Enum Value
 
 Format:
 
 ```text
 <feature><slice><result>
-```
 
 or
 
-```text
 <feature><result>
 ```
 
@@ -207,18 +232,25 @@ Examples:
 
 ```dart
 walletDeleteFailed
+
 taskCreateFailed
+
 inboxMarkAllReadFailed
+
 productDetailNotFound
+
 paymentStatusUnavailable
+
 noteNotFound
 ```
 
-&nbsp;
+---
 
-## Exception Naming
+# Exception Naming
 
-### File
+## File
+
+Format:
 
 ```text
 <module>_exception.dart
@@ -231,9 +263,13 @@ inbox_exception.dart
 finance_exception.dart
 ```
 
-### Class
+---
 
-```text
+## Class
+
+Format:
+
+```dart
 <Module>Exception
 ```
 
@@ -244,7 +280,9 @@ InboxException
 FinanceException
 ```
 
-### Factory
+---
+
+## Factory
 
 Format:
 
@@ -256,52 +294,71 @@ Examples:
 
 ```dart
 InboxException.inboxMarkAllReadFailed()
+
 FinanceException.walletDeleteFailed()
+
 TaskException.taskCreateFailed()
+
 ProductException.productDetailNotFound()
 ```
 
-If not tied to a slice and only feature-level, use:
+If the exception is not associated with a slice but only with a feature, use:
 
 ```text
 <feature><result>
 ```
 
-Example:
+Examples:
 
 ```dart
-PaymentException.paymentNotFound()
+ProductException.productUnavailable()
+ProductException.productNotFound()
 ```
 
-&nbsp;
+---
 
-## Failure Extension Naming
+# Failure Extension Naming
 
-### File
+## File
+
+Format:
 
 ```text
 <module>_failure_x.dart
 ```
 
-### Class
+---
 
-```text
+## Class
+
+Format:
+
+```dart
 <Module>FailureX
 ```
 
-### Localization Key
+Examples:
+
+```dart
+InboxFailureX
+FinanceFailureX
+```
+
+---
+
+## Localization Key
 
 Format:
 
 ```text
 failure<Feature><Slice><Result>
 
-atau
+or
 
 failure<Feature><Result>
 ```
 
-Contoh:
+Examples:
 
 ```text
 failureWalletDeleteFailed
@@ -313,416 +370,765 @@ failureInboxMarkAllReadFailed
 failureDestinationNotFound
 ```
 
-&nbsp;
+---
 
-## Feature Barrel Naming
+# Feature Barrel Naming
 
-### File
+## File
+
+Format:
 
 ```text
 <feature>_feature.dart
 ```
 
-### Export Scope
+---
 
-Feature barrel should export only resources that are intentionally public for that feature boundary.
+## Export Scope
 
-&nbsp;
+A feature barrel should only export the public resources owned by that feature.
 
-## Module Barrel Naming
+---
 
-### File
+# Module Barrel Naming
+
+## File
+
+Format:
 
 ```text
 <module>.dart
 ```
 
-Module barrel should expose module-level public surface only.
-
-&nbsp;
-
-## Enum Naming
-
-### File
+Examples:
 
 ```text
-<feature>_<concept>.dart
+inbox.dart
+task.dart
+finance.dart
 ```
 
-or
+A module barrel re-exports the feature barrels that should be exposed outside the module.
+
+---
+
+# Enum Naming
+
+## File
+
+Format:
 
 ```text
-<concept>.dart
+<name>.dart
 ```
 
-when context is already clear.
+Examples:
 
-### Enum
+```text
+payment_status.dart
 
-Use concise domain terms in PascalCase.
+theme_mode.dart
+
+task_priority.dart
+```
+
+---
+
+## Enum
+
+Format:
+
+```dart
+<Name>
+```
 
 Examples:
 
 ```dart
 PaymentStatus
-AttendanceType
-ThemeModeType
+
+ThemeMode
+
+TaskPriority
 ```
 
-&nbsp;
+Enums should **not** use the suffix:
 
-## Entity Naming
+```text
+Enum
+```
 
-### File
+---
+
+# Entity Naming
+
+## File
+
+Format:
 
 ```text
 <feature>_entity.dart
 ```
 
-### Class
+or
 
 ```text
+<feature>_<slice>_entity.dart
+```
+
+---
+
+## Class
+
+Format:
+
+```dart
 <Feature>Entity
+```
+
+or
+
+```dart
+<Feature><Slice>Entity
 ```
 
 Examples:
 
 ```dart
-ProductEntity
-WalletEntity
+UserEntity
+
 TaskEntity
+
+ProductEntity
 ```
 
-&nbsp;
+Entities must use the `Entity` suffix to avoid naming collisions with external packages.
 
-## Param Naming
+---
 
-### Folder
+# Param Naming
+
+## Folder
+
+Format:
 
 ```text
 params/
 ```
 
-### File
+---
+
+## File
+
+Format:
 
 ```text
 <feature>_<slice>_param.dart
 ```
 
-### Class
+---
 
-```text
+## Class
+
+Format:
+
+```dart
 <Feature><Slice>Param
 ```
 
 Examples:
 
 ```dart
-WalletDeleteParam
 TaskCreateParam
+
+WalletDeleteParam
+
 ProductDetailParam
 ```
 
-&nbsp;
+`Param` is preferred over `Params` to maintain consistency with the object model:
 
-## Repository Naming
+```
+Entity → Param → Dto → Request → Response
+```
 
-### Contract File
+where every type uses the singular form.
+
+---
+
+# Repository Naming
+
+## Contract File
+
+Format:
 
 ```text
 <feature>_repository.dart
 ```
 
-### Contract Class
+---
 
-```text
+## Contract Class
+
+Format:
+
+```dart
 <Feature>Repository
 ```
 
-### Method
+---
 
-Use clear business operation names.
+## Method
+
+Use natural business-oriented names while keeping them consistent across repository contracts.
 
 Examples:
 
 ```dart
-deleteWallet(ProductDeleteParam param)
-createTask(TaskCreateParam param)
-getProductDetail(ProductDetailParam param)
+createTask()
+
+deleteWallet()
+
+markAllInboxRead()
+
+getProductDetail()
+
+getCityList()
+
+watchPaymentStatus()
 ```
 
-&nbsp;
+---
 
-## Use Case Naming
+# Use Case Naming
 
-### File
+## File
+
+Format:
 
 ```text
 <feature>_<slice>_use_case.dart
 ```
 
-### Class
+Examples:
 
 ```text
+task_create_use_case.dart
+
+wallet_delete_use_case.dart
+
+product_detail_use_case.dart
+```
+
+---
+
+## Class
+
+Format:
+
+```dart
 <Feature><Slice>UseCase
 ```
 
 Examples:
 
 ```dart
-WalletDeleteUseCase
 TaskCreateUseCase
+
+WalletDeleteUseCase
+
 ProductDetailUseCase
 ```
 
-&nbsp;
+Use cases are named after slices, not additional actions.
 
-## Converter Naming
+---
 
-### File
+# Converter Naming
 
-```text
-<feature>_<concept>_converter.dart
-```
+## File
 
-### Class
+Format:
 
 ```text
-<Feature><Concept>Converter
-```
-
-Examples:
-
-```dart
-PaymentStatusConverter
-AttendanceTypeConverter
-```
-
-&nbsp;
-
-## DTO Naming
-
-### File
-
-```text
-<feature>_dto.dart
-```
-
-or for specialized shape:
-
-```text
-<feature>_<slice>_dto.dart
-```
-
-### Class
-
-```text
-<Feature>Dto
+<feature>_converter.dart
 ```
 
 or
 
 ```text
+<feature>_<slice>_converter.dart
+```
+
+---
+
+## Class
+
+Format:
+
+```dart
+<Feature>Converter
+```
+
+or
+
+```dart
+<Feature><Slice>Converter
+```
+
+Examples:
+
+```dart
+TaskConverter
+
+DestinationPopularConverter
+```
+
+---
+
+# DTO Naming
+
+## File
+
+Format:
+
+```text
+<feature>_dto.dart
+```
+
+or
+
+```text
+<feature>_<slice>_dto.dart
+```
+
+Examples:
+
+```text
+city_dto.dart
+
+destination_popular_dto.dart
+```
+
+---
+
+## Class
+
+Format:
+
+```dart
+<Feature>Dto
+```
+
+or
+
+```dart
 <Feature><Slice>Dto
 ```
 
-&nbsp;
+Examples:
 
-## Request Naming
+```dart
+CityDto
 
-### File
+DestinationPopularDto
+```
+
+---
+
+# Request Naming
+
+## File
+
+Format:
 
 ```text
 <feature>_<slice>_request.dart
 ```
 
-### Class
+---
 
-```text
+## Class
+
+Format:
+
+```dart
 <Feature><Slice>Request
 ```
 
-&nbsp;
+Examples:
 
-## Response Naming
+```dart
+WalletDeleteRequest
 
-### File
+TaskCreateRequest
+```
+
+---
+
+# Response Naming
+
+## File
+
+Format:
 
 ```text
 <feature>_<slice>_response.dart
 ```
 
-### Class
+---
 
-```text
+## Class
+
+Format:
+
+```dart
 <Feature><Slice>Response
 ```
 
-&nbsp;
+Examples:
 
-## Datasource Naming
+```dart
+ProductDetailResponse
 
-### File
+PaymentStatusResponse
+```
+
+---
+
+# Datasource Naming
+
+## File
+
+Format:
 
 ```text
 <feature>_remote_data_source.dart
+
 <feature>_remote_data_source_impl.dart
-```
 
-Optional local variant:
-
-```text
 <feature>_local_data_source.dart
+
 <feature>_local_data_source_impl.dart
 ```
 
-### Class
+---
 
-```text
+## Class
+
+Format:
+
+```dart
 <Feature>RemoteDataSource
+
 <Feature>RemoteDataSourceImpl
+
+<Feature>LocalDataSource
+
+<Feature>LocalDataSourceImpl
 ```
 
-(or Local equivalents)
+---
 
-### Method
+## Method
 
-Use operation names aligned with repository/use-case intent.
+Datasource methods should follow the repository contract for the corresponding feature slice.
 
-&nbsp;
+Examples:
 
-## Repository Implementation Naming
+```dart
+markAllInboxRead()
 
-### Implementation File
+deleteWallet()
+
+createTask()
+
+getProductDetail()
+
+getCityList()
+
+watchPaymentStatus()
+```
+
+---
+
+# Repository Implementation Naming
+
+## Implementation File
+
+Format:
 
 ```text
 <feature>_repository_impl.dart
 ```
 
-### Implementation Class
+---
 
-```text
+## Implementation Class
+
+Format:
+
+```dart
 <Feature>RepositoryImpl
 ```
 
-&nbsp;
+---
 
-## Logic Naming
+# Logic Naming
 
-### Slice Folder
+## Slice Folder
+
+Format:
 
 ```text
-logic/<slice>/
+<slice>
 ```
 
-### State File
+Examples:
+
+```text
+create
+delete
+detail
+list
+status
+```
+
+---
+
+## State File
+
+Format:
 
 ```text
 <feature>_<slice>_state.dart
 ```
 
-### State Class
+---
 
-```text
+## State Class
+
+Format:
+
+```dart
 <Feature><Slice>State
 ```
 
-### Cubit File
+---
+
+## Cubit File
+
+Format:
 
 ```text
 <feature>_<slice>_cubit.dart
 ```
 
-### Cubit Class
+---
 
-```text
+## Cubit Class
+
+Format:
+
+```dart
 <Feature><Slice>Cubit
 ```
 
-&nbsp;
+---
 
-## UI Naming
+# UI Naming
 
-### Slice Folder
+## Slice Folder
+
+Format:
 
 ```text
-ui/<slice>/
+<slice>
 ```
 
-### View File
+---
+
+## View File
+
+Format:
 
 ```text
 <feature>_<slice>_view.dart
 ```
 
-### View Class
+---
 
-```text
+## View Class
+
+Format:
+
+```dart
 <Feature><Slice>View
 ```
 
-### Widget File
+Examples:
 
-Use clear intent-based names.
+```dart
+TaskCreateView
+
+ProductDetailView
+```
+
+Use the term:
+
+```text
+View
+```
+
+instead of:
+
+```text
+Page
+```
+
+because `Page` belongs to the App Layer responsibility.
+
+---
+
+## Widget File
+
+Format:
+
+```text
+<feature>_<slice>_<widget>.dart
+```
+
+---
+
+## Widget Class
+
+Format:
+
+```dart
+<Feature><Slice><Widget>
+```
 
 Examples:
 
-```text
-<feature>_<slice>_content.dart
-<feature>_<slice>_error.dart
-<feature>_<slice>_skeleton.dart
+```dart
+TaskCreateForm
+
+InboxMarkAllReadPopupMenuItem
+
+WalletDeleteDialog
 ```
 
-### Widget Class
+---
 
-Use PascalCase aligned with widget file intent.
+# Module Compose Naming
 
-&nbsp;
+## DI
 
-## Module Compose Naming
-
-### DI
+Format:
 
 ```text
 <module>_di.dart
 ```
 
-Use consistent DI function names, for example:
+Examples:
 
-```dart
-Future<void> <module>DI() async {}
+```text
+inbox_di.dart
+
+task_di.dart
 ```
 
-### Route
+---
+
+## Route
+
+Format:
 
 ```text
 <module>_route.dart
 ```
 
-Use a route class such as:
+Examples:
 
-```dart
-class <Module>Route {}
+```text
+inbox_route.dart
+
+task_route.dart
 ```
 
-&nbsp;
+---
 
-## App Compose Naming
+# App Compose Naming
 
-App-level composition pages are placed in app module boundary.
+The application layer is responsible for composing UI and Logic.
 
-### Page File
+A page may represent a single primary slice or serve as an aggregate surface that combines multiple slices.
+
+Logic may also be registered at the page scope or a higher scope (such as the root/global scope) when required by lifecycle or composition needs.
+
+---
+
+## Page File
+
+Default format for a single-slice page:
 
 ```text
 <feature>_<slice>_page.dart
 ```
 
-or explicit aggregate pages when needed.
-
-### Page Class
+Examples:
 
 ```text
+task_create_page.dart
+
+product_detail_page.dart
+
+inbox_mark_all_read_page.dart
+```
+
+If the page represents an aggregate surface, use the most representative feature or context name.
+
+Examples:
+
+```text
+product_page.dart
+dashboard_page.dart
+```
+
+---
+
+## Page Class
+
+Default format for a single-slice page:
+
+```dart
 <Feature><Slice>Page
 ```
 
-Use aggregate naming when one page composes multiple slices.
+Examples:
+
+```dart
+TaskCreatePage
+
+ProductDetailPage
+
+InboxMarkAllReadPage
+```
+
+For aggregate pages, use the most representative surface name.
+
+Examples:
+
+```dart
+ProductPage
+DashboardPage
+```
+
+A page is responsible for composing:
+
+- View
+- Logic
+- Dependency Injection for the UI and Logic scope
+- Listeners
+- Providers
+- Navigation for route-specific actions

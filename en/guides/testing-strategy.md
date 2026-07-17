@@ -2,13 +2,9 @@
 
 This document describes baseline testing strategy in FSDA.
 
-&nbsp;
-
 ## Purpose
 
 Testing strategy ensures each layer can be verified without blurring architectural boundaries.
-
-&nbsp;
 
 ## Layer-Based Testing
 
@@ -19,8 +15,6 @@ Use this baseline approach:
 * Logic: tests for state transitions and orchestration logic
 * UI: widget tests for key presentation and interaction
 * App: integration or smoke tests for composition, routes, and dependency wiring
-
-&nbsp;
 
 ## Sequence-Based Testing
 
@@ -35,8 +29,6 @@ Example focus:
 * Retrieval + Stream: initial emission, update emission, failure emission when relevant
 * Retrieval + Offline First: local hit, remote fallback, sync behavior when applicable
 
-&nbsp;
-
 ## What To Prioritize
 
 Prioritize tests on:
@@ -45,8 +37,6 @@ Prioritize tests on:
 * error translation from Data to Domain
 * state transitions in Logic
 * critical App composition flows
-
-&nbsp;
 
 ## What To Avoid
 

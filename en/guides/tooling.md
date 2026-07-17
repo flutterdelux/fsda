@@ -2,15 +2,11 @@
 
 This document describes the tooling direction in FSDA.
 
-&nbsp;
-
 ## Status
 
 FSDA tooling is still under development.
 
 Final shape is not fixed yet, including flow, delivery model, and implementation form.
-
-&nbsp;
 
 ## Current Direction
 
@@ -21,8 +17,6 @@ In general, tooling is aimed to help with:
 * dependency rule validation
 * code generation or template application
 * repeated workflow automation
-
-&nbsp;
 
 ## Current Expectation
 
@@ -35,8 +29,6 @@ While tooling is not final, implementation still relies on:
 * manual review of structure and flow
 
 In other words, current documentation remains the main source of truth until tooling fully matures.
-
-&nbsp;
 
 ## Non-Final Decisions
 

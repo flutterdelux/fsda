@@ -1,35 +1,35 @@
 # UI Layer
 
-UI is the visual surface users can see and interact with.
+The UI is the visual or display form that can be seen by the user and interacted with.
 
-UI is responsible for presenting information to users.
+The UI is responsible for displaying information to the user.
 
-UI must focus on presentation.
+The UI must focus on presentation.
 
-UI must not contain business orchestration.
+The UI must not contain business orchestration.
 
-&nbsp;
+
 
 ## Responsibilities
 
-UI is responsible for providing:
+The UI is responsible for providing:
 
 * View
 * Widget
-* other visual components
+* Other visual components
 
-UI is not responsible for:
+The UI is not responsible for:
 
 * API
 * Database
 * Business Logic
 * State Management
 
-&nbsp;
+
 
 ## UI Structure
 
-Visual resources tied to a slice are grouped in that slice. If reused, place them in shared.
+Visuals tied to a slice are grouped within the slice. If the visual is shared, place it in shared.
 
 ```text
 ui/
@@ -39,11 +39,11 @@ ui/
 └── shared/
 ```
 
-&nbsp;
+
 
 ## View
 
-View is root visual for a feature slice.
+The View is the visual root for a feature slice.
 
 Example:
 
@@ -52,17 +52,17 @@ class ProductDetailView extends StatelessWidget {
 }
 ```
 
-View receives data only.
+The View only receives data.
 
-View does not call repository.
+The View does not call the repository.
 
-View does not call datasource.
+The View does not call the datasource.
 
-&nbsp;
+
 
 ## Widget
 
-Widget is a presentation component.
+A Widget is a presentation component.
 
 Example:
 
@@ -71,11 +71,11 @@ class ProductDetailCard extends StatelessWidget {
 }
 ```
 
-&nbsp;
+
 
 ## Shared UI
 
-Used by multiple slices inside one feature.
+Used by multiple slices within a feature.
 
 Example:
 
@@ -86,7 +86,7 @@ ui/
     └── extensions/
 ```
 
-Failure extension used to map module failures for presentation needs is placed at module scope:
+Failure extensions to translate module failures into presentation needs are placed at the module scope:
 
 ```text
 shared/
@@ -95,9 +95,9 @@ shared/
         └── <module>_failure_x.dart
 ```
 
-If module UI displays text to users, that module should maintain its own localization resources. `app_l10n` is still used for general/shared cross-module text.
+If the UI in a module displays text to the user, the module should ideally have its own localization resource. `app_l10n` is still used for text that is general or shared across modules.
 
-&nbsp;
+
 
 ## Dependency Rules
 
@@ -117,22 +117,22 @@ data/
 logic/
 ```
 
-&nbsp;
+
 
 ## Why This Layer Exists
 
-UI exists to present information to users.
+The UI exists to present information to the user.
 
-&nbsp;
+
 
 ## Key Principle
 
-UI only presents data.
+The UI only displays data.
 
-UI does not orchestrate business.
+The UI does not orchestrate business.
 
-UI does not know data implementation.
+The UI does not know about data implementation.
 
-UI should only know domain models needed for presentation, not repository contracts or use cases.
+The UI is only allowed to know the domain models needed for presentation, not repository contracts or use cases.
 
-App Layer is responsible for composing UI and Logic.
+The App Layer is responsible for composing the UI and Logic.
