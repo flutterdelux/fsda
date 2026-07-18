@@ -157,6 +157,7 @@ const sharedThemeConfig = {
 }
 
 export default defineConfig({
+  base: '/fsda/',
   title: 'FSDA',
   description: 'Feature Slice Driven Architecture',
   cleanUrls: true,
