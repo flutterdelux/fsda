@@ -1,6 +1,6 @@
 # Retrieval + Param Sequence (Rp) - Product / Product / Detail
 
-![sequence](images/r-p.png)
+![sequence](/images/sequences/r-p.png)
 
 ```text
 title Retrieval + Param Sequence (Rp) - Product / Product / Detail
@@ -9,8 +9,8 @@ actor User
 participant ProductDetailPage
 participant ProductDetailCubit
 participant ProductDetailUseCase
-participant ProductRepositoryImpl
-participant ProductRemoteDataSourceImpl
+participant ProductRepository
+participant ProductRemoteDataSource
 participant ApiClient
 
 entryspacing 0.5
@@ -27,44 +27,42 @@ ProductDetailCubit-->ProductDetailPage: ProductDetailState.loading()
 
 ProductDetailCubit->ProductDetailUseCase: call(ProductDetailParam(id))
 activate ProductDetailUseCase
-ProductDetailUseCase->ProductRepositoryImpl: getProductDetail(param)
-activate ProductRepositoryImpl
-ProductRepositoryImpl->ProductRepositoryImpl: ProductDetailRequest(param.id)
-ProductRepositoryImpl->ProductRemoteDataSourceImpl: getProductDetail(request)
-activate ProductRemoteDataSourceImpl
-ProductRemoteDataSourceImpl->ApiClient: GET /products/{request.id}
+ProductDetailUseCase->ProductRepository: getProductDetail(param)
+activate ProductRepository
+ProductRepository->ProductRepository: ProductDetailRequest(param.id)
+ProductRepository->ProductRemoteDataSource: getProductDetail(request)
+activate ProductRemoteDataSource
+ProductRemoteDataSource->ApiClient: GET /products/{request.id}
 activate ApiClient
-ApiClient-->ProductRemoteDataSourceImpl: ApiResponse
+ApiClient-->ProductRemoteDataSource: ApiResponse
 deactivate ApiClient
 
-alt response.statusCode == 200 and response.data != null
-    ProductRemoteDataSourceImpl->ProductRemoteDataSourceImpl: ProductDetailResponse.fromJson(response.body)
-    ProductRemoteDataSourceImpl-->ProductRepositoryImpl: ProductDto
-    deactivate ProductRemoteDataSourceImpl
-    ProductRepositoryImpl->ProductRepositoryImpl: dto.toEntity()
-    ProductRepositoryImpl-->ProductDetailUseCase: Result.success(ProductEntity)
-    deactivate ProductRepositoryImpl
-else response invalid or exception thrown
-    activate ProductRepositoryImpl
-    activate ProductRemoteDataSourceImpl
-    ProductRemoteDataSourceImpl->ProductRemoteDataSourceImpl: throw ProductException.fromAPiResponse()
-    ProductRemoteDataSourceImpl-->ProductRepositoryImpl: Throw Exception
-    deactivate ProductRemoteDataSourceImpl
-    ProductRepositoryImpl->ProductRepositoryImpl: handleException()
-    ProductRepositoryImpl-->ProductDetailUseCase: Result.failure(failure)
-    deactivate ProductRepositoryImpl
-end
-
-ProductDetailUseCase-->ProductDetailCubit: Forward Result
-deactivate ProductDetailUseCase
-
-alt Result.Success
+alt success
+    ProductRemoteDataSource->ProductRemoteDataSource: ProductDetailResponse.fromJson(response.body)
+    ProductRemoteDataSource-->ProductRepository: ProductDto
+    deactivate ProductRemoteDataSource
+    ProductRepository->ProductRepository: dto.toEntity()
+    ProductRepository-->ProductDetailUseCase: Result.success(ProductEntity)
+    deactivate ProductRepository
+    ProductDetailUseCase-->ProductDetailCubit: Forward Result
+    deactivate ProductDetailUseCase
     ProductDetailCubit->ProductDetailCubit: Emit loaded state
     ProductDetailCubit-->ProductDetailPage: ProductDetailState.loaded(data)
     deactivate ProductDetailCubit
     ProductDetailPage->ProductDetailPage: Show ProductDetailContent
-else Result.Failure
+else failure
+    activate ProductRepository
+    activate ProductRemoteDataSource
+    activate ProductDetailUseCase
     activate ProductDetailCubit
+    ProductRemoteDataSource->ProductRemoteDataSource: throw ProductException.fromAPiResponse()
+    ProductRemoteDataSource-->ProductRepository: Throw Exception
+    deactivate ProductRemoteDataSource
+    ProductRepository->ProductRepository: handleException()
+    ProductRepository-->ProductDetailUseCase: Result.failure(failure)
+    deactivate ProductRepository
+    ProductDetailUseCase-->ProductDetailCubit: Forward Result
+    deactivate ProductDetailUseCase
     ProductDetailCubit->ProductDetailCubit: Emit failure state
     ProductDetailCubit-->ProductDetailPage: ProductDetailState.failure(failure)
     deactivate ProductDetailCubit
@@ -72,5 +70,4 @@ else Result.Failure
 end
 
 deactivate ProductDetailPage
-
 ```

@@ -1,6 +1,6 @@
 # Mutation + Return + Param Sequence
 
-![sequence](images/m-r-p.png)
+![sequence](/images/sequences/m-rp.png)
 
 ```text
 title Mutation + Return + Param Sequence (Mrp) - Task / Task / Create
@@ -10,8 +10,8 @@ participant TaskCreatePage
 participant TaskCreateFormCubit
 participant TaskCreateCubit
 participant TaskCreateUseCase
-participant TaskRepositoryImpl
-participant TaskRemoteDataSourceImpl
+participant TaskRepository
+participant TaskRemoteDataSource
 participant ApiClient
 
 entryspacing 0.5
@@ -39,51 +39,48 @@ TaskCreateCubit-->TaskCreatePage: TaskCreateState.loading()
 
 TaskCreateCubit->TaskCreateUseCase: call(param)
 activate TaskCreateUseCase
-TaskCreateUseCase->TaskRepositoryImpl: createTask(param)
-activate TaskRepositoryImpl
-TaskRepositoryImpl->TaskRepositoryImpl: TaskCreateRequest.fromParam(param)
-TaskRepositoryImpl->TaskRemoteDataSourceImpl: createTask(request)
-activate TaskRemoteDataSourceImpl
-TaskRemoteDataSourceImpl->ApiClient: POST /tasks body: request.toJson()
+TaskCreateUseCase->TaskRepository: createTask(param)
+activate TaskRepository
+TaskRepository->TaskRepository: TaskCreateRequest.fromParam(param)
+TaskRepository->TaskRemoteDataSource: createTask(request)
+activate TaskRemoteDataSource
+TaskRemoteDataSource->ApiClient: POST /tasks body: request.toJson()
 activate ApiClient
-ApiClient-->TaskRemoteDataSourceImpl: ApiResponse
+ApiClient-->TaskRemoteDataSource: ApiResponse
 deactivate ApiClient
 
-alt response.statusCode == 200 and response.data != null
-    TaskRemoteDataSourceImpl->TaskRemoteDataSourceImpl: TaskCreateResponse.fromJson(response.body)
-    TaskRemoteDataSourceImpl->TaskRemoteDataSourceImpl: TaskDto.fromJson(TaskCreateResponse.data)
-    TaskRemoteDataSourceImpl-->TaskRepositoryImpl: TaskDto
-    deactivate TaskRemoteDataSourceImpl
-    TaskRepositoryImpl->TaskRepositoryImpl: dto.toEntity()
-    TaskRepositoryImpl-->TaskCreateUseCase: Result.success(TaskEntity)
-    deactivate TaskRepositoryImpl
-else response invalid or exception thrown
-    activate TaskRepositoryImpl
-    activate TaskRemoteDataSourceImpl
-    TaskRemoteDataSourceImpl->TaskRemoteDataSourceImpl: Throw TaskException.fromApiResponse()
-    TaskRemoteDataSourceImpl-->TaskRepositoryImpl: Throw Exception
-    deactivate TaskRemoteDataSourceImpl
-    TaskRepositoryImpl->TaskRepositoryImpl: handleException()
-    TaskRepositoryImpl-->TaskCreateUseCase: Result.failure(failure)
-    deactivate TaskRepositoryImpl
-end
-
-TaskCreateUseCase-->TaskCreateCubit: Forward Result
-deactivate TaskCreateUseCase
-
-alt Result.Success
+alt success
+    TaskRemoteDataSource->TaskRemoteDataSource: TaskCreateResponse.fromJson(response.body)
+    TaskRemoteDataSource->TaskRemoteDataSource: TaskDto.fromJson(TaskCreateResponse.data)
+    TaskRemoteDataSource-->TaskRepository: TaskDto
+    deactivate TaskRemoteDataSource
+    TaskRepository->TaskRepository: dto.toEntity()
+    TaskRepository-->TaskCreateUseCase: Result.success(TaskEntity)
+    deactivate TaskRepository
+    TaskCreateUseCase-->TaskCreateCubit: Forward Result
+    deactivate TaskCreateUseCase
     TaskCreateCubit->TaskCreateCubit: Emit success state
     TaskCreateCubit-->TaskCreatePage: TaskCreateState.success(data)
     deactivate TaskCreateCubit
     TaskCreatePage->TaskCreatePage: showSuccessSnackBar()
-else Result.Failure
+else failure
+    activate TaskRepository
+    activate TaskRemoteDataSource
+    activate TaskCreateUseCase
     activate TaskCreateCubit
+    TaskRemoteDataSource->TaskRemoteDataSource: Throw TaskException.fromApiResponse()
+    TaskRemoteDataSource-->TaskRepository: Throw Exception
+    deactivate TaskRemoteDataSource
+    TaskRepository->TaskRepository: handleException()
+    TaskRepository-->TaskCreateUseCase: Result.failure(failure)
+    deactivate TaskRepository
+    TaskCreateUseCase-->TaskCreateCubit: Forward Result
+    deactivate TaskCreateUseCase
     TaskCreateCubit->TaskCreateCubit: Emit failure state
     TaskCreateCubit-->TaskCreatePage: TaskCreateState.failure(failure)
     deactivate TaskCreateCubit
     TaskCreatePage->TaskCreatePage: showErrorSnackBar()
 end
 
-deactivate TaskCreateCubit
 deactivate TaskCreatePage
 ```

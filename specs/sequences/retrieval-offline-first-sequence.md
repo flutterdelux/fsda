@@ -1,6 +1,6 @@
 # Retrieval + Offline First Sequence (Rof) - Note / Note / List
 
-![sequence](images/r-loc.png)
+![sequence](/images/sequences/r-of.png)
 
 ```text
 title Retrieval + Offline First Sequence (Rof) - Note / Note / List
@@ -9,11 +9,11 @@ actor User
 participant NoteListPage
 participant NoteListCubit
 participant NoteListUseCase
-participant NoteRepositoryImpl
+participant NoteRepository
 participant NetworkInfo
-participant NoteRemoteDataSourceImpl
+participant NoteRemoteDataSource
 participant ApiClient
-participant NoteLocalDataSourceImpl
+participant NoteLocalDataSource
 participant DatabaseClient
 
 entryspacing 0.5
@@ -30,75 +30,73 @@ NoteListCubit-->NoteListPage: NoteListState.loading()
 
 NoteListCubit->NoteListUseCase: call()
 activate NoteListUseCase
-NoteListUseCase->NoteRepositoryImpl: getNoteList()
-activate NoteRepositoryImpl
-NoteRepositoryImpl->NetworkInfo: hasInternetAccess
+NoteListUseCase->NoteRepository: getNoteList()
+activate NoteRepository
+NoteRepository->NetworkInfo: hasInternetAccess
 activate NetworkInfo
-NetworkInfo-->NoteRepositoryImpl: isOnline
+NetworkInfo-->NoteRepository: isOnline
 deactivate NetworkInfo
 
 alt isOnline == true
-    NoteRepositoryImpl->NoteRemoteDataSourceImpl: getNoteList()
-    activate NoteRemoteDataSourceImpl
-    NoteRemoteDataSourceImpl->ApiClient: GET /notes
+    NoteRepository->NoteRemoteDataSource: getNoteList()
+    activate NoteRemoteDataSource
+    NoteRemoteDataSource->ApiClient: GET /notes
     activate ApiClient
-    ApiClient-->NoteRemoteDataSourceImpl: ApiResponse
+    ApiClient-->NoteRemoteDataSource: ApiResponse
     deactivate ApiClient
 
     alt remote success
-        NoteRemoteDataSourceImpl->NoteRemoteDataSourceImpl: NoteListResponse.fromJson(response.body)
-        NoteRemoteDataSourceImpl->NoteRemoteDataSourceImpl: data.map(NoteDto.fromJson).toList()
-        NoteRemoteDataSourceImpl-->NoteRepositoryImpl: List<NoteDto>
-        deactivate NoteRemoteDataSourceImpl
-        NoteRepositoryImpl->NoteLocalDataSourceImpl: cacheNoteList(data)
-        activate NoteLocalDataSourceImpl
-        NoteLocalDataSourceImpl->NoteLocalDataSourceImpl: data.map((note) => note.toJson()).toList()
-        NoteLocalDataSourceImpl->DatabaseClient: insertMany('notes', jsonList)
+        NoteRemoteDataSource->NoteRemoteDataSource: NoteListResponse.fromJson(response.body)
+        NoteRemoteDataSource->NoteRemoteDataSource: data.map(NoteDto.fromJson).toList()
+        NoteRemoteDataSource-->NoteRepository: List<NoteDto>
+        deactivate NoteRemoteDataSource
+        NoteRepository->NoteLocalDataSource: cacheNoteList(data)
+        activate NoteLocalDataSource
+        NoteLocalDataSource->NoteLocalDataSource: data.map((note) => note.toJson()).toList()
+        NoteLocalDataSource->DatabaseClient: insertMany('notes', jsonList)
         activate DatabaseClient
-        DatabaseClient-->NoteLocalDataSourceImpl: Complete without payload
+        DatabaseClient-->NoteLocalDataSource: Complete without payload
         deactivate DatabaseClient
-        NoteLocalDataSourceImpl-->NoteRepositoryImpl: cached
-        deactivate NoteLocalDataSourceImpl
+        NoteLocalDataSource-->NoteRepository: cached
+        deactivate NoteLocalDataSource
     else remote/cache failure
-        activate NoteRemoteDataSourceImpl
-        NoteRemoteDataSourceImpl-->NoteRepositoryImpl: Throw Exception
-        deactivate NoteRemoteDataSourceImpl
+        activate NoteRemoteDataSource
+        NoteRemoteDataSource-->NoteRepository: Throw Exception
+        deactivate NoteRemoteDataSource
     end
 end
 
-NoteRepositoryImpl->NoteLocalDataSourceImpl: getNoteList()
-activate NoteLocalDataSourceImpl
-NoteLocalDataSourceImpl->DatabaseClient: findAll('notes')
+NoteRepository->NoteLocalDataSource: getNoteList()
+activate NoteLocalDataSource
+NoteLocalDataSource->DatabaseClient: findAll('notes')
 activate DatabaseClient
-DatabaseClient-->NoteLocalDataSourceImpl: rows
+DatabaseClient-->NoteLocalDataSource: rows
 deactivate DatabaseClient
 
-alt local read success
-    NoteLocalDataSourceImpl-->NoteRepositoryImpl: List<NoteDto>
-    deactivate NoteLocalDataSourceImpl
-    NoteRepositoryImpl->NoteRepositoryImpl: dto.toEntity()
-    NoteRepositoryImpl-->NoteListUseCase: Result.success(List<NoteEntity>)
-    deactivate NoteRepositoryImpl
-else local read failure
-    activate NoteLocalDataSourceImpl
-    activate NoteRepositoryImpl
-    NoteLocalDataSourceImpl-->NoteRepositoryImpl: Throw CoreException.cacheError
-    deactivate NoteLocalDataSourceImpl
-    NoteRepositoryImpl->NoteRepositoryImpl: handleException()
-    NoteRepositoryImpl-->NoteListUseCase: Result.failure(failure)
-    deactivate NoteRepositoryImpl
-end
-
-NoteListUseCase-->NoteListCubit: Forward Result
-deactivate NoteListUseCase
-
-alt Result.Success
+alt success
+    NoteLocalDataSource-->NoteRepository: List<NoteDto>
+    deactivate NoteLocalDataSource
+    NoteRepository->NoteRepository: dto.toEntity()
+    NoteRepository-->NoteListUseCase: Result.success(List<NoteEntity>)
+    deactivate NoteRepository
+    NoteListUseCase-->NoteListCubit: Forward Result
+    deactivate NoteListUseCase
     NoteListCubit->NoteListCubit: Emit loaded state
     NoteListCubit-->NoteListPage: NoteListState.loaded(data)
     deactivate NoteListCubit
     NoteListPage->NoteListPage: Show NoteListContent
-else Result.Failure
+else failure
+    activate NoteRepository
+    activate NoteLocalDataSource
+    activate NoteListUseCase
     activate NoteListCubit
+    NoteLocalDataSource-->NoteRepository: Throw CoreException.cacheError
+    deactivate NoteLocalDataSource
+    NoteRepository->NoteRepository: handleException()
+    NoteRepository-->NoteListUseCase: Result.failure(failure)
+    deactivate NoteRepository
+    NoteListUseCase-->NoteListCubit: Forward Result
+    deactivate NoteListUseCase
     NoteListCubit->NoteListCubit: Emit failure state
     NoteListCubit-->NoteListPage: NoteListState.failure(failure)
     deactivate NoteListCubit
@@ -106,5 +104,4 @@ else Result.Failure
 end
 
 deactivate NoteListPage
-
 ```

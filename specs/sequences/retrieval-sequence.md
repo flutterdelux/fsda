@@ -1,6 +1,6 @@
 # Retrieval Sequence (R) - Travel / Destination / Popular
 
-![sequence](images/r.png)
+![sequence](/images/sequences/r.png)
 
 ```text
 title Retrieval Sequence (R) - Travel / Destination / Popular
@@ -9,8 +9,8 @@ actor User
 participant DestinationPopularPage
 participant DestinationPopularCubit
 participant DestinationPopularUseCase
-participant DestinationRepositoryImpl
-participant DestinationRemoteDataSourceImpl
+participant DestinationRepository
+participant DestinationRemoteDataSource
 participant ApiClient
 
 entryspacing 0.5
@@ -28,56 +28,54 @@ DestinationPopularCubit-->DestinationPopularPage: DestinationPopularState.loadin
 
 DestinationPopularCubit->DestinationPopularUseCase: call()
 activate DestinationPopularUseCase
-DestinationPopularUseCase->DestinationRepositoryImpl: getPopularDestinationList()
-activate DestinationRepositoryImpl
-DestinationRepositoryImpl->DestinationRemoteDataSourceImpl: getPopularDestinationList()
-activate DestinationRemoteDataSourceImpl
-DestinationRemoteDataSourceImpl->ApiClient: GET /destinations/popular
+DestinationPopularUseCase->DestinationRepository: getPopularDestinationList()
+activate DestinationRepository
+DestinationRepository->DestinationRemoteDataSource: getPopularDestinationList()
+activate DestinationRemoteDataSource
+DestinationRemoteDataSource->ApiClient: GET /destinations/popular
 activate ApiClient
-ApiClient-->DestinationRemoteDataSourceImpl: ApiResponse
+ApiClient-->DestinationRemoteDataSource: ApiResponse
 deactivate ApiClient
 
-alt response.statusCode == 200 and response.data != null
-    DestinationRemoteDataSourceImpl->DestinationRemoteDataSourceImpl: DestinationPopularResponse.fromJson(response.body)
-    DestinationRemoteDataSourceImpl-->DestinationRepositoryImpl: List<DestinationDto>
-    deactivate DestinationRemoteDataSourceImpl
-    DestinationRepositoryImpl->DestinationRepositoryImpl: map dto.toEntity()
-    DestinationRepositoryImpl-->DestinationPopularUseCase: Result.success(List<DestinationEntity>)
-    deactivate DestinationRepositoryImpl
-else response invalid or exception thrown
-    activate DestinationRepositoryImpl
-    activate DestinationRemoteDataSourceImpl
-    DestinationRemoteDataSourceImpl->DestinationRemoteDataSourceImpl: throw TravelException.fromApiResponse()
-    DestinationRemoteDataSourceImpl-->DestinationRepositoryImpl: Throw Exception
-    deactivate DestinationRemoteDataSourceImpl
-    DestinationRepositoryImpl->DestinationRepositoryImpl: handleException()
-    DestinationRepositoryImpl-->DestinationPopularUseCase: Result.failure(failure)
-    deactivate DestinationRepositoryImpl
-end
-
-DestinationPopularUseCase-->DestinationPopularCubit: Forward Result
-deactivate DestinationPopularUseCase
-
-alt Result.Success with non-empty data
-    DestinationPopularCubit->DestinationPopularCubit: Emit loaded state
-    DestinationPopularCubit-->DestinationPopularPage: DestinationPopularState.loaded(data)
+alt success
+    DestinationRemoteDataSource->DestinationRemoteDataSource: DestinationPopularResponse.fromJson(response.body)
+    DestinationRemoteDataSource-->DestinationRepository: List<DestinationDto>
+    deactivate DestinationRemoteDataSource
+    DestinationRepository->DestinationRepository: map dto.toEntity()
+    DestinationRepository-->DestinationPopularUseCase: Result.success(List<DestinationEntity>)
+    deactivate DestinationRepository
+    DestinationPopularUseCase-->DestinationPopularCubit: Forward Result
+    deactivate DestinationPopularUseCase
+    
+    alt non-empty data
+        DestinationPopularCubit->DestinationPopularCubit: Emit loaded state
+        DestinationPopularCubit-->DestinationPopularPage: DestinationPopularState.loaded(data)
+        DestinationPopularPage->DestinationPopularPage: Show DestinationPopularContent
+    else empty data
+        DestinationPopularCubit->DestinationPopularCubit: Emit loaded state with empty list
+        DestinationPopularCubit-->DestinationPopularPage: DestinationPopularState.loaded([])
+        DestinationPopularPage->DestinationPopularPage: Show DestinationPopularEmptyFeedback
+    end
     deactivate DestinationPopularCubit
-    DestinationPopularPage->DestinationPopularPage: Show DestinationPopularContent
-else Result.Success with empty data
+    
+else failure
+    activate DestinationRepository
+    activate DestinationRemoteDataSource
+    activate DestinationPopularUseCase
     activate DestinationPopularCubit
-    DestinationPopularCubit->DestinationPopularCubit: Emit loaded state with empty list
-    DestinationPopularCubit-->DestinationPopularPage: DestinationPopularState.loaded([])
-    deactivate DestinationPopularCubit
-    DestinationPopularPage->DestinationPopularPage: Show DestinationPopularEmptyFeedback
-else Result.Failure
-    activate DestinationPopularCubit
+    DestinationRemoteDataSource->DestinationRemoteDataSource: throw TravelException.fromApiResponse()
+    DestinationRemoteDataSource-->DestinationRepository: Throw Exception
+    deactivate DestinationRemoteDataSource
+    DestinationRepository->DestinationRepository: handleException()
+    DestinationRepository-->DestinationPopularUseCase: Result.failure(failure)
+    deactivate DestinationRepository
+    DestinationPopularUseCase-->DestinationPopularCubit: Forward Result
+    deactivate DestinationPopularUseCase
     DestinationPopularCubit->DestinationPopularCubit: Emit failure state
     DestinationPopularCubit-->DestinationPopularPage: DestinationPopularState.failure(failure)
     deactivate DestinationPopularCubit
     DestinationPopularPage->DestinationPopularPage: Show DestinationPopularErrorFeedback
 end
 
-
 deactivate DestinationPopularPage
-
 ```

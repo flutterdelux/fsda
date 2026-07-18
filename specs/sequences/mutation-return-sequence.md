@@ -1,6 +1,6 @@
 # Mutation + Return Sequence (Mr) - Queue / Queue / Take
 
-![sequence](images/m-r.png)
+![sequence](/images/sequences/m-r.png)
 
 ```text
 title Mutation + Return Sequence (Mr) - Queue / Queue / Take
@@ -9,8 +9,8 @@ actor User
 participant QueuePage
 participant QueueTakeCubit
 participant QueueTakeUseCase
-participant QueueRepositoryImpl
-participant QueueRemoteDataSourceImpl
+participant QueueRepository
+participant QueueRemoteDataSource
 participant ApiClient
 
 entryspacing 0.5
@@ -29,50 +29,47 @@ QueueTakeCubit-->QueuePage: QueueTakeState.loading()
 
 QueueTakeCubit->QueueTakeUseCase: call()
 activate QueueTakeUseCase
-QueueTakeUseCase->QueueRepositoryImpl: takeQueue()
-activate QueueRepositoryImpl
-QueueRepositoryImpl->QueueRemoteDataSourceImpl: takeQueue()
-activate QueueRemoteDataSourceImpl
-QueueRemoteDataSourceImpl->ApiClient: POST /queues/take
+QueueTakeUseCase->QueueRepository: takeQueue()
+activate QueueRepository
+QueueRepository->QueueRemoteDataSource: takeQueue()
+activate QueueRemoteDataSource
+QueueRemoteDataSource->ApiClient: POST /queues/take
 activate ApiClient
-ApiClient-->QueueRemoteDataSourceImpl: ApiResponse
+ApiClient-->QueueRemoteDataSource: ApiResponse
 deactivate ApiClient
 
-alt response.statusCode == 200 and response.data != null
-    QueueRemoteDataSourceImpl->QueueRemoteDataSourceImpl: QueueTakeResponse.fromJson(response.body)
-    QueueRemoteDataSourceImpl->QueueRemoteDataSourceImpl: QueueDto.fromJson(QueueTakeResponse.data)
-    QueueRemoteDataSourceImpl-->QueueRepositoryImpl: QueueDto
-    deactivate QueueRemoteDataSourceImpl
-    QueueRepositoryImpl->QueueRepositoryImpl: dto.toEntity()
-    QueueRepositoryImpl-->QueueTakeUseCase: Result.success(QueueEntity)
-    deactivate QueueRepositoryImpl
-else response invalid or exception thrown
-    activate QueueRepositoryImpl
-    activate QueueRemoteDataSourceImpl
-    QueueRemoteDataSourceImpl->QueueRemoteDataSourceImpl: Throw QueueException.fromApiResponse()
-    QueueRemoteDataSourceImpl-->QueueRepositoryImpl: Throw Exception
-    deactivate QueueRemoteDataSourceImpl
-    QueueRepositoryImpl->QueueRepositoryImpl: handleException('takeQueue', e, st)
-    QueueRepositoryImpl-->QueueTakeUseCase: Result.failure(failure)
-    deactivate QueueRepositoryImpl
-end
-
-QueueTakeUseCase-->QueueTakeCubit: Forward Result
-deactivate QueueTakeUseCase
-
-alt Result.Success
-    QueueTakeCubit->QueueTakeCubit: Emit success state with data
-    QueueTakeCubit-->QueuePage: QueueTakeState.success(data)
-    deactivate QueueTakeCubit
-    QueuePage->QueuePage: Show QueueTakeContent
-else Result.Failure
-    activate QueueTakeCubit
-    QueueTakeCubit->QueueTakeCubit: Emit failure state
-    QueueTakeCubit-->QueuePage: QueueTakeState.failure(failure)
-    deactivate QueueTakeCubit
-    QueuePage->QueuePage: Show QueueTakeErrorFeedback
+alt success
+  QueueRemoteDataSource->QueueRemoteDataSource: QueueTakeResponse.fromJson(response.body)
+  QueueRemoteDataSource->QueueRemoteDataSource: QueueDto.fromJson(QueueTakeResponse.data)
+  QueueRemoteDataSource-->QueueRepository: QueueDto
+  deactivate QueueRemoteDataSource
+  QueueRepository->QueueRepository: dto.toEntity()
+  QueueRepository-->QueueTakeUseCase: Result.success(QueueEntity)
+  deactivate QueueRepository
+  QueueTakeUseCase-->QueueTakeCubit: Forward Result
+  deactivate QueueTakeUseCase
+  QueueTakeCubit->QueueTakeCubit: Emit success state with data
+  QueueTakeCubit-->QueuePage: QueueTakeState.success(data)
+  deactivate QueueTakeCubit
+  QueuePage->QueuePage: Show QueueTakeContent
+else failure
+  activate QueueRepository
+  activate QueueRemoteDataSource
+  activate QueueTakeUseCase
+  activate QueueTakeCubit
+  QueueRemoteDataSource->QueueRemoteDataSource: QueueException.fromApiResponse()
+  QueueRemoteDataSource-->QueueRepository: Throw Exception
+  deactivate QueueRemoteDataSource
+  QueueRepository->QueueRepository: handleException('takeQueue', e, st)
+  QueueRepository-->QueueTakeUseCase: Result.failure(failure)
+  deactivate QueueRepository
+  QueueTakeUseCase-->QueueTakeCubit: Forward Result
+  deactivate QueueTakeUseCase
+  QueueTakeCubit->QueueTakeCubit: Emit failure state
+  QueueTakeCubit-->QueuePage: QueueTakeState.failure(failure)
+  deactivate QueueTakeCubit
+  QueuePage->QueuePage: Show QueueTakeErrorFeedback
 end
 
 deactivate QueuePage
-
 ```

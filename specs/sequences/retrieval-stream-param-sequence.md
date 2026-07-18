@@ -1,6 +1,6 @@
 # Retrieval + Stream + Param Sequence (Rsp) - Subscription / Payment / Status
 
-![sequence](images/r-s-p.png)
+![sequence](/images/sequences/r-sp.png)
 
 ```text
 title Retrieval + Stream + Param Sequence (Rsp) - Subscription / Payment / Status
@@ -9,8 +9,8 @@ actor User
 participant PaymentStatusPage
 participant PaymentStatusCubit
 participant PaymentStatusUseCase
-participant PaymentRepositoryImpl
-participant PaymentRemoteDataSourceImpl
+participant PaymentRepository
+participant PaymentRemoteDataSource
 participant ApiClient
 
 entryspacing 0.5
@@ -28,49 +28,46 @@ PaymentStatusCubit-->PaymentStatusPage: PaymentStatusState.loading()
 
 PaymentStatusCubit->PaymentStatusUseCase: call(PaymentStatusParam(id))
 activate PaymentStatusUseCase
-PaymentStatusUseCase->PaymentRepositoryImpl: watchPaymentStatus(param)
-activate PaymentRepositoryImpl
-PaymentRepositoryImpl->PaymentRepositoryImpl: PaymentStatusRequest.fromParam(param)
-PaymentRepositoryImpl->PaymentRemoteDataSourceImpl: watchPaymentStatus(request)
-activate PaymentRemoteDataSourceImpl
-PaymentRemoteDataSourceImpl->ApiClient: STREAM '/payments/{id}/status/stream'
+PaymentStatusUseCase->PaymentRepository: watchPaymentStatus(param)
+activate PaymentRepository
+PaymentRepository->PaymentRepository: PaymentStatusRequest.fromParam(param)
+PaymentRepository->PaymentRemoteDataSource: watchPaymentStatus(request)
+activate PaymentRemoteDataSource
+PaymentRemoteDataSource->ApiClient: STREAM '/payments/{id}/status/stream'
 activate ApiClient
 
 loop Every stream event
-    ApiClient-->PaymentRemoteDataSourceImpl: Map<String, dynamic>
-    deactivate ApiClient
-    PaymentRemoteDataSourceImpl-->PaymentRepositoryImpl: PaymentDto
-    deactivate PaymentRemoteDataSourceImpl
-    PaymentRepositoryImpl->PaymentRepositoryImpl: dto.toEntity()
-    PaymentRepositoryImpl-->PaymentStatusUseCase: Result.success(PaymentEntity)
-    deactivate PaymentRepositoryImpl
-    PaymentStatusUseCase-->PaymentStatusCubit: Result.success(data)
-    deactivate PaymentStatusUseCase
-    PaymentStatusCubit->PaymentStatusCubit: Emit loaded state
-    PaymentStatusCubit-->PaymentStatusPage: PaymentStatusState.loaded(data)
-    deactivate PaymentStatusCubit
-end
-
-alt Stream throws exception
-    activate PaymentStatusCubit
-    activate PaymentStatusUseCase
-    activate PaymentRepositoryImpl
-    activate PaymentRemoteDataSourceImpl
-    activate ApiClient
-    ApiClient-->PaymentRemoteDataSourceImpl: Throw Exception
-    deactivate ApiClient
-    PaymentRemoteDataSourceImpl-->PaymentRepositoryImpl: Throw SubscriptionException
-    deactivate PaymentRemoteDataSourceImpl
-    PaymentRepositoryImpl->PaymentRepositoryImpl: handleException()
-    PaymentRepositoryImpl-->PaymentStatusUseCase: Result.failure(failure)
-    deactivate PaymentRepositoryImpl
-    PaymentStatusUseCase-->PaymentStatusCubit: Result.failure(failure)
-    deactivate PaymentStatusUseCase
-    PaymentStatusCubit->PaymentStatusCubit: Emit failure state
-    PaymentStatusCubit-->PaymentStatusPage: PaymentStatusState.failure(failure)
-    deactivate PaymentStatusCubit
+    alt success
+        ApiClient-->PaymentRemoteDataSource: Map<String, dynamic>
+        PaymentRemoteDataSource-->PaymentRepository: PaymentDto
+        deactivate PaymentRemoteDataSource
+        PaymentRepository->PaymentRepository: dto.toEntity()
+        PaymentRepository-->PaymentStatusUseCase: Result.success(PaymentEntity)
+        deactivate PaymentRepository
+        PaymentStatusUseCase-->PaymentStatusCubit: Forward Result
+        deactivate PaymentStatusUseCase
+        PaymentStatusCubit->PaymentStatusCubit: Emit loaded state
+        PaymentStatusCubit-->PaymentStatusPage: PaymentStatusState.loaded(data)
+        deactivate PaymentStatusCubit
+    else failure
+        activate PaymentRepository
+        activate PaymentRemoteDataSource
+        activate PaymentStatusUseCase
+        activate PaymentStatusCubit
+        ApiClient-->PaymentRemoteDataSource: Throw Exception
+        deactivate ApiClient
+        PaymentRemoteDataSource-->PaymentRepository: Throw SubscriptionException
+        deactivate PaymentRemoteDataSource
+        PaymentRepository->PaymentRepository: handleException()
+        PaymentRepository-->PaymentStatusUseCase: Result.failure(failure)
+        deactivate PaymentRepository
+        PaymentStatusUseCase-->PaymentStatusCubit: Forward Result
+        deactivate PaymentStatusUseCase
+        PaymentStatusCubit->PaymentStatusCubit: Emit failure state
+        PaymentStatusCubit-->PaymentStatusPage: PaymentStatusState.failure(failure)
+        deactivate PaymentStatusCubit
+    end
 end
 
 deactivate PaymentStatusPage
-
 ```

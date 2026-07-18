@@ -1,6 +1,6 @@
 # Mutation Sequence (M) - Inbox / Inbox / Mark All Read
 
-![sequence](images/m.png)
+![sequence](/images/sequences/m.png)
 
 ```text
 title Mutation Sequence (M) - Inbox / Inbox / Mark All Read
@@ -9,8 +9,8 @@ actor User
 participant InboxPage
 participant InboxMarkAllReadCubit
 participant InboxMarkAllReadUseCase
-participant InboxRepositoryImpl
-participant InboxRemoteDataSourceImpl
+participant InboxRepository
+participant InboxRemoteDataSource
 participant ApiClient
 
 entryspacing 0.5
@@ -31,47 +31,44 @@ InboxPage->InboxPage: Show loading overlay
 
 InboxMarkAllReadCubit->InboxMarkAllReadUseCase: call()
 activate InboxMarkAllReadUseCase
-InboxMarkAllReadUseCase->InboxRepositoryImpl: markAllInboxRead()
-activate InboxRepositoryImpl
-InboxRepositoryImpl->InboxRemoteDataSourceImpl: markAllRead()
-activate InboxRemoteDataSourceImpl
-InboxRemoteDataSourceImpl->ApiClient: PATCH /inbox/mark-all-read
+InboxMarkAllReadUseCase->InboxRepository: markAllInboxRead()
+activate InboxRepository
+InboxRepository->InboxRemoteDataSource: markAllRead()
+activate InboxRemoteDataSource
+InboxRemoteDataSource->ApiClient: PATCH /inboxes/mark-all-read
 activate ApiClient
-ApiClient-->InboxRemoteDataSourceImpl: ApiResponse
+ApiClient-->InboxRemoteDataSource: ApiResponse
 deactivate ApiClient
 
-alt statusCode == 200
-    InboxRemoteDataSourceImpl-->InboxRepositoryImpl: Complete without payload
-    deactivate InboxRemoteDataSourceImpl
-    InboxRepositoryImpl-->InboxMarkAllReadUseCase: Result.success()
-    deactivate InboxRepositoryImpl
-else statusCode != 200 || Exception
-    activate InboxRepositoryImpl
-    activate InboxRemoteDataSourceImpl
-    InboxRemoteDataSourceImpl->InboxRemoteDataSourceImpl: InboxException.fromApiResponse
-    InboxRemoteDataSourceImpl-->InboxRepositoryImpl: Throw Exception
-    deactivate InboxRemoteDataSourceImpl
-    InboxRepositoryImpl->InboxRepositoryImpl: handleException()
-    InboxRepositoryImpl-->InboxMarkAllReadUseCase: Result.failure()
-    deactivate InboxRepositoryImpl
+alt success
+  InboxRemoteDataSource-->InboxRepository: Complete without payload
+  deactivate InboxRemoteDataSource
+  InboxRepository-->InboxMarkAllReadUseCase: Result.success()
+  deactivate InboxRepository
+  InboxMarkAllReadUseCase-->InboxMarkAllReadCubit: Forward Result
+  deactivate InboxMarkAllReadUseCase
+  InboxMarkAllReadCubit->InboxMarkAllReadCubit: Emit success state
+  InboxMarkAllReadCubit-->InboxPage: InboxMarkAllReadState.success()
+  deactivate InboxMarkAllReadCubit
+  InboxPage->InboxPage: showSuccessSnackBar()
+else failure
+  activate InboxRepository
+  activate InboxRemoteDataSource
+  activate InboxMarkAllReadUseCase
+  activate InboxMarkAllReadCubit
+  InboxRemoteDataSource->InboxRemoteDataSource: InboxException.fromApiResponse
+  InboxRemoteDataSource-->InboxRepository: Throw Exception
+  deactivate InboxRemoteDataSource
+  InboxRepository->InboxRepository: handleException()
+  InboxRepository-->InboxMarkAllReadUseCase: Result.failure()
+  deactivate InboxRepository
+  InboxMarkAllReadUseCase-->InboxMarkAllReadCubit: Forward Result
+  deactivate InboxMarkAllReadUseCase
+  InboxMarkAllReadCubit->InboxMarkAllReadCubit: Emit failure state
+  InboxMarkAllReadCubit-->InboxPage: InboxMarkAllReadState.failure()
+  deactivate InboxMarkAllReadCubit
+  InboxPage->InboxPage: showErrorSnackBar()
 end
 
-InboxMarkAllReadUseCase-->InboxMarkAllReadCubit: Forward Result
-deactivate InboxMarkAllReadUseCase
-
-alt Result.Success
-    InboxMarkAllReadCubit->InboxMarkAllReadCubit: Emit success state
-    InboxMarkAllReadCubit-->InboxPage: InboxMarkAllReadState.success()
-    deactivate InboxMarkAllReadCubit
-    InboxPage->InboxPage: showSuccessSnackBar()
-else Result.Failure
-    activate InboxMarkAllReadCubit
-    InboxMarkAllReadCubit->InboxMarkAllReadCubit: Emit failure state
-    InboxMarkAllReadCubit-->InboxPage: InboxMarkAllReadState.failure()
-    deactivate InboxMarkAllReadCubit
-    InboxPage->InboxPage: showErrorSnackBar()
-end
-
-deactivate InboxMarkAllReadCubit
 deactivate InboxPage
 ```

@@ -1,6 +1,6 @@
 # Mutation + Param Sequence
 
-![sequence](images/m-p.png)
+![sequence](/images/sequences/m-p.png)
 
 ```text
 title Mutation + Param Sequence (Mp) - Finance / Wallet / Delete
@@ -9,8 +9,8 @@ actor User
 participant WalletPage
 participant WalletDeleteCubit
 participant WalletDeleteUseCase
-participant WalletRepositoryImpl
-participant WalletRemoteDataSourceImpl
+participant WalletRepository
+participant WalletRemoteDataSource
 participant ApiClient
 
 entryspacing 0.5
@@ -32,46 +32,44 @@ WalletPage->WalletPage: Show loading overlay
 
 WalletDeleteCubit->WalletDeleteUseCase: call(param)
 activate WalletDeleteUseCase
-WalletDeleteUseCase->WalletRepositoryImpl: deleteWallet(param)
-activate WalletRepositoryImpl
-WalletRepositoryImpl->WalletRepositoryImpl: WalletDeleteRequest.fromParam(param)
-WalletRepositoryImpl->WalletRemoteDataSourceImpl: deleteWallet(request)
-activate WalletRemoteDataSourceImpl
-WalletRemoteDataSourceImpl->ApiClient: DELETE /wallets/{request.id}
+WalletDeleteUseCase->WalletRepository: deleteWallet(param)
+activate WalletRepository
+WalletRepository->WalletRepository: WalletDeleteRequest.fromParam(param)
+WalletRepository->WalletRemoteDataSource: deleteWallet(request)
+activate WalletRemoteDataSource
+WalletRemoteDataSource->ApiClient: DELETE /wallets/{request.id}
 activate ApiClient
-ApiClient-->WalletRemoteDataSourceImpl: ApiResponse
+ApiClient-->WalletRemoteDataSource: ApiResponse
 deactivate ApiClient
 
-alt response.statusCode == 200
-    WalletRemoteDataSourceImpl-->WalletRepositoryImpl: Complete without payload
-    deactivate WalletRemoteDataSourceImpl
-    WalletRepositoryImpl-->WalletDeleteUseCase: Result.success(null)
-    deactivate WalletRepositoryImpl
-else response.statusCode != 200 or exception thrown
-    activate WalletRepositoryImpl
-    activate WalletRemoteDataSourceImpl
-    WalletRemoteDataSourceImpl->WalletRemoteDataSourceImpl: Throw FinanceException.fromApiResponse()
-    WalletRemoteDataSourceImpl-->WalletRepositoryImpl: Throw Exception
-    deactivate WalletRemoteDataSourceImpl
-    WalletRepositoryImpl->WalletRepositoryImpl: handleException()
-    WalletRepositoryImpl-->WalletDeleteUseCase: Result.failure(failure)
-    deactivate WalletRepositoryImpl
-end
-
-WalletDeleteUseCase-->WalletDeleteCubit: Forward Result
-deactivate WalletDeleteUseCase
-
-alt Result.Success
-    WalletDeleteCubit->WalletDeleteCubit: Emit success state
-    WalletDeleteCubit-->WalletPage: WalletDeleteState.success()
-    deactivate WalletDeleteCubit
-    WalletPage->WalletPage: showSuccessSnackBar()
-else Result.Failure
-    activate WalletDeleteCubit
-    WalletDeleteCubit->WalletDeleteCubit: Emit failure state
-    WalletDeleteCubit-->WalletPage: WalletDeleteState.failure(failure)
-    deactivate WalletDeleteCubit
-    WalletPage->WalletPage: showErrorSnackBar()
+alt success
+  WalletRemoteDataSource-->WalletRepository: Complete without payload
+  deactivate WalletRemoteDataSource
+  WalletRepository-->WalletDeleteUseCase: Result.success(null)
+  deactivate WalletRepository
+  WalletDeleteUseCase-->WalletDeleteCubit: Forward Result
+  deactivate WalletDeleteUseCase
+  WalletDeleteCubit->WalletDeleteCubit: Emit success state
+  WalletDeleteCubit-->WalletPage: WalletDeleteState.success()
+  deactivate WalletDeleteCubit
+  WalletPage->WalletPage: showSuccessSnackBar()
+else failure
+  activate WalletRepository
+  activate WalletRemoteDataSource
+  activate WalletDeleteUseCase
+  activate WalletDeleteCubit
+  WalletRemoteDataSource->WalletRemoteDataSource: FinanceException.fromApiResponse()
+  WalletRemoteDataSource-->WalletRepository: Throw Exception
+  deactivate WalletRemoteDataSource
+  WalletRepository->WalletRepository: handleException()
+  WalletRepository-->WalletDeleteUseCase: Result.failure(failure)
+  deactivate WalletRepository
+  WalletDeleteUseCase-->WalletDeleteCubit: Forward Result
+  deactivate WalletDeleteUseCase
+  WalletDeleteCubit->WalletDeleteCubit: Emit failure state
+  WalletDeleteCubit-->WalletPage: WalletDeleteState.failure(failure)
+  deactivate WalletDeleteCubit
+  WalletPage->WalletPage: showErrorSnackBar()
 end
 
 deactivate WalletPage
