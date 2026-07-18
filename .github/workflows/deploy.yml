@@ -35,8 +35,7 @@ jobs:
         run: npm ci # Ubah ke 'pnpm install' atau 'yarn install' jika perlu
 
       - name: Build with VitePress
-        # Pastikan Anda memiliki script "docs:build": "vitepress build" di package.json
-        run: npm run docs:build 
+        run: npm run build 
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
