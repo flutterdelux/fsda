@@ -51,7 +51,7 @@ fsda gen-module travel
 fsda gen-feature destination -m travel --ds remote
 
 # generate retrieval slice + detail UI
-fsda gen-slice popular -f destination -m travel -s Rp -u detail
+fsda gen-slice popular -f destination -m travel -s Rp -u main
 
 # generate mutation slice + popup menu and dialog UI
 fsda gen-slice bookmark -f destination -m travel -s Mp -u pmi,dialog
@@ -76,7 +76,7 @@ Sequence code:
 ## 5) Generate UI Only
 
 ```bash
-fsda gen-ui popular -f destination -m travel -u detail
+fsda gen-ui popular -f destination -m travel -u main
 fsda gen-ui bookmark -f destination -m travel -u pmi
 ```
 
@@ -161,7 +161,7 @@ fsda configure-app daylook
 fsda gen-module travel
 fsda gen-feature destination -m travel --ds remote
 
-fsda gen-slice popular -f destination -m travel -s Rp -u detail
+fsda gen-slice popular -f destination -m travel -s Rp -u main
 fsda gen-slice bookmark -f destination -m travel -s Mp -u pmi,dialog
 fsda gen-slice create -f destination -m travel -s Mp -u form
 

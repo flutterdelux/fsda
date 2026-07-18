@@ -179,13 +179,13 @@ fsda gen-slice delete_balance -f wallet -m finance -s Mp -d deleteBalance
 Optional UI generation in the same command:
 
 ```bash
-fsda gen-slice get_balance -f wallet -m finance -s R -u detail
+fsda gen-slice get_balance -f wallet -m finance -s R -u main
 ```
 
 Or generate UI separately:
 
 ```bash
-fsda gen-ui detail_balance -f wallet -m finance -u detail
+fsda gen-ui detail_balance -f wallet -m finance -u main
 ```
 
 Important:

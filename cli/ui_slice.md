@@ -27,7 +27,7 @@ fsda gen-slice <slice> -f <feature> -m <module> -s <sequence_code> -u pmi,dialog
 | lsv | list vertical | ListView vertical for parent body |
 | lsh | list horizontal | ListView horizontal as section |
 | pag | list vertical pagination | ListView vertical with pagination for parent body |
-| detail | detail view | Detail view for a specific item for parent body |
+| main | main view | Main view for a specific content |
 | sec | section | Basic section for grouping content |
 | pmi | popup menu item | Popup menu item for item actions |
 | dialog | dialog | Dialog for confirming an action on a specific item |

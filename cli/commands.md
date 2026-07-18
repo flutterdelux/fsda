@@ -246,7 +246,7 @@ fsda configure-app fsda_demo
 
 fsda gen-module finance
 fsda gen-feature wallet -m finance --ds remote
-fsda gen-slice detail -f wallet -m finance -s Rp -u detail
+fsda gen-slice detail -f wallet -m finance -s Rp -u main
 fsda gen-slice delete -f wallet -m finance -s Mp -u pmi,dialog
 
 fsda reg finance -a fsda_demo
