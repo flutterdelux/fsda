@@ -180,7 +180,7 @@ fsda fix-import -m travel -a wikuy
 
 | Startup | Home Page | Destination List |
 |:---------:|:---------:|:------------------:|
-| ![img](public/startup.png) | ![img](public/home.png) | ![img](public/destination-list.png) |
+| ![img](/images/startup.png) | ![img](/images/home.png) | ![img](/images/destination-list.png) |
 
 ## One Shot Command
 

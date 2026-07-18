@@ -1302,4 +1302,4 @@ Jika seluruh konfigurasi benar, akan menghasilkan *output* dibawah ini.
 
 | Startup | Home Page | Destination List |
 |:---------:|:---------:|:------------------:|
-| ![img](/startup.png) | ![img](/home.png) | ![img](/destination-list.png) |
+| ![img](/images/startup.png) | ![img](/images/home.png) | ![img](/images/destination-list.png) |

@@ -1302,4 +1302,4 @@ If all configurations are correct, it will produce the output below.
 
 | Startup | Home Page | Destination List |
 |:---------:|:---------:|:------------------:|
-| ![img](/startup.png) | ![img](/home.png) | ![img](/destination-list.png) |
+| ![img](/images/startup.png) | ![img](/images/home.png) | ![img](/images/destination-list.png) |
