@@ -3,7 +3,7 @@
 This workflow follows the active CLI command surface, from workspace initialization to repeatable development cycles.
 
 For a ready-to-run E2E scenario (workspace -> app run), use:
-- [Day-Look E2E](../../cli/daylook_e2e.md)
+- [Wikuy-CLI Driven E2E](/en/getting-started-cli-wikuy.md)
 
 Document goals:
 - clear for new developers

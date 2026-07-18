@@ -51,8 +51,8 @@ Lanjutkan dengan dokumen pendukung berikut:
 
 Untuk praktik end-to-end yang langsung bisa diikuti, gunakan salah satu jalur berikut:
 
-1. [Manual E2E (tanpa FSDA CLI)](getting-started-manual-wikuy.md)
-2. [CLI-Driven E2E (mayoritas FSDA CLI + finalisasi manual)](getting-started-cli-wikuy.md)
+1. [Manual E2E (tanpa FSDA CLI)](getting-started-cli-wikuy)
+2. [CLI-Driven E2E (mayoritas FSDA CLI + finalisasi manual)](getting-started-cli-wikuy)
 
 Keduanya menghasilkan target yang sama:
 

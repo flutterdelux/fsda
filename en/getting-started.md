@@ -51,7 +51,7 @@ Then continue with supporting documents:
 
 For practical end-to-end onboarding, choose one path:
 
-1. [Manual E2E (without FSDA CLI)](/en/getting-started-manual-wikuy)
+1. [Manual E2E (without FSDA CLI)](/en/getting-started-wikuy)
 2. [CLI-Driven E2E (mostly FSDA CLI + small manual finalization)](/en/getting-started-cli-wikuy)
 
 Both paths target the same output:

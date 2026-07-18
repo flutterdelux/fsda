@@ -278,7 +278,6 @@ Dokumentasi shared package disusun terpisah per package agar tanggung jawab tiap
 * [app_core](../packages/app-core.md)
 * [app_l10n](../packages/app-l10n.md)
 * [app_ui](../packages/app-ui.md)
-* [infra_...](../packages/infrastructure.md)
 
 
 

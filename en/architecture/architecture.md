@@ -278,7 +278,6 @@ Shared package documentation is compiled separately per package so that the resp
 * [app_core](../packages/app-core.md)
 * [app_l10n](../packages/app-l10n.md)
 * [app_ui](../packages/app-ui.md)
-* [infra_...](../packages/infrastructure.md)
 
 
 

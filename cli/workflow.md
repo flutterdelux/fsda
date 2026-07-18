@@ -3,7 +3,7 @@
 Workflow ini disusun berdasarkan command CLI yang aktif saat ini, urut dari inisialisasi workspace sampai cycle development berulang.
 
 Untuk skenario E2E test yang siap pakai (workspace -> app run) gunakan:
-- [Day-Look E2E](daylook_e2e.md)
+- [Wikuy-CLI Driven E2E](/getting-started-cli-wikuy.md)
 
 Target dokumen:
 - jelas untuk developer baru (junior)
