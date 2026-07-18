@@ -26,7 +26,7 @@
 
 /* Menentukan batas tinggi maksimal kode blok */
 div[class*='language-'] pre {
-  max-height: 450px; /* Sesuaikan ukuran tinggi (dalam px atau rem) sesuai keinginan Anda */
+  max-height: 350px; /* Sesuaikan ukuran tinggi (dalam px atau rem) sesuai keinginan Anda */
   overflow-y: auto;  /* Memunculkan scrollbar vertikal jika kode melebihi batas tinggi */
 }
 
