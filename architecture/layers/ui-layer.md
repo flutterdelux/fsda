@@ -1,24 +1,24 @@
 # UI Layer
 
-UI adalah visual atau bentuk tampilan yang dapat dilihat oleh user dan dapat berinteraksi dengannya.
+The UI is the visual or display form that can be seen by the user and interacted with.
 
-UI bertanggung jawab menampilkan informasi kepada user.
+The UI is responsible for displaying information to the user.
 
-UI harus fokus pada presentation.
+The UI must focus on presentation.
 
-UI tidak boleh mengandung business orchestration.
+The UI must not contain business orchestration.
 
 
 
 ## Responsibilities
 
-UI bertanggung jawab menyediakan:
+The UI is responsible for providing:
 
 * View
 * Widget
-* Komponen visual lainnya
+* Other visual components
 
-UI tidak bertanggung jawab terhadap:
+The UI is not responsible for:
 
 * API
 * Database
@@ -29,7 +29,7 @@ UI tidak bertanggung jawab terhadap:
 
 ## UI Structure
 
-Visual yang terikat pada slice dikelompokkan di dalam slice. Jika visual tersebut digunakan bersama, letakkan di shared.
+Visuals tied to a slice are grouped within the slice. If the visual is shared, place it in shared.
 
 ```text
 ui/
@@ -43,28 +43,28 @@ ui/
 
 ## View
 
-View adalah root visual untuk feature slice.
+The View is the visual root for a feature slice.
 
-Contoh:
+Example:
 
 ```dart
 class ProductDetailView extends StatelessWidget {
 }
 ```
 
-View hanya menerima data.
+The View only receives data.
 
-View tidak memanggil repository.
+The View does not call the repository.
 
-View tidak memanggil datasource.
+The View does not call the datasource.
 
 
 
 ## Widget
 
-Widget adalah komponen presentasi.
+A Widget is a presentation component.
 
-Contoh:
+Example:
 
 ```dart
 class ProductDetailCard extends StatelessWidget {
@@ -75,9 +75,9 @@ class ProductDetailCard extends StatelessWidget {
 
 ## Shared UI
 
-Digunakan oleh beberapa slice dalam feature.
+Used by multiple slices within a feature.
 
-Contoh:
+Example:
 
 ```text
 ui/
@@ -86,7 +86,7 @@ ui/
     └── extensions/
 ```
 
-Failure extension untuk menerjemahkan module failure ke kebutuhan presentasi diletakkan pada module scope:
+Failure extensions to translate module failures into presentation needs are placed at the module scope:
 
 ```text
 shared/
@@ -95,7 +95,7 @@ shared/
         └── <module>_failure_x.dart
 ```
 
-Jika UI pada module menampilkan text ke user, module tersebut sebaiknya memiliki resource localization sendiri. `app_l10n` tetap digunakan untuk text yang sifatnya umum atau shared lintas module.
+If the UI in a module displays text to the user, the module should ideally have its own localization resource. `app_l10n` is still used for text that is general or shared across modules.
 
 
 
@@ -121,18 +121,18 @@ logic/
 
 ## Why This Layer Exists
 
-UI ada untuk menyajikan informasi kepada user.
+The UI exists to present information to the user.
 
 
 
 ## Key Principle
 
-UI hanya menampilkan data.
+The UI only displays data.
 
-UI tidak mengorkestrasi bisnis.
+The UI does not orchestrate business.
 
-UI tidak mengetahui implementasi data.
+The UI does not know about data implementation.
 
-UI hanya boleh mengetahui domain model yang dibutuhkan untuk presentasi, bukan repository contract atau use case.
+The UI is only allowed to know the domain models needed for presentation, not repository contracts or use cases.
 
-App Layer bertugas meng-compose UI dan Logic.
+The App Layer is responsible for composing the UI and Logic.

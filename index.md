@@ -1,5 +1,4 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
 hero:
@@ -7,48 +6,47 @@ hero:
   text: "Feature Slice Driven Architecture"
   tagline: "A pragmatic, rule-driven Flutter architecture focused on consistency, discoverability, and long-term maintainability."
   image:
-    src: /images/logo.png
+    src: /logo.png
     alt: FSDA Logo
   actions:
     - theme: brand
       text: Getting Started
-      link: /getting-started
+      link: /en/getting-started
     - theme: alt
       text: View Architecture
-      link: /architecture/architecture
+      link: /en/architecture/architecture
 
 features:
   - title: Rule-Driven
-    details: Mengurangi ambiguitas melalui aturan struktur, dependency, dan konvensi yang eksplisit.
+    details: Reduce ambiguity with explicit structure rules, dependency direction, and naming conventions.
   - title: Discoverability First
-    details: Didesain agar developer dapat dengan cepat menemukan di mana sebuah kode harus ditulis atau dicari.
+    details: Designed so developers can quickly find where code should be written or located.
   - title: Modular Monorepo
-    details: Mendukung arsitektur multi-aplikasi (Apps, Modules, Shared Packages) dalam satu ekosistem.
+    details: Supports multi-application architecture (Apps, Modules, Shared Packages) within one ecosystem.
   - title: CLI Powered
-    details: Automasi pembuatan struktur, feature, dan module secara presisi menggunakan fsda_cli.
+    details: Automates generation of structure, feature, and module with fsda_cli.
 ---
 
 ## Why FSDA?
 
-Banyak arsitektur menjelaskan prinsip, namun sedikit yang menjelaskan implementasi secara spesifik. Akibatnya:
-* Struktur proyek berbeda-beda antar developer
-* Naming convention tidak konsisten
-* Tanggung jawab layer menjadi ambigu
-* Architectural drift mudah terjadi
+Many architectures explain principles, but only a few provide specific implementation guidance. This often leads to:
 
-**FSDA hadir untuk mengatasi masalah tersebut.**
+- Inconsistent project structures between developers
+- Unstable naming conventions
+- Ambiguous layer responsibility
+- Easy architectural drift
 
-<br>
+FSDA is built to solve those problems.
 
 ## High-Level Overview
 
-Konsep arsitektur ini membagi proyek ke dalam tiga lapisan utama:
+This architecture is divided into three major boundaries:
 
 ### 1. Shared Packages
-Fondasi independen yang digunakan bersama oleh seluruh sistem (`app_core`, `app_ui`, `app_l10n`, `infra_...`).
+Independent foundations used across the system (`app_core`, `app_ui`, `app_l10n`, `infra_...`).
 
 ### 2. Modules
-Boundary bisnis utama yang berisi *feature-feature* dalam domain yang sama dan dapat digunakan kembali oleh banyak aplikasi.
+Primary business boundaries containing domain-related features, reusable across multiple apps.
 
 ### 3. Apps
-Lapisan komposisi yang bertugas menyusun berbagai *modules* dan *shared packages* menjadi sebuah aplikasi utuh yang siap berjalan.
+Composition layer that assembles modules and shared packages into runnable applications.

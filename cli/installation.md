@@ -1,22 +1,22 @@
 # 🚀 Installation
 
-Sebelum menginstal FSDA CLI, pastikan komputer Anda memiliki:
+Before installing FSDA CLI, make sure your computer has:
 * **Dart SDK**
 * **Flutter SDK**
 
-Kemudian, jalankan perintah berikut untuk menginstal FSDA CLI secara global:
+Then, run the following command to install FSDA CLI globally:
 
 ```bash
 dart pub global activate fsda_cli
 ```
 
-Verifikasi instalasi dengan menjalankan:
+Verify the installation by running:
 
 ```bash
 fsda --version
 ```
 
-Perintah bantuan tersedia untuk melihat semua perintah dan opsi:
+Help command is available to see all commands and options:
 
 ```bash
 fsda --help

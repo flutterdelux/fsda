@@ -1,80 +1,80 @@
 # Anti-Patterns
 
-Dokumen ini merangkum pola yang sebaiknya dihindari saat menggunakan FSDA.
+This document summarizes patterns that should be avoided when using FSDA.
 
 
 ## Purpose
 
-Anti-pattern membantu menjaga arsitektur tetap konsisten dengan menunjukkan bentuk-bentuk implementasi yang tampak praktis di awal, tetapi biasanya menimbulkan drift di kemudian hari.
+Anti-patterns help keep architecture consistent by highlighting implementation choices that look practical at first but usually cause drift later.
 
 
 ## Common Anti-Patterns
 
-Hindari pola berikut:
+Avoid the following:
 
-* mulai implementasi dari folder, bukan dari sequence
-* menaruh business orchestration di UI
-* membiarkan DTO atau response bocor ke Logic atau UI
-* mengakses repository implementation langsung dari layer yang tidak semestinya
-* memindahkan resource ke shared terlalu cepat tanpa ownership yang jelas
-* membuat variasi naming sendiri di luar convention
-* menggabungkan beberapa tujuan bisnis berbeda ke dalam satu slice
-* membiarkan circular dependence antar feature
+* starting implementation from folders instead of sequence
+* placing business orchestration in UI
+* letting DTO or raw responses leak into Logic or UI
+* accessing repository implementation directly from inappropriate layers
+* moving resources to shared boundaries too early without clear ownership
+* creating naming variants outside active conventions
+* combining multiple business goals into one slice
+* allowing circular dependency across features
 
 
 ## Folder First vs Sequence First
 
-Anti-pattern ini tidak berarti folder tidak penting.
+This anti-pattern does not mean folders are unimportant.
 
-Workspace, module, dan feature tetap membutuhkan struktur folder yang jelas. Masalahnya muncul ketika implementasi dimulai dari menebak folder, file, dan class, sebelum jelas slice apa yang sedang dikerjakan dan sequence apa yang dipakai.
+Workspace, module, and feature still require clear folder structure. The problem appears when implementation starts by guessing folders, files, and classes before the slice and sequence are clear.
 
-Contoh yang keliru:
+Wrong approach example:
 
-* requirement baru datang: `delete wallet`
-* developer langsung membuat folder `data/`, `domain/`, `logic/`, `ui/`, beberapa file request, response, cubit, widget, dan repository
-* setelah itu baru mencoba menebak flow-nya
+* new requirement arrives: `delete wallet`
+* developer immediately creates `data/`, `domain/`, `logic/`, `ui/`, several request/response/cubit/widget/repository files
+* only then they try to guess the flow
 
-Masalah dari pendekatan ini:
+Problems with this approach:
 
-* struktur mudah melebar tanpa alasan yang jelas
-* file yang dibuat sering tidak mengikuti blueprint sequence yang tepat
-* naming dan dependency jadi mudah drift
+* structure grows without clear reason
+* generated files often miss the correct sequence blueprint
+* naming and dependency drift more easily
 
-Pendekatan yang benar:
+Correct approach:
 
-* mulai dari requirement
-* tentukan feature slice
-* tentukan sequence yang paling sesuai
-* buka blueprint
-* baru turunkan ke folder, file, class, dan flow implementasi
+* start from requirement
+* identify the feature slice
+* choose the most appropriate sequence
+* open the corresponding blueprint
+* then derive folders, files, classes, and implementation flow
 
-Dengan kata lain, folder tetap dibuat, tetapi folder mengikuti keputusan sequence, bukan sebaliknya.
+In short: folders still matter, but folders should follow sequence decisions, not the other way around.
 
 
 ## App vs Module Confusion
 
-Hindari mencampur composition concern milik App dengan implementation concern milik Module.
+Avoid mixing App composition concerns with Module implementation concerns.
 
-Contoh yang perlu dihindari:
+Avoid cases such as:
 
-* menaruh page composition ke boundary yang salah
-* menaruh route aggregation di Module package
-* menaruh dependency injection App ke boundary feature
+* placing page composition in the wrong boundary
+* placing route aggregation in module package
+* placing app-level dependency injection in feature boundary
 
 
 ## Shared Misuse
 
-`shared/` bukan tempat pembuangan untuk resource yang belum jelas posisinya.
+`shared/` is not a dumping ground for resources with unclear placement.
 
-Sebelum memindahkan sesuatu ke shared, pastikan:
+Before moving something into shared, make sure:
 
-* reuse-nya nyata
-* ownership-nya jelas
-* boundary terdekatnya memang sudah tidak cukup
+* reuse is real
+* ownership is clear
+* nearest boundary is truly insufficient
 
 
 ## Sequence Misuse
 
-Jangan memaksa satu slice mengikuti pola yang tidak sesuai hanya karena ingin meniru implementasi lain.
+Do not force a slice into an unsuitable sequence only to mimic another implementation.
 
-Jika sequence terasa tidak pas, evaluasi kembali requirement slice-nya lebih dulu.
+If sequence feels wrong, reevaluate slice requirement first.

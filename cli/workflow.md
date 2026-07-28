@@ -1,39 +1,39 @@
 # FSDA CLI Workflow
 
-Workflow ini disusun berdasarkan command CLI yang aktif saat ini, urut dari inisialisasi workspace sampai cycle development berulang.
+This workflow follows the active CLI command surface, from workspace initialization to repeatable development cycles.
 
-Untuk skenario E2E test yang siap pakai (workspace -> app run) gunakan:
+For a ready-to-run E2E scenario (workspace -> app run), use:
 - [Wikuy-CLI Driven E2E](/getting-started-cli-wikuy.md)
 
-Target dokumen:
-- jelas untuk developer baru (junior)
-- tetap cukup rinci untuk solo dan tim
-- urutannya sesuai proses nyata di project
+Document goals:
+- clear for new developers
+- detailed enough for solo and team use
+- aligned with real project flow
 
-## Rule Utama
+## Core Rule
 
-Semua command dijalankan dari root workspace yang punya fsda.yaml, kecuali create.
+Run all commands from the workspace root that contains fsda.yaml, except create.
 
-Contoh:
+Example:
 
 ```bash
-# dijalankan di luar workspace
+# run outside workspace
 fsda create fsda-base
 
-# masuk ke root workspace
+# move into workspace root
 cd fsda-base
 ```
 
 ## 1) Create Workspace
 
-Mulai dari pembuatan workspace kosong dengan struktur FSDA.
+Start by creating an empty FSDA workspace.
 
 ```bash
 fsda create fsda-base
 cd fsda-base
 ```
 
-Struktur awal minimal:
+Minimal initial structure:
 
 ```text
 fsda-base/
@@ -43,11 +43,11 @@ fsda-base/
 └── fsda.yaml
 ```
 
-## 2) Cek dan Edit fsda.yaml untuk Setup Awal
+## 2) Check and Edit fsda.yaml for Initial Setup
 
-Setelah workspace dibuat, langsung cek fsda.yaml. File ini adalah sumber kebenaran paket awal workspace.
+After workspace creation, inspect fsda.yaml first. This file is the source of truth for baseline packages.
 
-Contoh isi awal yang umum:
+Common initial content:
 
 ```yaml
 packages:
@@ -58,39 +58,39 @@ packages:
   - infra_logging
 ```
 
-Catatan:
-- daftar di packages menentukan apa yang akan disiapkan oleh fsda configure
-- kalau mau ganti stack infra (misal dari http ke http), edit di sini dulu
+Notes:
+- package list defines what fsda configure prepares
+- if you change infra stack, edit this file first
 
-## 3) Cek Template Package dan Infra yang Tersedia
+## 3) Check Available Package and Infra Templates
 
-Sebelum final edit fsda.yaml, developer bisa lihat daftar template yang tersedia.
+Before finalizing fsda.yaml, inspect available templates.
 
 ```bash
 fsda list-pckg
 ```
 
-Tips cek infra dari output list-pckg:
+Tip to inspect infra templates only:
 
 ```bash
 fsda list-pckg | grep infra_
 ```
 
-Gunakan hasil list untuk memastikan nama package di fsda.yaml valid.
+Use this list to validate package names in fsda.yaml.
 
-## 4) Configure Workspace Sesuai fsda.yaml
+## 4) Configure Workspace from fsda.yaml
 
-Jalankan sinkronisasi package awal workspace.
+Run initial package synchronization.
 
 ```bash
 fsda configure
 ```
 
 Expected outcome:
-- folder packages berisi package yang ada di fsda.yaml
-- package yang tidak lagi ada di fsda.yaml akan disesuaikan sesuai mekanisme configure
+- packages folder contains active packages from fsda.yaml
+- removed packages are reconciled by configure behavior
 
-Contoh hasil:
+Example output:
 
 ```text
 packages/
@@ -101,45 +101,45 @@ packages/
 └── infra_logging/
 ```
 
-## 5) Generate App dan Setup App Awal
+## 5) Generate App and Initial App Setup
 
-Generate app target.
+Generate target app.
 
 ```bash
 fsda gen-app ruviti
 ```
 
-Lalu setup awal app sesuai petunjuk docs app / log output setelah generate sukses.
+Then run initial app setup based on app docs and generation logs.
 
 ```bash
 cd apps/ruviti
 flutter pub get
 
-# jika diperlukan oleh app template
+# if required by app template
 dart run package_rename
 dart run flutter_launcher_icons
 
 flutter run
 ```
 
-Kembali ke root workspace, lalu sinkronkan app dengan package aktif workspace:
+Return to workspace root, then sync app dependencies with active workspace packages:
 
 ```bash
 cd ../..
 fsda configure-app ruviti
 ```
 
-Gunakan fsda configure-app setiap kali ada perubahan package infra/app package yang mempengaruhi app dependency dan DI app.
+Use fsda configure-app whenever package changes affect app dependencies or app DI.
 
-## 6) Generate Module (Mulai Development Modular)
+## 6) Generate Module (Start Modular Development)
 
 ```bash
 fsda gen-module finance
 ```
 
-Tujuan step ini:
-- menyiapkan boundary modul
-- menyiapkan shared error, extension, dan wrapper fitur
+This step prepares:
+- module boundary
+- shared errors, extensions, and feature wrapper
 
 ## 7) Generate Feature
 
@@ -147,168 +147,168 @@ Tujuan step ini:
 fsda gen-feature wallet -m finance --ds both
 ```
 
-Menyiapkan folder feature di modul target, termasuk struktur awal file barrel feature.
+This prepares feature folder structure and initial feature barrel files.
 
-Catatan:
-- mode datasource default adalah both.
-- opsi yang tersedia: both, remote, local.
-- untuk feature yang sudah ada, gunakan regen-feature untuk melengkapi baseline tanpa menimpa file yang sudah ada.
+Notes:
+- default datasource mode is both
+- options: both, remote, local
+- for existing features, use regen-feature to add missing baseline without overwriting existing files
 
-Contoh regen:
+Regen example:
 
 ```bash
 fsda regen-feature wallet -m finance --ds both
 ```
 
-## 8) Generate Slice (Automation Inti)
+## 8) Generate Slice (Core Automation)
 
-Gunakan gen-slice untuk menghasilkan automation inti per use case.
+Use gen-slice to generate core automation per use case.
 
 ```bash
 fsda gen-slice get_balance -f wallet -m finance -s M
 fsda gen-slice delete_balance -f wallet -m finance -s Mp
 ```
 
-Opsional method name explicit:
+Optional explicit method name:
 
 ```bash
 fsda gen-slice get_balance -f wallet -m finance -s M -d getBalance
 fsda gen-slice delete_balance -f wallet -m finance -s Mp -d deleteBalance
 ```
 
-Opsional generate UI dalam command yang sama:
+Optional UI generation in the same command:
 
 ```bash
 fsda gen-slice get_balance -f wallet -m finance -s R -u main
 ```
 
-Atau generate UI terpisah:
+Or generate UI separately:
 
 ```bash
 fsda gen-ui detail_balance -f wallet -m finance -u main
 ```
 
-Penting:
-- automation fokus sampai level logic
-- UI tetap perlu development manual
-- route screen per slice juga perlu compose manual
+Important:
+- automation focuses on logic baseline
+- UI still requires manual implementation
+- route/page composition per slice is still manual via compose commands
 
-## 9) Register Module ke App Target
+## 9) Register Module to Target App
 
-Setelah module siap dipakai app, lakukan wrapper composition module ke app.
+After module is ready for app usage, compose module wrapper into app.
 
 ```bash
 fsda reg finance -a ruviti
 ```
 
-Step ini menyiapkan integrasi module ke app, termasuk:
-- dependency module di app
-- DI module entry
-- route module entry
+This prepares module integration into app, including:
+- module dependency in app
+- module DI entry
+- module route entry
 - failure extension registration
 - localization delegate registration
 
-## 10) Install Resource Feature ke Wrapper App
+## 10) Install Feature Resources into App Wrapper
 
-Untuk feature yang benar-benar dipakai app, install resource DI feature ke wrapper module app.
+For features used by app, install feature DI resources into app module wrapper.
 
 ```bash
 fsda di wallet -m finance -a ruviti
 ```
 
-Biasanya command ini akan menyiapkan registration untuk:
+Usually this registers:
 - datasource
 - repository
 - use case
 - logic
 
-Jalankan per feature yang dipakai app.
+Run per feature used by the app.
 
-## 11) Compose Per Slice
+## 11) Compose per Slice
 
-Setelah automation selesai, gunakan compose untuk merakit page app wrapper.
+After automation is done, use compose to assemble app wrapper pages.
 
-Main compose (membentuk/replace page target dari slice utama dan update base route):
+Main compose (build/replace primary target page and update base route):
 
 ```bash
 fsda compose-main get_balance -f wallet -m finance -a ruviti -p detail
 ```
 
-Inject compose untuk aksi popup menu (menambah provider/listener/method + popup action ke page yang sama):
+Inject compose for popup action (inject provider/listener/method + popup action into same page):
 
 ```bash
 fsda compose-pmi delete_balance -f wallet -m finance -a ruviti -p detail
 ```
 
-Catatan:
-- `compose-main` dan `compose-form` mengganti/menyusun page utama dan update base route
-- `compose-pag` khusus retrieval pagination
-- `compose-pmi` khusus popup menu item
-- `compose-sec` compose retrieval section: provider auto-trigger method retrieval, sekaligus generate method section widget; peletakan section tetap manual oleh developer
-- compose mode injection tetap mendaftarkan target page ke child routes module dan helper navigasi `to<TargetPage>()`
-- keputusan UX/layout detail tetap di tangan developer setelah baseline compose terbentuk
+Notes:
+- `compose-main` and `compose-form` build/replace main page and update base route
+- `compose-pag` is for retrieval pagination
+- `compose-pmi` is for popup menu action injection
+- `compose-sec` composes retrieval sections: provider auto-triggers retrieval method and a section widget method is generated; section placement remains manual
+- inject mode also upserts module child route and `to<TargetPage>()` navigation helper
+- final UX/layout decisions remain in developer control
 
 ## 12) Test Run
 
-Setiap selesai 1 rangkaian compose, langsung test run.
+After each compose sequence, run the app.
 
 ```bash
 flutter run
 ```
 
-Opsional quality gate:
+Optional quality gate:
 
 ```bash
-# dari root workspace
+# from workspace root
 dart analyze
 ```
 
 ## 13) Repeat Cycle
 
-Untuk fitur berikutnya, ulangi alur inti ini:
+For the next feature, repeat this core flow:
 
-1. gen-module (jika module baru)
+1. gen-module (if new module)
 2. gen-feature
 3. gen-slice
-4. reg module ke app (jika belum)
-5. di feature ke app wrapper
-6. compose per slice dengan command mode yang sesuai (`compose-main`, `compose-form`, `compose-pag`, `compose-pmi`, `compose-sec`) lalu refine UI/flow manual
+4. reg module to app (if not registered)
+5. di feature to app wrapper
+6. compose each slice with matching command mode (`compose-main`, `compose-form`, `compose-pag`, `compose-pmi`, `compose-sec`), then refine UI/flow manually
 7. test run
 
-## Rekomendasi Proses Solo vs Tim
+## Recommended Process: Solo vs Team
 
 ### Solo Development
 
-Gunakan urutan step 1 sampai 13 secara linear. Ini paling aman untuk menjaga konteks tetap utuh dari setup sampai integrasi.
+Use steps 1 to 13 linearly. This is the safest path to keep full context from setup to integration.
 
 ### Team Development
 
-Proses repeat dipecah per module:
+Split repeat process by module:
 
-1. tiap tim pegang 1 module utama
-2. tiap tim jalan sampai gen-feature, gen-slice, dan manual compose di module masing-masing
-3. tim integrasi menggabungkan hasil dan jalankan reg + di ke app target
-4. lakukan test run integrasi penuh di app
+1. each team owns one main module
+2. each team runs up to gen-feature, gen-slice, and manual compose in their module
+3. integration team merges outputs and runs reg + di into target app
+4. run full integration test in app
 
-Hasilnya:
-- paralel development lebih cepat
-- konflik antar tim lebih kecil karena boundary module jelas
-- penggabungan akhir fokus ke integration dan QA
+Benefits:
+- faster parallel development
+- fewer cross-team conflicts due to clear module boundaries
+- final merge focused on integration and QA
 
-## Ringkasan Singkat
+## Quick Summary
 
-Alur minimal yang wajib diingat junior:
+Minimal flow every junior should remember:
 
 1. create workspace
-2. cek/edit fsda.yaml
-3. list package/infra
+2. check/edit fsda.yaml
+3. list packages/infra
 4. configure workspace
-5. gen app + setup awal + test run
+5. gen app + initial setup + test run
 6. gen module
 7. gen feature
 8. gen slice
-9. reg module ke app
-10. di feature ke app
-11. manual compose logic/ui/route
+9. reg module to app
+10. di feature to app
+11. compose logic/UI/route
 12. test run
 13. repeat

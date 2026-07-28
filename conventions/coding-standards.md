@@ -1,80 +1,80 @@
 # Coding Standards
 
-Dokumen ini menjelaskan pedoman coding dasar pada FSDA.
+This document defines baseline coding guidelines for FSDA.
 
 
 ## Purpose
 
-Coding standards digunakan untuk menjaga konsistensi implementasi, memudahkan review, dan mengurangi variasi yang tidak perlu di dalam codebase.
+Coding standards keep implementation consistent, make reviews easier, and reduce unnecessary variation across the codebase.
 
 
 ## General Principles
 
-Gunakan pedoman berikut sebagai baseline:
+Use the following as your baseline:
 
-* utamakan perubahan kecil dan terfokus
-* ikuti boundary arsitektur yang sudah ditetapkan
-* utamakan kejelasan dibanding cleverness
-* pertahankan naming sesuai convention yang berlaku
-* hindari side effect tersembunyi
+* prioritize small, focused changes
+* follow established architectural boundaries
+* prefer clarity over cleverness
+* keep naming aligned with active conventions
+* avoid hidden side effects
 
 
 ## Layer Discipline
 
-Setiap layer harus tetap berada pada tanggung jawabnya:
+Each layer must stay within its responsibility:
 
-* Domain berisi contract dan business rule yang stabil
-* Data berisi detail implementasi teknis
-* Logic berisi state management dan alur interaksi
-* UI berisi presentation
-* App berisi composition
+* Domain contains stable contracts and business rules
+* Data contains technical implementation details
+* Logic contains state management and interaction flow
+* UI contains presentation
+* App contains composition
 
-Jika sebuah perubahan membuat tanggung jawab layer menjadi kabur, biasanya struktur implementasinya perlu ditinjau ulang.
+If a change blurs layer responsibilities, the implementation structure usually needs to be revisited.
 
 
 ## Code Style
 
-Gunakan gaya penulisan yang konsisten:
+Use a consistent writing style:
 
-* nama harus jelas dan deskriptif
-* hindari singkatan yang tidak umum
-* hindari one-letter variable kecuali untuk konteks yang sangat pendek dan jelas
-* komentar hanya ditambahkan jika benar-benar membantu menjelaskan keputusan atau alur yang tidak langsung terbaca
-* hindari file atau class yang memegang terlalu banyak tanggung jawab
+* names should be clear and descriptive
+* avoid uncommon abbreviations
+* avoid one-letter variables except for very short and obvious contexts
+* add comments only when they clarify decisions or non-obvious flow
+* avoid files or classes with too many responsibilities
 
 
 ## Flow Clarity
 
-Alur data harus mudah ditelusuri dari UI ke sumber data.
+Data flow should be easy to trace from UI to data source.
 
-Pertahankan aturan berikut:
+Keep these rules:
 
-* jangan biarkan DTO bocor ke Logic atau UI
-* jangan biarkan repository implementation bocor ke Domain
-* jangan taruh business orchestration di UI
-* jangan taruh composition concern di Module
+* do not leak DTO into Logic or UI
+* do not leak repository implementation into Domain
+* do not place business orchestration in UI
+* do not place composition concerns in Module
 
 
 ## Shared Placement
 
-Jangan memindahkan sesuatu ke shared terlalu cepat.
+Do not move resources to shared boundaries too early.
 
-Naikkan boundary hanya jika:
+Promote a boundary only when:
 
-* benar-benar dipakai bersama
-* ownership-nya jelas
-* reuse-nya stabil
+* it is truly reused
+* ownership is clear
+* reuse is stable
 
-Jika resource masih spesifik untuk satu feature atau satu module, simpan tetap pada boundary terdekatnya.
+If a resource is still specific to one feature or one module, keep it in its nearest boundary.
 
 
 ## Testing Awareness
 
-Saat menulis kode, pikirkan juga bentuk test-nya.
+When writing code, also think about how it will be tested.
 
-Implementasi yang baik biasanya:
+Good implementation usually:
 
-* punya dependency yang jelas
-* tidak terlalu banyak state tersembunyi
-* mudah diuji per layer
-* tidak membutuhkan setup teknis yang berlebihan untuk memverifikasi behavior inti
+* has clear dependencies
+* avoids excessive hidden state
+* is testable per layer
+* does not require excessive technical setup to verify core behavior

@@ -1,28 +1,28 @@
 # Development Workflow
 
-Dokumen ini menjelaskan alur pengembangan aplikasi menggunakan FSDA.
+This document describes the recommended application development workflow using FSDA.
 
-Tujuan workflow ini adalah:
+The goals of this workflow are to:
 
-* Menjaga konsistensi pengembangan.
-* Memastikan implementasi mengikuti sequence yang benar.
-* Mempermudah scaling project.
-* Mempermudah kolaborasi tim.
-* Mempermudah automation dan code generation.
+- Maintain development consistency.
+- Ensure implementation follows the correct sequence.
+- Improve project scalability.
+- Facilitate team collaboration.
+- Simplify automation and code generation.
 
 
 
 ## Phase 1 — Workspace Setup
 
-Phase ini dilakukan satu kali pada awal project.
+This phase is performed once at the beginning of a project.
 
 ---
 
 ### 1.1 Create Workspace
 
-Buat root workspace.
+Create the workspace root.
 
-Contoh:
+Example:
 
 ```text
 workspace_name/
@@ -35,9 +35,9 @@ workspace_name/
 
 ### 1.2 Create Shared Packages
 
-Buat package fondasi.
+Create the foundation packages.
 
-Minimal:
+Minimum structure:
 
 ```text
 packages/
@@ -47,14 +47,14 @@ packages/
 └── infra_...
 ```
 
-`infra_...` untuk implementasi kecil yang sering dipakai bersama dipecah menjadi package infrastructure yang lebih spesifik.
+`infra_...` packages contain small infrastructure implementations that are frequently shared across the workspace. Each concern should be extracted into its own infrastructure package.
 
-Contoh:
+Example:
 
 ```text
 packages/
 ├── infra_http
-├── infra_http
+├── infra_hive
 ├── infra_firebase
 ├── infra_supabase
 └── infra_storage
@@ -62,11 +62,11 @@ packages/
 
 ---
 
-### 1.3 Create App Project
+### 1.3 Create App Projects
 
-Buat project aplikasi.
+Create the application projects.
 
-Contoh:
+Example:
 
 ```text
 apps/
@@ -78,9 +78,9 @@ apps/
 
 ### 1.4 Setup App Foundation
 
-Setup struktur dasar aplikasi.
+Create the application's base structure.
 
-Contoh:
+Example:
 
 ```text
 lib/
@@ -112,27 +112,27 @@ lib/
 
 ---
 
-### 1.5 Determine Infrastructure
+### 1.5 Choose Infrastructure
 
-Tentukan teknologi yang digunakan.
+Decide which technologies will be used.
 
-Contoh:
+Example:
 
-| Concern        | Technology    |
-| -------------- | ------------- |
-| ApiClient      | Http           |
-| Local Storage  | Hive          |
-| Database       | Sqflite       |
-| BaaS           | Supabase      |
+| Concern | Technology |
+|---------|------------|
+| API Client | HTTP |
+| Local Storage | Hive |
+| Database | Sqflite |
+| BaaS | Supabase |
 | Authentication | Firebase Auth |
 
 ---
 
 ### 1.6 Compose Infrastructure
 
-Register seluruh dependency teknis.
+Register all technical dependencies.
 
-Contoh:
+Example:
 
 ```text
 core/
@@ -142,7 +142,7 @@ core/
 └── externals/
 ```
 
-Contoh:
+Example:
 
 ```dart
 Future<void> externalDI() async {
@@ -152,47 +152,47 @@ Future<void> externalDI() async {
 }
 ```
 
-Infrastructure dapat ditambah atau diubah kembali selama pengembangan berlangsung.
-
-
-
-## Phase 2 — Module Development
-
-Phase ini dilakukan berulang selama pengembangan aplikasi.
+Infrastructure may evolve throughout the lifetime of the project as new technologies are introduced or existing ones are replaced.
 
 ---
 
-### 2.1 Identify Requirement
+## Phase 2 — Module Development
 
-Ubah requirement menjadi feature slice.
+This phase is repeated throughout the development lifecycle.
 
-Contoh:
+---
 
-| Requirement          | Module       | Feature | Slice  |
-| -------------------- | ------------ | ------- | ------ |
-| Delete wallet        | finance      | wallet  | delete |
-| Create task          | task         | task    | create |
-| Product detail       | product      | product | detail |
+### 2.1 Identify Requirements
+
+Translate business requirements into feature slices.
+
+Example:
+
+| Requirement | Module | Feature | Slice |
+|-------------|---------|---------|-------|
+| Delete wallet | finance | wallet | delete |
+| Create task | task | task | create |
+| Product detail | product | product | detail |
 | Watch payment status | subscription | payment | status |
 
 ---
 
-### 2.2 Determine Sequence
+### 2.2 Determine the Sequence
 
-Tentukan sequence yang sesuai.
+Choose the sequence that matches the implementation.
 
-| Slice  | Sequence                     | Code |
-| ------ | ---------------------------- | ---- |
-| delete | Mutation + Param             | Mp   |
-| create | Mutation + Return + Param    | Mrp  | 
-| detail | Retrieval + Param            | Rp   |
-| status | Retrieval + Stream + Param   | Rsp  |
+| Slice | Sequence | Code |
+|--------|----------|------|
+| delete | Mutation + Param | Mp |
+| create | Mutation + Return + Param | Mrp |
+| detail | Retrieval + Param | Rp |
+| status | Retrieval + Stream + Param | Rsp |
 
 ---
 
-### 2.3 Create Module Skeleton
+### 2.3 Create the Module Skeleton
 
-Jika module belum ada, buat struktur dasar module.
+If the module does not yet exist, create its baseline structure.
 
 ```text
 module1/
@@ -201,31 +201,31 @@ module1/
 ├── l10n.yaml
 ├── pubspec.yaml
 └── lib/
-  ├── module1.dart
-  ├── l10n/
-  │   ├── module1_en.arb
-  │   └── module1_id.arb
-  └── src/
-    ├── features/
-    ├── generated/
-    └── shared/
-      ├── data/
-      │   └── errors/
-      │       └── module1_exception.dart
-      ├── domain/
-      │   └── errors/
-      │       └── module1_failure.dart
-      ├── logic/
-      └── ui/
-        └── extensions/
-          └── module1_failure_x.dart
+    ├── module1.dart
+    ├── l10n/
+    │   ├── module1_en.arb
+    │   └── module1_id.arb
+    └── src/
+        ├── features/
+        ├── generated/
+        └── shared/
+            ├── data/
+            │   └── errors/
+            │       └── module1_exception.dart
+            ├── domain/
+            │   └── errors/
+            │       └── module1_failure.dart
+            ├── logic/
+            └── ui/
+                └── extensions/
+                    └── module1_failure_x.dart
 ```
 
-Baseline module di atas penting karena setiap module adalah Flutter package mandiri.
+The baseline module structure is important because every module is an independent Flutter package.
 
-Jika module memiliki UI text yang tampil ke user, module tersebut sebaiknya memiliki resource localization sendiri. `app_l10n` tetap dipakai untuk localization yang sifatnya umum atau shared lintas module.
+If a module displays user-facing text, it should maintain its own localization resources. The `app_l10n` package should remain responsible for common localization shared across applications and modules.
 
-`l10n.yaml` module dapat menggunakan baseline berikut:
+Recommended `l10n.yaml` baseline:
 
 ```yaml
 arb-dir: lib/l10n
@@ -236,9 +236,9 @@ output-dir: lib/src/generated
 untranslated-messages-file: missing_keys.json
 ```
 
-`build.yaml` module dapat digunakan untuk membatasi scope code generation agar tetap fokus pada boundary module.
+The module's `build.yaml` can also be used to limit code generation to the module boundary.
 
-Contoh baseline:
+Example:
 
 ```yaml
 targets:
@@ -250,32 +250,36 @@ targets:
           explicit_to_json: true
 ```
 
-Selain itu, setiap module juga sebaiknya menyiapkan dependency dan dev dependency yang mendukung object modeling dan code generation.
+Each module should also include the dependencies required for object modeling and code generation.
 
-Baseline package yang umum dibutuhkan:
+Recommended baseline packages:
 
-dependencies:
-* `freezed_annotation`
-* `json_annotation`
+**dependencies**
 
-dev_dependencies:
-* `build_runner`
-* `freezed`
-* `json_serializable`
+- `freezed_annotation`
+- `json_annotation`
 
-Dalam baseline Flutter saat ini, object modeling seperti DTO, Entity, Request, Response, Param, dan State direkomendasikan menggunakan `Freezed`. Untuk object yang membutuhkan serialisasi, gunakan `json_serializable` dengan baseline `build.yaml` di atas.
+**dev_dependencies**
 
-Selain dependency teknis tersebut, module umumnya juga bergantung pada shared package berikut:
+- `build_runner`
+- `freezed`
+- `json_serializable`
 
-* `app_core` untuk contract dan abstraction lintas app maupun module
-* `app_l10n` untuk localization umum lintas app maupun module
-* `app_ui` untuk kebutuhan standard UI lintas app maupun module
+Within the current Flutter ecosystem, object models such as DTOs, Entities, Requests, Responses, Params, and States are recommended to be implemented using **Freezed**.
+
+For serializable objects, use **json_serializable** with the baseline `build.yaml` configuration shown above.
+
+Modules will typically also depend on the following shared packages:
+
+- `app_core` for contracts and abstractions shared across applications and modules.
+- `app_l10n` for shared localization.
+- `app_ui` for reusable UI components and design system resources.
 
 ---
 
-### 2.4 Create Module Shared Resources
+### 2.4 Create Shared Module Resources
 
-Urutan pembuatan:
+Creation order:
 
 ```text
 Failure
@@ -285,22 +289,23 @@ Exception
 FailureX
 ```
 
-Karena:
+Because:
 
 ```text
 Failure
-→ menjadi acuan untuk Exception
-→ menjadi acuan untuk FailureX
+→ defines the canonical business failure
+→ becomes the reference for Exception
+→ becomes the reference for FailureX
 
 FailureX
-→ menerjemahkan Failure ke kebutuhan presentasi
+→ translates business failures into presentation-layer concerns
 ```
 
 ---
 
-### 2.5 Create Feature Skeleton
+### 2.5 Create the Feature Skeleton
 
-Jika feature belum ada.
+If the feature does not yet exist:
 
 ```text
 feature1/
@@ -328,17 +333,17 @@ feature1/
 
 ---
 
-### 2.6 Create Slice Skeleton
+### 2.6 Create the Slice Skeleton
 
-Buat struktur slice sesuai sequence.
+Create the slice directory according to the selected sequence.
 
-Contoh:
+Examples:
 
 ```text
 detail/
 ```
 
-atau
+or
 
 ```text
 create/
@@ -346,9 +351,9 @@ create/
 
 ---
 
-### 2.7 Create Domain
+### 2.7 Build the Domain Layer
 
-Urutan:
+Recommended order:
 
 ```text
 Enum
@@ -364,9 +369,9 @@ Use Case
 
 ---
 
-### 2.8 Create Data
+### 2.8 Build the Data Layer
 
-Jika domain menggunakan enum:
+If the domain defines enums:
 
 ```text
 Enum
@@ -374,7 +379,7 @@ Enum
 Converter
 ```
 
-Kemudian:
+Then continue with:
 
 ```text
 Converter
@@ -392,9 +397,9 @@ Repository Implementation
 
 ---
 
-### 2.9 Create Logic
+### 2.9 Build the Logic Layer
 
-Urutan:
+Recommended order:
 
 ```text
 State
@@ -404,9 +409,9 @@ Cubit / Bloc / Controller
 
 ---
 
-### 2.10 Create UI
+### 2.10 Build the UI Layer
 
-Urutan:
+Recommended order:
 
 ```text
 View
@@ -418,11 +423,11 @@ Shared UI
 
 ---
 
-### 2.11 Validate Against Blueprint
+### 2.11 Validate Against the Blueprint
 
-Bandingkan implementasi dengan blueprint sequence.
+Compare the implementation against the blueprint sequence.
 
-Pastikan:
+Verify that the following are consistent with the blueprint:
 
 ```text
 folder
@@ -432,21 +437,19 @@ dependency
 flow
 ```
 
-sesuai dengan blueprint.
-
-
+---
 
 ## Phase 3 — App Composition
 
-Phase ini menghubungkan module ke aplikasi.
+This phase integrates modules into the application.
 
 ---
 
-### 3.1 Create App Composition Page
+### 3.1 Create the App Composition Page
 
-Compose Logic dan UI pada App layer.
+Compose the Logic and UI at the application layer.
 
-Contoh:
+Example:
 
 ```text
 apps/
@@ -460,11 +463,11 @@ apps/
                             └── product_detail_page.dart
 ```
 
-Page pada App dapat mewakili satu primary slice atau mengagregasi beberapa slice sekaligus.
+A page may represent a single primary slice or aggregate multiple slices into a single surface.
 
-Logic dapat diregistrasikan di page scope atau scope yang lebih tinggi seperti root/global scope sesuai kebutuhan lifecycle dan composition.
+Logic may be registered at the page scope or a higher scope, such as the root/global scope, depending on lifecycle and composition requirements.
 
-Contoh:
+Example:
 
 ```text
 ProductDetailPage
@@ -474,11 +477,11 @@ ProductDetailPage
 
 ---
 
-### 3.2 Compose Module Route
+### 3.2 Compose Module Routes
 
-Tambahkan route module.
+Register the module routes.
 
-Contoh:
+Example:
 
 ```dart
 abstract final class Module1Route {
@@ -497,9 +500,9 @@ routes: [
 
 ### 3.3 Compose Localization
 
-Compose localization umum dari `app_l10n` bersama localization milik module-module yang digunakan aplikasi.
+Compose shared localization from `app_l10n` together with the localization resources provided by the modules used by the application.
 
-Contoh:
+Example:
 
 ```dart
 MaterialApp(
@@ -511,42 +514,41 @@ MaterialApp(
 )
 ```
 
-Pada tahap ini App bertugas menentukan localization mana saja yang benar-benar dipakai pada aplikasi, lalu menyusunnya ke dalam composition root.
+At this stage, the application decides which localization resources are actually required and assembles them within the composition root.
 
 ---
 
 ### 3.4 Compose Feature DI
 
-Tambahkan feature DI.
+Register feature dependencies.
 
-Contoh:
+Example:
 
 ```dart
 abstract final class Module1Di {
   static void register() {
-    // reg feature di
     _feature1Di();
   }
 
-
-  // feature
   static void _feature1Di() {
     // Datasources
 
     // Repositories
 
-    // Usecases
+    // Use Cases
 
-    // Logic (Cubits/Blocs)
+    // Logic (Cubits / Blocs)
   }
 }
 ```
 
+---
+
 ### 3.5 Compose Module DI
 
-Tambahkan module DI.
+Register the module dependency injection.
 
-Contoh:
+Example:
 
 ```dart
 Future<void> initDI() async {
@@ -557,17 +559,17 @@ Future<void> initDI() async {
 
 ---
 
-### 3.6 Run Application
+### 3.6 Run the Application
 
-Verifikasi bahwa feature dapat berjalan.
+Verify that the feature works correctly.
 
 
 
 ## Solo Developer Workflow
 
-Untuk solo developer disarankan menggunakan iterasi kecil.
+For solo development, small iterative cycles are recommended.
 
-Contoh:
+Example:
 
 ```text
 Module
@@ -583,10 +585,10 @@ Test
 Repeat
 ```
 
-Atau:
+Or:
 
 ```text
-1 Module
+One Module
 ↓
 Compose
 ↓
@@ -595,15 +597,15 @@ Test
 Next Module
 ```
 
-Dengan pendekatan ini feedback loop menjadi lebih cepat.
+This approach shortens the feedback loop and allows issues to be detected earlier.
 
 
 
 ## Team Workflow
 
-Untuk tim besar.
+For larger teams.
 
-Contoh:
+Example:
 
 ```text
 Team A
@@ -616,15 +618,15 @@ Team C
 → Subscription Module
 ```
 
-Masing-masing tim dapat menggunakan:
+Each team may maintain its own:
 
 ```text
 module_app
 ```
 
-Setiap tim membuat `module_app` sendiri. App tersebut hanya menjadi implementasi untuk satu module saat testing lokal.
+Each `module_app` serves as a dedicated application for developing and testing a single module in isolation.
 
-Setelah module stabil:
+Once the module is stable:
 
 ```text
 Module
@@ -633,20 +635,19 @@ Merge
 ↓
 Compose
 ↓
-Main Apps Integration
+Integrate into Main Applications
 ```
-
 
 
 ## Golden Rule
 
-Jangan mulai dari UI.
+Do not start with the UI.
 
-Jangan mulai dari API.
+Do not start with the API.
 
-Jangan mulai dari folder.
+Do not start with the folder structure.
 
-Mulailah dari:
+Always start from:
 
 ```text
 Requirement
@@ -664,4 +665,4 @@ Blueprint
 Implementation
 ```
 
-Sequence dan Blueprint adalah sumber kebenaran implementasi.
+The **Sequence** and the **Blueprint** are the single source of truth for every implementation.

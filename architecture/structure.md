@@ -1,10 +1,10 @@
-# Struktur
+# Structure
 
-Dokumen ini merupakan peta struktur global FSDA.
+This document is the global structure map of FSDA.
 
-Detail rule tetap dijelaskan pada dokumen khusus, seperti [dependency rules](dependency-rules.md), [sequence patterns](sequence-pattern.md), [naming conventions](../conventions/naming-conventions.md), dan [layer docs](layers/domain-layer.md).
+Detailed rules are still explained in specific documents, such as [dependency rules](dependency-rules.md), [sequence patterns](sequence-pattern.md), [naming conventions](../conventions/naming-conventions.md), and [layer docs](layers/domain-layer.md).
 
-Dokumen ini menjelaskan:
+This document explains:
 
 * Workspace Structure
 * App Structure
@@ -14,9 +14,9 @@ Dokumen ini menjelaskan:
 * Feature Slice Structure
 * Shared Structure
 
-Dokumen ini membantu melihat gambaran besar struktur proyek. Jika terjadi konflik pada aturan detail, maka dokumen khusus yang membahas concern tersebut menjadi acuan utama.
+This document helps to see the big picture of the project structure. If there is a conflict regarding detailed rules, the specific document discussing that concern is the primary reference.
 
-## Struktur Workspace
+## Workspace Structure
 
 ```text
 root-workspace/
@@ -27,9 +27,9 @@ root-workspace/
 
 ### 1. apps/
 
-Berisi aplikasi yang menyusun modules dan packages.
+Contains applications that compose modules and packages.
 
-Contoh:
+Example:
 
 ```text
 apps/
@@ -38,9 +38,9 @@ apps/
 
 ### 2. modules/
 
-Berisi business modules. Module merupakan boundary bisnis utama dalam sistem.
+Contains business modules. A module is the main business boundary in the system.
 
-Contoh:
+Example:
 
 ```text
 modules/
@@ -52,11 +52,11 @@ modules/
 
 ### 3. packages/
 
-Berisi shared packages. Package tidak mengandung business feature.
+Contains shared packages. Packages do not contain business features.
 
-Package hanya berisi reusable component yang dapat digunakan oleh seluruh aplikasi.
+Packages only contain reusable components that can be used by all applications.
 
-Contoh:
+Example:
 
 ```text
 packages/
@@ -66,11 +66,11 @@ packages/
 └── app_ui/
 ```
 
-## Struktur App
+## App Structure
 
-App bertanggung jawab sebagai composition root aplikasi.
+The App is responsible for acting as the composition root of the application.
 
-App bertugas untuk:
+The App is tasked to:
 
 * Bootstrap application
 * Configure dependencies
@@ -89,9 +89,9 @@ lib/
 
 ### 1. main.dart
 
-Entry point aplikasi.
+The application entry point.
 
-Contoh tanggung jawab:
+Example responsibilities:
 
 * WidgetsFlutterBinding.ensureInitialized()
 * Logging initialization
@@ -101,7 +101,7 @@ Contoh tanggung jawab:
 
 ### 2. app/
 
-Berisi bootstrap aplikasi.
+Contains the application bootstrap.
 
 ```text
 app/
@@ -113,22 +113,22 @@ app/
 
 - app_router.dart
 
-    Menyusun seluruh route module.
+    Arranges all module routes.
 
 - main_app.dart
 
-    Mengonfigurasi root widget.
+    Configures the root widget.
 
 - startup.dart
 
-  Biasanya digunakan sebagai:
+  Usually used as:
 
     * Splash Screen
     * Initial Loading Screen
 
 - dashboard/
 
-    Dashboard merupakan shell UI utama aplikasi. Dashboard berada pada App Structure karena bertugas menyusun akses menuju berbagai module.
+    The Dashboard is the main UI shell of the application. The Dashboard is in the App Structure because it is responsible for arranging access to various modules.
 
     ```text
     dashboard/
@@ -142,7 +142,7 @@ app/
 
 ### 3. core/
 
-Berisi kebutuhan teknis aplikasi.
+Contains the technical needs of the application.
 
 ```text
 core/
@@ -173,7 +173,7 @@ core/
 
 ### 4. modules/
 
-Berisi compose module. Setiap module memiliki:
+Contains module compositions. Each module has:
 
 ```text
 <module>_di.dart
@@ -188,15 +188,15 @@ modules/
 │   └── features/
 │       └── <feature>/
 │           └── pages/
-│               └── <page>.dart (compose UI & logic; dapat merepresentasikan single-slice maupun aggregate page)
+│               └── <page>.dart (compose UI & logic; can represent a single-slice or aggregate page)
 └── <module>/
 ```
 
-## Struktur Module
+## Module Structure
 
-Module merupakan business boundary utama.
+A module is the primary business boundary.
 
-Contoh:
+Example:
 
 ```text
 attendance
@@ -205,7 +205,7 @@ travel
 inbox
 ```
 
-Struktur:
+Structure:
 
 ```text
 modules/
@@ -237,21 +237,21 @@ modules/
 └── <module>/
 ```
 
-Setiap module menjadi Flutter package mandiri, sehingga baseline file seperti `build.yaml`, `l10n.yaml`, dan dependency untuk Freezed serta serialization perlu disiapkan pada level module.
+Each module becomes an independent Flutter package, so baseline files like `build.yaml`, `l10n.yaml`, and dependencies for Freezed and serialization need to be prepared at the module level.
 
-Dalam baseline Flutter saat ini, module umumnya juga bergantung pada shared package berikut:
+In the current Flutter baseline, modules generally also depend on the following shared packages:
 
-* `app_core` untuk contract dan abstraction lintas app maupun module
-* `app_l10n` untuk localization umum lintas app maupun module
-* `app_ui` untuk kebutuhan standard UI lintas app maupun module
+* `app_core` for contracts and abstractions across apps and modules
+* `app_l10n` for general localization across apps and modules
+* `app_ui` for standard UI needs across apps and modules
 
-Detail teknis seperti package dependency, `Freezed`, `json_serializable`, `build.yaml`, dan `l10n.yaml` dijelaskan pada [Development Workflow](../guides/development-workflow.md).
+Technical details like package dependencies, `Freezed`, `json_serializable`, `build.yaml`, and `l10n.yaml` are explained in [Development Workflow](../guides/development-workflow.md).
 
-## Struktur Feature
+## Feature Structure
 
-Feature merupakan business capability dalam suatu module.
+A feature is a business capability within a module.
 
-Contoh:
+Example:
 
 ```text
 attendance
@@ -260,7 +260,7 @@ city
 inbox
 ```
 
-Struktur:
+Structure:
 
 ```text
 features/
@@ -273,9 +273,9 @@ features/
 └── <feature>/
 ```
 
-## Struktur Layer
+## Layer Structure
 
-Setiap feature menggunakan empat layer:
+Each feature uses four layers:
 
 ```text
 data
@@ -286,7 +286,7 @@ ui
 
 ### 1. Data
 
-Berisi implementasi akses data. Object modeling seperti DTO, Request, dan Response harus konsisten, mudah dirawat, dan sesuai dengan baseline stack yang dipakai.
+Contains data access implementations. Object modeling such as DTOs, Requests, and Responses must be consistent, maintainable, and in accordance with the baseline stack used.
 
 ```text
 data/
@@ -306,7 +306,7 @@ data/
 
 ### 2. Domain
 
-Berisi business contract. Object modeling seperti Entity dan Param harus konsisten, mudah dirawat, dan sesuai dengan baseline stack yang dipakai.
+Contains business contracts. Object modeling such as Entities and Params must be consistent, maintainable, and in accordance with the baseline stack used.
 
 ```text
 domain/
@@ -324,7 +324,7 @@ domain/
 
 ### 3. Logic
 
-Berisi state management.
+Contains state management.
 
 ```text
 logic/
@@ -335,7 +335,7 @@ logic/
 
 ### 4. UI
 
-Berisi tampilan dalam bentuk view dan komponen presentasi.
+Contains displays in the form of views and presentation components.
 
 ```text
 ui/
@@ -346,11 +346,11 @@ ui/
         └── ..._<widget>.dart
 ```
 
-## Struktur Feature Slice
+## Feature Slice Structure
 
-Feature Slice merupakan unit implementasi terkecil dalam FSDA.
+A Feature Slice is the smallest implementation unit in FSDA.
 
-Feature slice ini berbanding lurus dengan flow use case bisnis. Namun implementasi struktur folder nya lebih ke Logic dan UI. Sedangkan untuk implementasi di layer lain (Data & Domain) langsung dibuat per file dan ada juga sebagai method.
+This feature slice is directly proportional to the business use case flow. However, its folder structure implementation leans more towards Logic and UI. Meanwhile, implementations in other layers (Data & Domain) are directly created per file and also exist as methods.
 
 
 ```text
@@ -399,15 +399,15 @@ features/
                 └── <feature>_<column>_field.dart
 ```
 
-Untuk lebih detailnya bisa dilihat pada dokumentasi per sequence atau cek contoh project.
+For more details, refer to the documentation per sequence or check the example project.
 
-Seluruh object modeling seperti DTO, Entity, Request, Response, dan Param diperlakukan sebagai contract yang harus mudah dirawat dalam jangka panjang. Untuk baseline Flutter saat ini, detail implementasi seperti `Freezed`, `json_serializable`, dan konfigurasi code generation dijelaskan pada [Development Workflow](../guides/development-workflow.md).
+All object modeling such as DTO, Entity, Request, Response, and Param are treated as contracts that must be easily maintainable in the long run. For the current Flutter baseline, implementation details like `Freezed`, `json_serializable`, and code generation configurations are explained in [Development Workflow](../guides/development-workflow.md).
 
-## Struktur Shared
+## Shared Structure
 
 * Feature Shared
 
-Digunakan oleh beberapa slice dalam satu feature.
+Used by multiple slices within a single feature.
 
 ```text
 feature/
@@ -416,7 +416,7 @@ feature/
 
 * Module Shared
 
-Digunakan oleh beberapa feature dalam satu module.
+Used by multiple features within a single module.
 
 ```text
 module/
@@ -435,11 +435,11 @@ module/
             └── <module>_failure_x.dart
 ```
 
-Failure, Exception, dan FailureX yang bersifat module scope diletakkan pada shared module agar dapat dipakai bersama oleh seluruh feature di dalam module yang sama.
+Failures, Exceptions, and FailureX that are module-scoped are placed in the module shared so they can be used together by all features within the same module.
 
 * App Shared
 
-Digunakan oleh beberapa compose module dalam satu aplikasi.
+Used by several composed modules within a single application.
 
 ```text
 lib/
@@ -450,7 +450,7 @@ lib/
 └── modules/
 ```
 
-atau
+or
 
 ```text
 lib/
@@ -460,11 +460,11 @@ lib/
 └── shared/
 ```
 
-Referensi pertama diutamakan pada app shared. Karena nama folder nya bukan `shared` melainkan bentuk spesifik dari shared itu sendiri, misalnya extensions/.
+The primary reference is prioritized for the app shared. Because the folder name is not `shared` but rather a specific form of the shared itself, for example `extensions/`.
 
 * Package Shared
 
-Digunakan oleh seluruh aplikasi. Semua package merupakan shared karena dapat digunakan oleh seluruh aplikasi dan menjadi referensi utama.
+Used by the entire application. All packages are shared because they can be used by all applications and serve as the main reference.
 
 ```text
 packages/
@@ -474,4 +474,4 @@ packages/
 └── app_ui/
 ```
 
-Contoh lengkap struktur bisa dilihat pada [Structure Example](structure-example.md).
+A complete example of the structure can be seen in [Structure Example](structure-example.md).

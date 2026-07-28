@@ -1,8 +1,8 @@
 # App
 
-App adalah layer tersembunyi yang mengorkestrasi Logic dan UI, routing management, dan kebutuhan lain yang tidak masuk ke dalam domain, logic, maupun UI.
+The App is a hidden layer that orchestrates Logic and UI, routing management, and other necessities that do not fall under the domain, logic, or UI layers.
 
-Tidak dikategorikan sebagai layer utama sehingga bentuk layering tetap 4 bentuk, yaitu:
+It is not categorized as a main layer, keeping the layering structure at 4 forms, which are:
 
 ```text
 Data  ─────┐
@@ -13,23 +13,23 @@ UI ────────┘
 ```
 
 ```text
-App mengetahui module.
-Module tidak mengetahui App. 
+The App knows the module.
+The module does not know the App. 
 ```
 
-Hubungan tersebut membuat App menjadi titik komposisi tertinggi dalam aplikasi.
+This relationship makes the App the highest composition point in the application.
 
 
 
 ## Composition
 
-UI dan Logic nantinya akan dikombinasikan oleh App.
+UI and Logic will eventually be combined by the App.
 
-Page pada App dapat merepresentasikan satu primary slice atau menjadi aggregate surface yang menggabungkan beberapa slice sekaligus.
+A Page in the App can represent one primary slice or become an aggregate surface that combines several slices at once.
 
-Logic juga dapat diregistrasikan pada page scope atau scope yang lebih tinggi seperti root/global scope bila lifecycle dan kebutuhan composition mengharuskannya.
+Logic can also be registered at the page scope or a higher scope such as the root/global scope if the lifecycle and composition needs require it.
 
-Contoh:
+Example:
 
 ```text
 ProductDetailPage
@@ -37,9 +37,9 @@ ProductDetailPage
  └── ProductDetailView
 ```
 
-Routing management juga menjadi tanggung jawab App. Route tiap module disusun di App dengan grouping module masing-masing, kemudian digabungkan menjadi satu.
+Routing management is also the responsibility of the App. The route of each module is arranged in the App by grouping each module, then combined into one.
 
-Contoh:
+Example:
 
 ```dart
 routes: [
@@ -59,9 +59,9 @@ routes: [
 ],
 ```
 
-Localization composition juga menjadi tanggung jawab App. App menyusun localization umum dari `app_l10n` bersama localization milik module-module yang dipakai aplikasi.
+Localization composition is also the responsibility of the App. The App arranges general localization from `app_l10n` along with localizations belonging to the modules used by the application.
 
-Contoh:
+Example:
 
 ```dart
 MaterialApp(
@@ -73,7 +73,7 @@ MaterialApp(
 )
 ```
 
-Begitu juga dengan dependency injection, App bertanggung jawab untuk menginisialisasi dependency injection tiap module dan menggabungkannya menjadi satu.
+Likewise, with dependency injection, the App is responsible for initializing the dependency injection of each module and combining them into one.
 
 ```dart
 Future<void> initDI() async {
@@ -115,7 +115,6 @@ other apps
 
 ## Why This Layer Is Hidden
 
-App tidak merepresentasikan concern bisnis maupun teknis tertentu. App hanya bertugas mengorkestrasi dan menyusun komponen yang berasal dari layer lain. Karena itu App tidak dikategorikan sebagai layer utama pada FSDA.
+The App does not represent a specific business or technical concern. The App is only tasked with orchestrating and arranging components from other layers. Therefore, the App is not categorized as a main layer in FSDA.
 
-Tersembunyi namun penting. Sebutan hidden layer di sini adalah karena App yang bergantung ke layer-layer lain agar feature dapat diterapkan pada aplikasi dan digunakan user. Bentuk sebenarnya dari App adalah project utama aplikasinya. Project App bisa banyak dan cara compose-nya bisa berbeda-beda sehingga tidak dikategorikan sebagai layer utama.
-
+Hidden but important. The term hidden layer here is because the App depends on other layers so that features can be applied to the application and used by the user. The actual form of the App is the main project of the application. There can be many App projects and the way they are composed can be different, so it is not categorized as a main layer.

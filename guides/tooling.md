@@ -1,39 +1,39 @@
 # Tooling
 
-Dokumen ini menjelaskan arah tooling pada FSDA.
+This document describes the tooling direction in FSDA.
 
 ## Status
 
-Tooling FSDA saat ini masih berada pada tahap development.
+FSDA tooling is still under development.
 
-Bentuk akhirnya belum dipatok, baik dari sisi flow, delivery model, maupun bentuk implementasinya.
+Final shape is not fixed yet, including flow, delivery model, and implementation form.
 
 ## Current Direction
 
-Secara umum, tooling diarahkan untuk membantu:
+In general, tooling is aimed to help with:
 
-* scaffolding module, feature, dan slice
-* validasi naming dan structure
-* validasi dependency rules
-* code generation atau template application
-* automation workflow yang berulang
+* scaffolding module, feature, and slice
+* naming and structure validation
+* dependency rule validation
+* code generation or template application
+* repeated workflow automation
 
 ## Current Expectation
 
-Selama tooling belum final, implementasi tetap mengandalkan:
+While tooling is not final, implementation still relies on:
 
 * sequence pattern
 * blueprint
 * naming conventions
 * dependency rules
-* review manual terhadap structure dan flow
+* manual review of structure and flow
 
-Dengan kata lain, dokumentasi saat ini tetap menjadi source utama sampai tooling benar-benar matang.
+In other words, current documentation remains the main source of truth until tooling fully matures.
 
 ## Non-Final Decisions
 
-Beberapa hal yang masih terbuka:
+Some open decisions:
 
-* apakah tooling akan berbentuk CLI
-* apakah tooling akan gratis, berbayar, atau kombinasi keduanya
-* seberapa jauh automation akan mengatur scaffold, validation, dan generation
+* whether tooling will be CLI-based
+* whether tooling will be free, paid, or hybrid
+* how far automation should control scaffold, validation, and generation

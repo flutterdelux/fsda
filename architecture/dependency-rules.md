@@ -1,20 +1,20 @@
 # Dependency Rules
 
-Dokumen ini mendefinisikan aturan dependency pada FSDA.
+This document defines the dependency rules in FSDA.
 
-Tujuan utama dependency rules adalah:
+The main goals of dependency rules are:
 
-- Menjaga arah dependency tetap konsisten.
-- Mencegah coupling antar layer.
-- Memastikan feature tetap mudah dipindahkan.
-- Memastikan automation dapat dilakukan secara deterministik.
-- Menjaga scalability jangka panjang.
+- Maintain a consistent dependency direction.
+- Prevent coupling between layers.
+- Ensure features remain easy to move (portable).
+- Ensure automation can be performed deterministically.
+- Maintain long-term scalability.
 
 
 
 ## Dependency Direction
 
-Dependency selalu mengarah ke dalam (inward).
+Dependencies always point inwards.
 
 ```text
 Data  ─────┐
@@ -24,37 +24,37 @@ Logic ─────┼──► Domain
 UI ────────┘
 ```
 
-Domain tidak mengetahui layer lain.
+The Domain does not know about other layers.
 
-Domain adalah pusat kontrak aplikasi.
+The Domain is the center of application contracts.
 
 
 
 ## Layer Dependency Matrix
 
-| Layer  | Boleh Depend Ke |
-| ------ | --------------- |
-| Domain | Domain          |
-| Data   | Domain, Data    |
-| Logic  | Domain, Logic   |
-| UI     | Domain, UI      |
+| Layer  | Allowed Dependencies |
+| ------ | -------------------- |
+| Domain | Domain               |
+| Data   | Domain, Data         |
+| Logic  | Domain, Logic        |
+| UI     | Domain, UI           |
 
 
 
 ## Domain Layer Rules
 
-Domain adalah lapisan paling stabil.
+The Domain is the most stable layer.
 
-Domain mendefinisikan:
+The Domain defines:
 
 - Entity
 - Repository Contract
 - Use Case
 - Param
 - Failure
-- Enum bisnis
+- Business Enum
 
-Domain tidak boleh mengetahui implementasi.
+The Domain must not know about implementations.
 
 ---
 
@@ -66,7 +66,7 @@ Allowed:
 domain/
 ```
 
-Contoh:
+Example:
 
 ```dart
 import '../entities/task.dart';
@@ -86,7 +86,7 @@ ui/
 flutter/
 ```
 
-Contoh:
+Example:
 
 ```dart
 import '../../data/dtos/task_dto.dart';
@@ -143,9 +143,9 @@ import '../../ui/create/pages/task_create_page.dart';
 
 ## Data Layer Rules
 
-Data adalah implementasi dari kontrak domain.
+Data is the implementation of domain contracts.
 
-Data bertanggung jawab terhadap:
+Data is responsible for:
 
 - API
 - Database
@@ -167,7 +167,7 @@ domain/
 data/
 ```
 
-Contoh:
+Example:
 
 ```dart
 import '../../domain/entities/task.dart';
@@ -233,18 +233,18 @@ import '../../ui/create/pages/task_create_page.dart';
 
 ## Logic Layer Rules
 
-Logic mengorkestrasi use case.
+Logic orchestrates use cases.
 
-Logic bertanggung jawab terhadap:
+Logic is responsible for:
 
 - State
 - Cubit
 - Bloc
 - Provider
 - Controller
-- State management lainnya
+- Other state management
 
-Logic tidak boleh mengetahui implementasi data.
+Logic must not know about data implementations.
 
 ---
 
@@ -257,7 +257,7 @@ domain/
 logic/
 ```
 
-Contoh:
+Example:
 
 ```dart
 import '../../domain/usecases/task_create_use_case.dart';
@@ -322,20 +322,18 @@ import '../../ui/create/pages/task_create_page.dart';
 
 ## UI Layer Rules
 
-* UI adalah tampilan yang dilihat user.
-* UI harus sesederhana mungkin.
-* UI bertanggung jawab terhadap:
+- UI is the view seen by the user.
+- UI should be as simple as possible.
+- UI is responsible for:
+  - View
+  - Widget
+  - Dialogs, bottom sheets, and other UI components
+- UI must not access the data layer.
+- UI must not access the logic layer.
+- UI can access the domain only in the form of stable presentation models, such as entity, enum, or param.
+- UI must not access repository contracts or domain use cases.
 
-    - View
-    - Widget 
-    - Dialog, bottom sheet, dan ui component lainnya
-
-* UI tidak boleh mengakses data layer.
-* UI tidak boleh mengakses logic layer.
-* UI dapat mengakses domain hanya dalam bentuk model presentasi yang stabil, seperti entity, enum, atau param.
-* UI tidak boleh mengakses repository contract atau use case domain.
-
-App Layer bertugas meng-compose UI dengan Logic.
+The App Layer is responsible for composing UI with Logic.
 
 ---
 
@@ -415,9 +413,9 @@ import '../../logic/create/task_create_cubit.dart';
 
 ## App Layer Rules
 
-App Layer adalah orchestrator.
+The App Layer is the orchestrator.
 
-App Layer bertanggung jawab terhadap:
+The App Layer is responsible for:
 
 - Routing
 - Dependency Injection
@@ -460,26 +458,26 @@ await taskDI();
 
 ## Cross Feature Rules
 
-Feature boleh mengakses feature lain selama masih berada di dalam module yang sama.
+A feature may access another feature as long as both reside within the same module.
 
-Hal ini dimungkinkan karena module adalah business boundary utama. Dalam kasus tertentu, ada operasi yang sulit dipisahkan sepenuhnya antar feature, tetapi masih jelas ownership bisnisnya di level module.
+This is allowed because the module serves as the primary business boundary. In certain cases, there are operations that are difficult to isolate completely between features, but their business ownership remains clear at the module level.
 
-Meski begitu, akses lintas feature harus tetap:
+However, cross-feature access must still be:
 
-- sesederhana mungkin
-- sejelas mungkin
-- tetap mengikuti layer dependency masing-masing
-- tidak membentuk circular dependence antar feature
+- As simple as possible
+- As clear as possible
+- Compliant with their respective layer dependencies
+- Free of circular dependencies between features
 
-Akses lintas feature untuk kebutuhan modeling seperti DTO, Entity, Param, Request, Response, enum, atau referensi lain yang bersifat cascade adalah hal yang normal. Ini mirip dengan kebutuhan reference atau cascade pada database, selama alurnya tetap eksplisit dan mudah ditelusuri.
+Cross-feature access for modeling needs such as DTO, Entity, Param, Request, Response, enum, or other cascade references is normal. This is similar to reference or cascade requirements in databases, provided that the flow remains explicit and easy to trace.
 
-Jika `featureC` membutuhkan operasi yang berada di `featureD`, misalnya `createTransaction` membutuhkan `createTransactionItems`, maka akses tersebut diperbolehkan selama alasan keterkaitannya jelas, flow-nya tetap sederhana, dan tidak menciptakan circular dependence.
+If `featureC` requires an operation residing in `featureD`, for example `createTransaction` requires `createTransactionItems`, such access is permitted as long as the reason for interrelation is clear, the flow remains simple, and it does not create a circular dependence.
 
 ---
 
 ### Allowed
 
-Di dalam module yang sama, akses lintas feature dapat dilakukan melalui pola berikut:
+Within the same module, cross-feature access can be accomplished through the following patterns:
 
 ```text
 modeling cascade
@@ -487,21 +485,21 @@ shared/
 domain contract
 ```
 
-Penjelasan singkat:
+Brief explanation:
 
-- `modeling cascade` untuk DTO, Entity, Param, Request, Response, enum, atau reference lain yang saling terkait secara natural
-- `shared/` untuk resource module-scope atau feature-scope yang memang dimiliki bersama
-- `domain contract` untuk entity, enum, param, atau contract stabil lain yang aman dijadikan acuan bersama
+- `modeling cascade` for DTO, Entity, Param, Request, Response, enum, or other naturally interrelated references
+- `shared/` for module-scope or feature-scope resources that are indeed shared
+- `domain contract` for entities, enums, params, or other stable contracts that are safe to use as shared references
 
-`feature barrel` boleh digunakan bila membantu discoverability, tetapi di dalam module yang sama tidak wajib dijadikan satu-satunya bentuk import. Karena masih berada di dalam satu Flutter package yang sama, terkadang direct import ke resource yang jelas justru lebih mudah dibaca dan tidak membingungkan suggestion import. Namun mengikuti bentuk import linting yang konsisten tetap lebih disarankan.
+`feature barrel` files may be used if they help discoverability, but within the same module, they are not strictly required as the sole form of import. Since they are still within the same Flutter package, direct imports to clear resources can sometimes be easier to read and less confusing for import suggestions. However, following a consistent import linting format remains recommended.
 
-Allowed bukan berarti semua file internal bebas diakses dari mana saja. Tetap jaga agar alasan aksesnya jelas, sederhana, dan tidak sampai membentuk circular dependence.
+Being allowed does not mean every internal file can be freely accessed from anywhere. Always ensure the reason for access is clear, simple, and avoids forming circular dependencies.
 
 ---
 
 ### Wrong Example
 
-❌ Circular dependence antar feature
+❌ Circular dependence between features
 
 ```text
 feature_c
@@ -511,34 +509,34 @@ feature_d
   -> feature_c
 ```
 
-❌ Akses lintas feature yang melanggar layer dependency
+❌ Cross-feature access that violates layer dependencies
 
 ```dart
 import '../feature_d/data/repositories/feature_d_repository_impl.dart';
 ```
 
-❌ Akses lintas feature yang membuat flow ownership menjadi kabur dan sulit ditelusuri
+❌ Cross-feature access that blurs flow ownership and makes tracing difficult
 
 ```text
-feature_c memanggil banyak file internal feature_d
-tanpa boundary yang jelas
+feature_c calls many internal files of feature_d
+without a clear boundary
 ```
 
 
 
 ## Cross Module Rules
 
-Module tidak boleh mengakses internal module lain.
+A module must not access the internal files of another module.
 
 ---
 
 ### Allowed
 
-Melalui public barrel.
+Through the public barrel.
 
-Aturan ini berlaku untuk akses antar module atau antar package, bukan untuk akses antar feature yang masih berada di dalam module yang sama.
+This rule applies to access between modules or between packages, not to access between features that remain within the same module.
 
-Contoh:
+Example:
 
 ```dart
 import 'package:task/task.dart';
@@ -558,13 +556,13 @@ import 'package:task/src/features/task/...';
 
 ## Shared Rules
 
-Shared mengikuti boundary penggunaan aktual.
+Shared resources follow their actual usage boundary.
 
 ---
 
 ### Feature Shared
 
-Digunakan oleh beberapa slice dalam satu feature.
+Used by multiple slices within a single feature.
 
 ```text
 feature/
@@ -575,7 +573,7 @@ feature/
 
 ### Module Shared
 
-Digunakan oleh beberapa feature dalam satu module.
+Used by multiple features within a single module.
 
 ```text
 module/
@@ -586,7 +584,7 @@ module/
 
 ### App Shared
 
-Digunakan lintas module.
+Used across modules.
 
 ```text
 app/
@@ -594,20 +592,18 @@ core/
 packages/
 ```
 
+Components do not need to be moved to a higher boundary simply because they are read by a higher boundary.
 
-
-Komponen tidak harus dipindahkan ke boundary yang lebih tinggi hanya karena dibaca oleh boundary yang lebih tinggi.
-
-Ownership tetap mengikuti boundary penggunaan utamanya.
+Ownership always follows its primary usage boundary.
 
 
 
 ## Golden Rule
 
-Dependency harus selalu mengarah ke kontrak yang lebih stabil.
+Dependencies must always point toward more stable contracts.
 
-Jangan bergantung pada implementasi.
+Do not depend on implementations.
 
 Depend on contract, not implementation.
 
-Domain pada dasarnya adalah shared contract untuk hal hal seperti entity, enum, dan param.
+The Domain is essentially a shared contract for things like entities, enums, and params.

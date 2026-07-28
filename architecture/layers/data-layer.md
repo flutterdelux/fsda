@@ -1,16 +1,16 @@
 # Data Layer
 
-Data adalah implementasi dari kontrak domain.
+Data is the implementation of the domain contract.
 
-Data bertanggung jawab untuk memperoleh, menyimpan, dan mengubah data dari berbagai sumber.
+Data is responsible for fetching, storing, and modifying data from various sources.
 
-Contoh pada dokumen ini disederhanakan agar fokus pada arsitektur. Detail teknis baseline Flutter saat ini dijelaskan pada [Development Workflow](../../guides/development-workflow.md).
+The examples in this document are simplified to focus on architecture. Current Flutter baseline technical details are explained in [Development Workflow](../../guides/development-workflow.md).
 
 
 
 ## Responsibilities
 
-Data bertanggung jawab terhadap:
+Data is responsible for:
 
 * API
 * Database
@@ -39,9 +39,9 @@ data/
 
 ## Datasource
 
-Datasource bertanggung jawab berinteraksi dengan sumber data.
+Datasource is responsible for interacting with data sources.
 
-Contoh:
+Example:
 
 ```dart
 abstract interface class ProductRemoteDataSource {
@@ -53,9 +53,9 @@ abstract interface class ProductRemoteDataSource {
 
 ## DTO
 
-DTO adalah representasi data mentah.
+DTO is the representation of raw data.
 
-Contoh:
+Example:
 
 ```dart
 final class ProductDto {
@@ -87,17 +87,17 @@ final class ProductDto {
 }
 ```
 
-DTO adalah detail implementasi data layer.
+DTO is the implementation detail of the data layer.
 
-Entity adalah kontrak yang boleh keluar menuju layer lain.
+Entity is the contract that can go out to other layers.
 
 
 
 ## Request
 
-Request digunakan untuk komunikasi ke datasource. Input yang menjadi kebutuhan mutasi maupun retrieval harus dibungkus dalam bentuk request. Namun biasanya request hanya digunakan untuk komunikasi dengan remote datasource seperti API. Untuk komunikasi dengan local datasource bisa langsung menggunakan object DTO.
+Request is used for communication to the datasource. Inputs that are requirements for mutation or retrieval must be wrapped in a request. However, usually requests are only used for communication with remote datasources like APIs. For communication with local datasources, DTO objects can be used directly.
 
-Contoh:
+Example:
 
 ```dart
 final class ProductDetailRequest {
@@ -115,11 +115,11 @@ final class ProductDetailRequest {
 
 ## Response
 
-Response digunakan untuk membungkus hasil dari sumber data. Sama seperti Request, Response juga biasanya digunakan untuk komunikasi dengan remote datasource. Dimana object return dari API biasanya dibungkus dalam bentuk ApiResponse kontrak yang kemudin body nya di mapping ke bentuk Response yang dibuat.
+Response is used to wrap the results from data sources. Similar to Request, Response is also typically used for communication with remote datasources. The return object from the API is usually wrapped in an ApiResponse contract, and its body is mapped into the created Response format.
 
-Response menjadi tukang prediksi untuk response API, sehingga jika response API berubah maka yang perlu diubah hanya Response nya saja agar adaptible dengan actual response API dan bentuk DTO.
+Response acts as a predictor for API responses, so if the API response changes, only the Response needs to be updated to be adaptable to the actual API response and the DTO format.
 
-Contoh:
+Example:
 
 ```dart
 final class ProductDetailResponse {
@@ -143,9 +143,9 @@ final class ProductDetailResponse {
 
 ## Converter
 
-Karena Enum (Domain) tidak boleh tau tentang implementasi teknis, maka converter ini biasanya digunakan untuk mengubah Enum menjadi bentuk yang bisa dipahami oleh data source, seperti String atau int.
+Because Enum (Domain) must not know about technical implementations, this converter is usually used to convert an Enum into a format understood by the data source, such as String or int.
 
-Contoh:
+Example:
 
 ```dart
 class PaymentStatusConverter extends JsonConverter<PaymentStatus, String> {
@@ -176,11 +176,11 @@ class PaymentStatusConverter extends JsonConverter<PaymentStatus, String> {
 
 ## Repository Implementation
 
-Repository implementation menghubungkan domain dengan datasource. Di sini juga tempat untuk menangani error yang terjadi maupun yang dilempar oleh datasource.
+Repository implementation connects the domain with the datasource. This is also the place to handle errors that occur or are thrown by the datasource.
 
-Repository implementation juga menjadi titik berhenti dari Param, sehingga harus di mapping ke bentuk request/dto yang dibutuhkan datasource. Begitu juga dengan dto, repository implementation menjadi titik berhenti dari dto dari arah datasource, sehingga harus di mapping ke bentuk entity sebelum disalurkan kembali ke domain.
+Repository implementation also serves as the stopping point for Params, so they must be mapped to the request/dto format required by the datasource. Similarly with dtos, the repository implementation serves as the stopping point for dtos coming from the datasource, so they must be mapped into entities before being passed back to the domain.
 
-Contoh:
+Example:
 
 ```dart
 class ProductRepositoryImpl
@@ -213,11 +213,11 @@ class ProductRepositoryImpl
 
 ## Exception
 
-Exception merepresentasikan kegagalan teknis yang terjadi pada Data Layer.
+Exceptions represent technical failures that occur in the Data Layer.
 
-Exception digunakan untuk membungkus error dari sumber data sebelum diterjemahkan menjadi Failure.
+Exceptions are used to wrap errors from data sources before translating them into Failures.
 
-Contoh sumber error:
+Examples of error sources:
 
 - API Error
 - Network Error
@@ -226,7 +226,7 @@ Contoh sumber error:
 - Cache Error
 - Serialization Error
 
-Contoh:
+Example:
 
 ```dart
 sealed class ProductException implements Exception {
@@ -240,11 +240,11 @@ sealed class ProductException implements Exception {
 }
 ```
 
-Exception tidak boleh keluar dari Data Layer.
+Exceptions must not leave the Data Layer.
 
-Repository Implementation bertanggung jawab menerjemahkan Exception menjadi Failure.
+The Repository Implementation is responsible for translating Exceptions into Failures.
 
-Contoh:
+Example:
 
 ```text
 Datasource
@@ -254,9 +254,9 @@ ProductException.productNotFound()
 ProductFailure.productNotFound
 ```
 
-Pada FSDA, exception diletakkan pada module scope di `module/shared/data/errors` karena sering digunakan bersama oleh beberapa feature dalam module yang sama.
+In FSDA, exceptions are placed at the module scope in `module/shared/data/errors` because they are often shared by multiple features within the same module.
 
-Contoh:
+Example:
 
 ```text
 <module>/
@@ -290,12 +290,12 @@ ui/
 
 ## Why This Layer Exists
 
-Data ada untuk mengisolasi detail teknis dari bisnis.
+Data exists to isolate technical details from the business.
 
 
 
 ## Key Principle
 
-Data mengimplementasikan kontrak domain.
+Data implements the domain contract.
 
-Data tidak boleh bocor ke logic maupun UI.
+Data must not leak to logic or UI.

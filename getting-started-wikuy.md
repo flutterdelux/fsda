@@ -1,10 +1,10 @@
 # Getting Started E2E - Wikuy (Manual)
 
-Dokumen ini memandu pembuatan project FSDA secara manual *end-to-end* tanpa menggunakan command generator FSDA CLI. 
+This document guides the manual *end-to-end* creation of an FSDA project without using the FSDA CLI generator command.
 
-Sebagai panduan komparatif, kita akan mengambil komponen *boilerplate* dari repositori [fsda-templates](https://github.com/flutterdelux/fsda-templates) dan merakitnya mengikuti standar arsitektur FSDA.
+As a comparative guide, we will take the *boilerplate* components from the [fsda-templates](https://github.com/flutterdelux/fsda-templates) repository and assemble them following the FSDA architectural standards.
 
-## Target Hasil
+## Target Result
 
 - Workspace: `Wikuy`
 - App: `wikuy`
@@ -19,14 +19,14 @@ Sebagai panduan komparatif, kita akan mengambil komponen *boilerplate* dari repo
   - URL docs: `https://fdelux-mock-545621765686.asia-southeast2.run.app/docs/api/v1/#/Destinations`
   - Endpoint runtime: `GET https://fdelux-mock-545621765686.asia-southeast2.run.app/api/v1/destinations`
 
-## Prasyarat
+## Prerequisites
 
-- Flutter SDK dan Dart SDK terpasang
-- Git tersedia di sistem (Opsional but recommended)
+- Flutter SDK and Dart SDK installed
+- Git available on the system (Optional but recommended)
 
 ## 1. Setup Workspace
 
-Langkah pertama adalah membuat *root directory* dan mendefinisikan batas-batas utama (App, Module, Packages).
+The first step is to create the *root directory* and define the main boundaries (App, Module, Packages).
 
 ```bash
 mkdir Wikuy
@@ -36,13 +36,13 @@ mkdir apps modules packages
 
 ## 2. Setup Workspace Foundation
 
-Unduh repositori template nya terlebih dahulu dan simpan ke dalam folder sementara (`temp_templates`) di dalam workspace agar kita bisa mengambil komponen yang dibutuhkan.
+Download the template repository first and save it into a temporary folder (`temp_templates`) within the workspace so we can extract the required components.
 
 ```bash
 git clone https://github.com/flutterdelux/fsda-templates.git temp_templates
 ```
 
-Buat file `analysis_options.yaml` di root workspace, tambahkan template ke *exclude* agar tidak dianalisis oleh Dart analyzer sehingga memunculkan warning dan error analyzer di IDE:
+Create an `analysis_options.yaml` file in the workspace root, add the template to the *exclude* list so it is not analyzed by the Dart analyzer, preventing analyzer warnings and errors from appearing in the IDE:
 
 ::: code-group
 ```yaml [analysis_options.yaml]
@@ -52,13 +52,13 @@ analyzer:
 ```
 :::
 
-Ambil file `fsda.yaml` dari template, edit isinya. fsda.yaml ini berisi konfigurasi *workspace* dan *app* yang akan digunakan oleh FSDA CLI jika nanti ingin menggunakannya.
+Take the `fsda.yaml` file from the template, and edit its contents. This fsda.yaml contains the *workspace* and *app* configurations that will be used by the FSDA CLI if you want to use it later.
 
 ```bash
 cp temp_templates/fsda.yaml .
 ```
 
-Salin template package yang dibutuhkan dari folder sementara ke dalam folder `packages/` workspace. Jangan lupa jalankan `flutter pub get` di masing-masing package untuk memastikan dependensi terunduh dengan benar.
+Copy the required package templates from the temporary folder into the workspace's `packages/` folder. Don't forget to run `flutter pub get` in each package to ensure dependencies are downloaded correctly.
 
 Copy packages:
 
@@ -70,7 +70,7 @@ cp -r temp_templates/packages/infra_http packages/
 cp -r temp_templates/packages/infra_logging packages/
 ```
 
-Run pub get pada masing-masing package:
+Run pub get on each package:
 
 ```bash
 cd packages/app_core && flutter pub get && cd ../..
@@ -82,23 +82,23 @@ cd packages/infra_logging && flutter pub get && cd ../..
 
 ## 3. Setup App
 
-Langkah ini mengharuskan kita membuat project Flutter standar terlebih dahulu agar basis project sesuai dengan versi Flutter SDK yang terinstal di sistem, baru kemudian menimpanya (merge) dengan isi dari template aplikasi (misalnya base).
+This step requires us to create a standard Flutter project first so that the project base matches the Flutter SDK version installed on the system, and then overwrite (merge) it with the contents from the application template (e.g., base).
 
-Buat project Flutter dasar:
+Create a basic Flutter project:
 
 ```bash
 flutter create --empty apps/wikuy
 ```
 
-Salin dan merge isi template aplikasi ke dalam project yang baru dibuat:
+Copy and merge the application template contents into the newly created project:
 
 ```bash
 cp -r temp_templates/apps/base/* apps/wikuy/
 ```
 
-Pastikan name pubspec nya `wikuy` apabila berubah tertimpa oleh template.
+Ensure the pubspec name is `wikuy` in case it was changed when overwritten by the template.
 
-Tambahkan shared packages:
+Add shared packages:
 
 ```yaml
 dependencies:
@@ -114,7 +114,7 @@ dependencies:
     path: ../../packages/infra_logging
 ```
 
-Tambah package yang dibutuhkan infrastructure:
+Add the required infrastructure packages:
 
 ```bash
 cd apps/wikuy
@@ -122,7 +122,7 @@ dart pub add http logging
 cd ../../
 ```
 
-Daftarkan external infrastructure ke external di dan core di.
+Register external infrastructure to external di and core di.
 
 ::: code-group
 
@@ -164,9 +164,9 @@ Future<void> coreDI() async {
 
 :::
 
-Pastikan konfigurasi package_rename_config mengarah ke App ID yang benar (misal: com.fdelux.wikuy) dan sesuaikan flutter_launcher_icons.
+Make sure the package_rename_config configuration points to the correct App ID (e.g., com.fdelux.wikuy) and adjust flutter_launcher_icons.
 
-Jalankan command untuk konfigurasi App ID dan launcher icon:
+Run the command for App ID and launcher icon configuration:
 
 ```bash
 cd apps/wikuy
@@ -175,20 +175,20 @@ dart run flutter_launcher_icons
 cd ../../
 ```
 
-## 4. Pembuatan Module, Feature, Slice
+## 4. Module, Feature, and Slice Creation
 
-Sama halnya dengan aplikasi, module juga dibuat dengan melakukan `flutter create` terlebih dahulu agar kompatibel dengan lingkungan Flutter saat ini, baru kemudian dibentuk strukturnya sesuai pola *template module* bawaan FSDA.
+Similar to the application, a module is also created by running `flutter create` first to make it compatible with the current Flutter environment, and then its structure is formed according to the default FSDA *module template* pattern.
 
 ### 4.1. Module
 
-Buat *base package* module-nya:
+Create its module *base package*:
 ```bash
 flutter create modules/travel --template=package
 ```
 
-Alih-alih membuat folder dan file satu per satu, kita akan langsung meng-copy isi module dari template `modules/travel` yang ada di repositori ke dalam module yang baru kita buat.
+Instead of creating folders and files one by one, we will directly copy the module contents from the `modules/travel` template in the repository into the newly created module.
 
-Struktur awal module `travel` yang akan terbentuk:
+The initial structure of the `travel` module that will be formed:
 
 ```text
 modules/
@@ -216,15 +216,15 @@ modules/
                         └── travel_failure_x.dart
 ```
 
-Jalankan perintah berikut untuk men-copy file template:
+Run the following command to copy the template files:
 
 ```bash
 cp -r temp_templates/modules/travel/* modules/travel/
 ```
 
-Setelah menyalin file, idealnya kita perlu mengedit *file name* maupun isi *code*-nya. Namun, **karena saat ini module template juga menggunakan konteks `travel`**, maka isinya dianggap sudah sesuai dan tidak perlu diubah namanya.
+After copying the files, ideally we need to edit the *file name* and its *code* content. However, **because the template module currently also uses the `travel` context**, the content is considered appropriate and does not need to be renamed.
 
-Jalankan *post-hook* berikut di dalam folder `modules/travel` untuk me-resolve *dependencies*, men-generate file lokalisasi, dan menjalankan *build_runner*:
+Run the following *post-hook* inside the `modules/travel` folder to resolve *dependencies*, generate localization files, and run *build_runner*:
 
 ```bash
 cd modules/travel
@@ -236,9 +236,9 @@ cd ../../
 
 ### 4.2. Feature
 
-Di dalam folder `lib/src/features/`, kita akan membuat folder feature `destination` dan menginisialisasi arsitektur dasarnya.
+Inside the `lib/src/features/` folder, we will create the `destination` feature folder and initialize its basic architecture.
 
-Struktur feature `destination`:
+The `destination` feature structure:
 ```text
 modules/travel/lib/src/features/
 └── destination/
@@ -256,7 +256,7 @@ modules/travel/lib/src/features/
     └── destination_feature.dart
 ```
 
-Buat file-file tersebut dan isikan *code block* dibawah ini ke masing-masing file.
+Create those files and insert the *code block* below into each respective file.
 
 ```bash
 cd modules/travel
@@ -366,7 +366,7 @@ export 'src/shared/ui/extensions/travel_failure_x.dart';
 
 ### 4.3. Slice
 
-Karena slice ini menggunakan tipe sequence `R` (Retrieval), buat *file* yang dibutuhkan di dalam feature `destination`. 
+Since this slice uses the `R` (Retrieval) sequence type, create the required *files* inside the `destination` feature.
 
 ```bash
 cd modules/travel/lib/src/features/destination
@@ -905,7 +905,7 @@ export 'ui/list/widgets/destination_list_skeleton.dart';
 
 ### 4.4. Post Hooks
 
-Jalankan perintah berikut di dalam folder `modules/travel` untuk men-generate arb dan file freezed/json_serializable:
+Run the following command inside the `modules/travel` folder to generate arb and freezed/json_serializable files:
 
 ```bash
 cd modules/travel
@@ -915,11 +915,11 @@ cd ../../
 ```
 
 
-## 5. Register Module dan Feature DI ke App
+## 5. Register Module and Feature DI to App
 
-Setelah module selesai dibuat, module tersebut harus didaftarkan (*registered*) ke *App*.
+After the module is created, the module must be registered to the *App*.
 
-Buka `apps/wikuy/pubspec.yaml` dan daftarkan path module.
+Open `apps/wikuy/pubspec.yaml` and register the module path.
 
 ```yaml
 dependencies:
@@ -927,7 +927,7 @@ dependencies:
     path: ../../modules/travel
 ```
 
-Berikut adalah ringkasan struktur register module yang sudah terbentuk setelah module `travel` didaftarkan ke dalam app `wikuy`:
+Here is a summary of the module registration structure that has been formed after the `travel` module is registered into the `wikuy` app:
 
 ```text
 lib/
@@ -1129,9 +1129,9 @@ extension FailureX on Failure {
 
 :::
 
-## 6. Compose Slice ke Page
+## 6. Compose Slice to Page
 
-View skeleton sudah dibuat di slice list, jadi tinggal dicompose di page target beserta logic nya.
+The view skeleton has been created in the list slice, so it just needs to be composed in the target page along with its logic.
 
 ```text
 lib/
@@ -1246,15 +1246,15 @@ abstract final class TravelRoute {
 
 :::
 
-Hasil compose utama:
+Main compose result:
 
 - generate page app wrapper DestinationListPage
 - inject provider cubit retrieval
 - update route module app wrapper
 
-## 7. Buat Button Navigasi ke Destination List
+## 7. Create Navigation Button to Destination List
 
-Buka halaman Home di App (`apps/wikuy/lib/app/dashboard/pages/home_page.dart`) dan tambahkan navigasi menuju slice yang baru saja di-*compose*.
+Open the Home page in the App (`apps/wikuy/lib/app/dashboard/pages/home_page.dart`) and add navigation to the slice that has just been *composed*.
 
 ::: code-group
 
@@ -1282,14 +1282,14 @@ body: ListView(
 
 ## 8. Run & Cleanup
 
-Jalankan aplikasi.
+Run the application.
 
 ```bash
 cd apps/wikuy
 flutter run
 ```
 
-Hapus folder sementara `temp_templates` jika sudah tidak dibutuhkan lagi.
+Delete the temporary folder `temp_templates` if it is no longer needed.
 
 ```bash
 cd ../../
@@ -1298,7 +1298,7 @@ rm -rf temp_templates
 
 ## 9. Result
 
-Jika seluruh konfigurasi benar, akan menghasilkan *output* dibawah ini.
+If all configurations are correct, it will produce the output below.
 
 | Startup | Home Page | Destination List |
 |:---------:|:---------:|:------------------:|

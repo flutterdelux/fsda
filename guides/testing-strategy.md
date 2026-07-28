@@ -1,48 +1,47 @@
 # Testing Strategy
 
-Dokumen ini menjelaskan strategi testing dasar pada FSDA.
+This document describes baseline testing strategy in FSDA.
 
 ## Purpose
 
-Testing strategy membantu memastikan tiap layer dapat diverifikasi tanpa mengaburkan boundary arsitektur.
+Testing strategy ensures each layer can be verified without blurring architectural boundaries.
 
 ## Layer-Based Testing
 
-Gunakan pendekatan berikut sebagai baseline:
+Use this baseline approach:
 
-* Domain: unit test untuk use case, contract behavior, dan rule bisnis
-* Data: test untuk mapping, translation error, repository behavior, dan adapter teknis
-* Logic: test untuk state transition dan orchestration logic
-* UI: widget test untuk presentation dan interaction utama
-* App: integration atau smoke test untuk composition, route, dan dependency wiring
+* Domain: unit tests for use cases, contract behavior, and business rules
+* Data: tests for mapping, error translation, repository behavior, and technical adapters
+* Logic: tests for state transitions and orchestration logic
+* UI: widget tests for key presentation and interaction
+* App: integration or smoke tests for composition, routes, and dependency wiring
 
 ## Sequence-Based Testing
 
-Selain berdasarkan layer, testing juga dapat dilihat dari sequence.
+Besides layer focus, tests can also follow sequence behavior.
 
-Contoh fokus pengujian:
+Example focus:
 
-* Mutation: input valid, input invalid, success flow, failure flow
-* Mutation + Return: verifikasi hasil return dan side effect yang relevan
+* Mutation: valid input, invalid input, success flow, failure flow
+* Mutation + Return: verify return result and relevant side effects
 * Retrieval: success, empty state, failure, loading
 * Retrieval + Pagination: page progression, append behavior, end-of-list behavior
-* Retrieval + Stream: initial emission, update emission, failure emission bila relevan
-* Retrieval + Offline First: local hit, remote fallback, sync behavior bila ada
+* Retrieval + Stream: initial emission, update emission, failure emission when relevant
+* Retrieval + Offline First: local hit, remote fallback, sync behavior when applicable
 
 ## What To Prioritize
 
-Prioritaskan test pada area berikut:
+Prioritize tests on:
 
-* boundary yang rawan berubah
-* error translation dari Data ke Domain
-* state transition pada Logic
-* flow App composition yang kritis
+* boundaries that frequently change
+* error translation from Data to Domain
+* state transitions in Logic
+* critical App composition flows
 
 ## What To Avoid
 
-Hindari test yang:
+Avoid tests that:
 
-* terlalu terikat pada detail implementasi internal yang tidak penting
-* sulit dirawat karena setup teknisnya lebih kompleks daripada behavior yang diuji
-* mengulang verifikasi yang sama di terlalu banyak layer tanpa nilai tambah jelas
-
+* are overly tied to unimportant internal implementation details
+* are hard to maintain because technical setup is more complex than tested behavior
+* duplicate the same validation across too many layers without clear added value

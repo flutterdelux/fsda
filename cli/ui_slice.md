@@ -65,4 +65,4 @@ Recommended mapping:
 - form mutation flow with form cubit: `compose-form`
 - pagination retrieval: `compose-pag`
 - popup menu action injection: `compose-pmi`
-- retrieval section compose (provider auto-bootstrap + generated section method, placement manual): `compose-sec`
+- section compose (provider auto-bootstrap + generated section method, placement remains manual): `compose-sec`

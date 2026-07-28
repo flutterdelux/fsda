@@ -1,31 +1,31 @@
 # Commit Conventions
 
-Dokumen ini menjelaskan baseline commit convention untuk FSDA.
+This document defines baseline commit conventions for FSDA.
 
 
 ## Purpose
 
-Commit convention membantu menjaga histori repository tetap mudah dibaca, mudah ditelusuri, dan mudah direview.
+Commit conventions keep repository history readable, traceable, and review-friendly.
 
 
 ## General Rules
 
-Gunakan commit yang:
+Use commits that:
 
-* fokus pada satu concern utama
-* menjelaskan intent perubahan dengan singkat
-* tidak mencampur refactor, formatting, dan perubahan behavior besar tanpa alasan jelas
+* focus on one primary concern
+* explain change intent briefly
+* do not mix refactor, formatting, and major behavior changes without clear reason
 
 
 ## Recommended Format
 
-Format yang direkomendasikan:
+Recommended format:
 
 ```text
 <type>: <summary>
 ```
 
-Contoh:
+Examples:
 
 ```text
 docs: clarify cross-feature dependency rules
@@ -36,22 +36,22 @@ refactor: simplify module shared placement examples
 
 ## Suggested Types
 
-Gunakan type yang paling representatif:
+Use the most representative type:
 
-* `feat` untuk penambahan capability baru
-* `fix` untuk perbaikan bug atau perilaku yang salah
-* `docs` untuk perubahan dokumentasi
-* `refactor` untuk perubahan struktur internal tanpa mengubah behavior eksternal
-* `test` untuk penambahan atau perbaikan test
-* `chore` untuk pekerjaan maintenance umum
-* `build` untuk perubahan build, tooling, atau dependency setup
+* `feat` for new capability
+* `fix` for bug fix or incorrect behavior
+* `docs` for documentation changes
+* `refactor` for internal structure changes without external behavior change
+* `test` for adding or fixing tests
+* `chore` for general maintenance work
+* `build` for build, tooling, or dependency setup changes
 
 
 ## Scope Guidance
 
-Jika perlu, ringkasan dapat menyebut boundary yang berubah.
+If needed, summary may mention the changed boundary.
 
-Contoh:
+Examples:
 
 ```text
 docs: refine app composition workflow
@@ -62,16 +62,16 @@ refactor: simplify note list page example
 
 ## What To Avoid
 
-Hindari commit seperti:
+Avoid commits such as:
 
 * `update`
 * `fix bug`
 * `misc`
 * `final`
 
-Hindari juga commit yang terlalu besar dan mencampur terlalu banyak concern yang berbeda.
+Also avoid oversized commits that combine too many unrelated concerns.
 
 
 ## Documentation Changes
 
-Jika perubahan menyentuh aturan arsitektur, naming, dependency, atau structure, gunakan ringkasan yang eksplisit agar perubahan normatif mudah ditemukan kembali di histori commit.
+If a change touches architecture rules, naming, dependency, or structure, use explicit summaries so normative changes are easy to find in commit history.

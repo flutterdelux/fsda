@@ -1,12 +1,12 @@
 # Domain Layer
 
-Domain adalah pusat kontrak bisnis pada FSDA.
+The Domain is the center of the business contract in FSDA.
 
-Domain mendefinisikan apa yang aplikasi lakukan, bukan bagaimana aplikasi melakukannya.
+The Domain defines what the application does, not how the application does it.
 
-Domain merupakan layer paling stabil dan menjadi pusat dependency seluruh layer lainnya.
+The Domain is the most stable layer and acts as the dependency center for all other layers.
 
-Contoh pada dokumen ini disederhanakan agar fokus pada arsitektur. Detail teknis baseline Flutter saat ini dijelaskan pada [Development Workflow](../../guides/development-workflow.md).
+The examples in this document are simplified to focus on architecture. Current Flutter baseline technical details are explained in [Development Workflow](../../guides/development-workflow.md).
 
 ```text
 Data  ─────┐
@@ -20,7 +20,7 @@ UI ────────┘
 
 ## Responsibilities
 
-Domain bertanggung jawab terhadap:
+The Domain is responsible for:
 
 * Entity
 * Repository Contract
@@ -29,7 +29,7 @@ Domain bertanggung jawab terhadap:
 * Failure
 * Business Enum
 
-Domain tidak bertanggung jawab terhadap:
+The Domain is not responsible for:
 
 * API
 * Database
@@ -51,7 +51,7 @@ domain/
 └── usecases/
 ```
 
-Failure tetap merupakan concern domain, tetapi pada FSDA diletakkan pada module scope agar dapat digunakan bersama oleh seluruh feature di dalam module yang sama.
+Failure remains a domain concern, but in FSDA it is placed at the module scope so that it can be shared by all features within the same module.
 
 ```text
 shared/
@@ -64,9 +64,9 @@ shared/
 
 ## Entities
 
-Entity merepresentasikan model bisnis utama aplikasi.
+Entities represent the core business models of the application.
 
-Contoh:
+Example:
 
 ```dart
 final class ProductEntity {
@@ -82,7 +82,7 @@ final class ProductEntity {
 }
 ```
 
-Entity tidak mengetahui:
+Entities do not know about:
 
 * DTO
 * Request
@@ -93,11 +93,11 @@ Entity tidak mengetahui:
 
 ## Repository Contracts
 
-Repository pada domain adalah kontrak.
+A Repository in the domain is a contract.
 
-Repository mendefinisikan operasi bisnis yang dibutuhkan aplikasi.
+A Repository defines the business operations required by the application.
 
-Contoh:
+Example:
 
 ```dart
 abstract interface class ProductRepository {
@@ -105,19 +105,19 @@ abstract interface class ProductRepository {
 }
 ```
 
-Repository tidak memiliki implementasi.
+A Repository has no implementation.
 
-Implementasi berada di data layer.
+The implementation is in the data layer.
 
 
 
 ## Param
 
-Param digunakan untuk membawa input use case.
+Param is used to carry use case inputs.
 
-Param harus immutable. Detail teknis baseline Flutter saat ini dijelaskan pada [Development Workflow](../../guides/development-workflow.md).
+Param must be immutable. Current Flutter baseline technical details are explained in [Development Workflow](../../guides/development-workflow.md).
 
-Contoh:
+Example:
 
 ```dart
 final class ProductDetailParam {
@@ -131,11 +131,11 @@ final class ProductDetailParam {
 
 ## Use Cases
 
-Use Case adalah entry point bisnis.
+Use Cases are the business entry points.
 
-Use Case mengorkestrasi repository contract.
+Use Cases orchestrate repository contracts.
 
-Contoh:
+Example:
 
 ```dart
 class ProductDetailUseCase extends UseCase<ProductEntity, ProductDetailParam> {
@@ -156,9 +156,9 @@ class ProductDetailUseCase extends UseCase<ProductEntity, ProductDetailParam> {
 
 ## Business Enums
 
-Enum digunakan untuk mendefinisikan nilai bisnis.
+Enums are used to define business values.
 
-Contoh:
+Example:
 
 ```dart
 enum PaymentStatus { unpaid, paid, expired }
@@ -168,26 +168,26 @@ enum PaymentStatus { unpaid, paid, expired }
 
 ## Failures
 
-Failure merepresentasikan kegagalan bisnis.
+Failures represent business failures.
 
-Failure tidak mengetahui:
+Failures do not know about:
 
 * HTTP Error
 * SQLite Error
 
-Contoh:
+Example:
 
 ```dart
 enum ProductFailure implements Failure { productNotFound }
 ```
 
-Pada FSDA, failure diletakkan di `module/shared/domain/errors` karena merupakan domain concern yang dapat diakses bersama oleh seluruh feature di bawah module yang sama.
+In FSDA, failures are placed in `module/shared/domain/errors` because they are a domain concern that can be accessed collectively by all features under the same module.
 
 
 
 ## Dependency Rules
 
-Domain hanya boleh bergantung pada domain.
+The Domain can only depend on the domain.
 
 Allowed:
 
@@ -208,16 +208,16 @@ flutter/
 
 ## Why This Layer Exists
 
-Domain ada untuk memisahkan kontrak bisnis dari implementasi.
+The Domain exists to separate business contracts from implementations.
 
 
 
 ## Key Principle
 
-Domain adalah kontrak.
+The Domain is a contract.
 
-Domain tidak mengetahui implementasi.
+The Domain does not know about implementation.
 
-Layer lain boleh mengetahui domain.
+Other layers can know about the domain.
 
-Domain tidak boleh mengetahui layer lain.
+The Domain must not know about other layers.

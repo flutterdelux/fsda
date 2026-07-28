@@ -1,8 +1,8 @@
 # Getting Started CLI-Driven E2E - Wikuy
 
-Dokumen ini memandu pembuatan project FSDA end-to-end dengan mayoritas proses melalui FSDA CLI, lalu finalisasi manual seperlunya.
+This document guides the creation of an end-to-end FSDA project mostly through the FSDA CLI, followed by manual finalization as necessary.
 
-## Target Hasil
+## Target Output
 
 - Workspace: `Wikuy-CLI`
 - App: `wikuy`
@@ -11,18 +11,18 @@ Dokumen ini memandu pembuatan project FSDA end-to-end dengan mayoritas proses me
 - Slice: `list`
 - Sequence: `R`
 - UI: `lsv`
-- Method: `getDestinationList`
 - Compose target page: `destination_list_page`
+- Generated main page class: `DestinationListPage`
 - API source: `GET /destinations`
 
-## Prasyarat
+## Prerequisites
 
-- Flutter SDK dan Dart SDK terpasang
-- `fsda` command tersedia di terminal
+- Flutter SDK and Dart SDK installed
+- `fsda` command available in terminal
 
-## 1. Setup Workspace
+## 1. Create Workspace
 
-Jalankan di luar workspace:
+Run this outside any workspace:
 
 ```bash
 fsda create Wikuy-CLI
@@ -31,7 +31,7 @@ cd Wikuy-CLI
 
 ## 2. Setup Workspace Foundation
 
-Sesuaikan fsda.yaml agar menggunakan infra_http dan infra_logging dan jalankan configure. Atau bisa dengan command berikut:
+Adjust fsda.yaml to use infra_http and infra_logging and run configure. Or you can use the following commands:
 
 ```bash
 fsda configure
@@ -46,7 +46,7 @@ fsda gen-app wikuy
 fsda configure-app wikuy
 ```
 
-Lakukan penyesuaian App ID dan launcher icon kemudian jalankan command berikut:
+Make adjustments to the App ID and launcher icon then run the following command:
 
 ```bash
 cd apps/wikuy
@@ -55,7 +55,7 @@ dart run flutter_launcher_icons
 cd ../../
 ```
 
-Penyesuaian baseUrl untuk ApiClient di core_di.dart:
+Adjust the baseUrl for the ApiClient in core_di.dart:
 
 ::: code-group
 ```dart [core_di.dart] {2,6}
@@ -71,21 +71,21 @@ baseUrl: FDeluxMockConfig.cloudRunBaseUrl,
 
 ## 4. Generate Module, Feature, Slice
 
-
 ```bash
 fsda gen-module travel
 fsda gen-feature destination -m travel --ds remote
 fsda gen-slice list -f destination -m travel -s R -d getDestinationList -u lsv
 ```
 
-Penjelasan:
+Explanation:
 
-- `--ds remote`: karena data source dari public API
+- `--ds remote`: because the data source is a public API
 - `-s R`: retrieval sequence
 - `-d getDestinationList`: retrieval method name
 - `-u lsv`: vertical list UI bundle
 
-Lakukan penyesuaian untuk path di data source getDestinationList:
+Adjust the path in the data source getDestinationList:
+
 
 ::: code-group
 ```dart [destination_remote_data_source_impl.dart]
@@ -95,7 +95,7 @@ final response = await _apiClient.get<Map<String, dynamic>>(
 ```
 :::
 
-Dan penyesuian untuk UI:
+And adjust the UI:
 
 ::: code-group
 ```dart [destination_list_item.dart]
@@ -114,30 +114,30 @@ return AppListTile(
 ```
 :::
 
-## 5. Register Module dan Feature DI ke App
+## 5. Register Module and Install Feature DI
 
 ```bash
 fsda reg travel -a wikuy
 fsda di destination -m travel -a wikuy
 ```
 
-## 6. Compose Slice ke Page
+## 6. Compose Slice to Page
 
-`compose-main` digunakan untuk mengenerate page wrapper dengan skeleton view dari slice list, dan target page nya adalah `destination_list_page.dart`:
+`compose-main` is used to generate the page wrapper with a skeleton view from the slice list, and the target page is `destination_list_page.dart`:
 
 ```bash
 fsda compose-main list -f destination -m travel -a wikuy -p destination_list_page
 ```
 
-Hasil compose utama:
+Main compose output:
 
-- generate page app wrapper `DestinationListPage`
-- inject provider cubit retrieval
-- update route module app wrapper
+- generates app wrapper page `DestinationListPage`
+- injects retrieval cubit provider
+- updates app wrapper route wiring
 
-## 7. Buat Button Navigasi ke Destination List
+## 7. Create Navigation Button to Destination List
 
-Buka halaman Home di App (`apps/wikuy/lib/app/dashboard/pages/home_page.dart`) dan tambahkan navigasi menuju slice yang baru saja di-*compose*.
+Open the Home page in the App (`apps/wikuy/lib/app/dashboard/pages/home_page.dart`) and add navigation to the slice that was just *composed*.
 
 ::: code-group
 
@@ -170,7 +170,7 @@ cd apps/wikuy
 flutter run
 ```
 
-Jika ada import yang tidak seuai linting sehingga memunculkan IDE warning, jalankan perintah berikut untuk perbaikan:
+If there are imports that do not comply with linting and cause IDE warnings, run the following command to fix them:
 
 ```bash
 fsda fix-import -m travel -a wikuy
@@ -184,7 +184,7 @@ fsda fix-import -m travel -a wikuy
 
 ## One Shot Command
 
-Gunakan perintah berikut untuk menjalankan seluruh proses di atas dalam satu baris perintah, kemudian lakukan pemolesan manual seperlunya.
+Use the following command to run the entire process above in a single command line, then make manual adjustments as needed.
 
 ```bash
 fsda create Wikuy-CLI && \

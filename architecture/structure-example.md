@@ -1,10 +1,10 @@
 # Structure Example
 
-Dokumen ini bersifat ilustratif, bukan normatif.
+This document is illustrative, not normative.
 
-Untuk kemudahan pembacaan, contoh ini berfokus pada struktur implementasi inti dan tidak selalu mengulang setiap file dasar modul secara detail.
+For readability, this example focuses on core implementation structure and does not always repeat every module baseline file in full detail.
 
-Contoh page pada App juga perlu dibaca sebagai ilustrasi surface page. Dalam praktiknya, page dapat berupa single-slice page maupun aggregate page sesuai kebutuhan composition aplikasi.
+App page examples should be read as composition surfaces. In real projects, pages can be single-slice pages or aggregate pages.
 
 ## Example Workspace Tree
 

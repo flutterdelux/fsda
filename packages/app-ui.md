@@ -1,41 +1,41 @@
 # app_ui
 
-Package fondasi untuk design system, visual primitives, dan komponen UI bersama yang digunakan lintas aplikasi.
+Foundation package for design system, visual primitives, and shared UI components used across applications.
 
 ## Purpose
 
-`app_ui` membantu menjaga konsistensi visual dan interaction pattern tanpa memaksa feature menyimpan komponen presentasi umum di dalam boundary bisnis.
+`app_ui` maintains visual and interaction consistency without forcing features to store generic presentation components inside business boundaries.
 
 ## Typical Responsibilities
 
-Contoh isi yang cocok berada di `app_ui`:
+Examples of resources suitable for `app_ui`:
 
 * theme, color tokens, typography, spacing tokens
-* shared widget atau visual primitive lintas module
-* feedback component umum seperti loading, empty state, atau error presentation yang reusable
-* helper UI yang menjadi bagian dari design system
+* shared widgets/visual primitives reused across modules
+* reusable feedback components like loading, empty state, and error presentation
+* UI helpers that belong to design system
 
 ## Good Candidates
 
-Letakkan sesuatu di `app_ui` jika resource tersebut:
+Place resources in `app_ui` when they:
 
-* reusable lintas banyak module atau app
-* tidak membawa ownership feature bisnis tertentu
-* berfokus pada presentation, styling, atau interaction pattern umum
+* are reusable across multiple modules or apps
+* do not carry specific business feature ownership
+* focus on presentation, styling, or common interaction patterns
 
 ## Not For
 
-`app_ui` bukan tempat untuk:
+`app_ui` is not for:
 
-* page composition milik App
-* widget yang sangat spesifik ke satu feature bisnis
+* app page composition
+* widgets highly specific to one business feature
 * business orchestration
-* datasource, repository, atau use case
+* datasource, repository, or use case
 
 ## Dependency Position
 
-`app_ui` berada pada shared UI foundation.
+`app_ui` sits at shared UI foundation level.
 
-Module UI boleh bergantung ke `app_ui` untuk menjaga konsistensi komponen presentasi tanpa menarik masuk business dependency yang tidak perlu.
+Module UI may depend on `app_ui` to keep presentation consistency without pulling unnecessary business dependencies.
 
-Dalam baseline Flutter saat ini, module umumnya bergantung pada `app_ui` untuk kebutuhan standard UI lintas app maupun module.
+In current Flutter baseline, modules commonly depend on `app_ui` for standard UI needs across apps/modules.

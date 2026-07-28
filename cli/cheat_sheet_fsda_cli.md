@@ -1,53 +1,53 @@
 # FSDA CLI Cheat Sheet
 
-Panduan cepat command fsda_cli terbaru.
+Quick reference for the latest fsda_cli commands.
 
 ## 1) Setup Workspace
 
 ```bash
-# create workspace baru (jalankan di luar workspace)
+# create a new workspace (run outside workspace)
 fsda create fsda_base
 
 cd fsda_base
 
-# sinkronisasi package root dari fsda.yaml
+# sync root packages from fsda.yaml
 fsda configure
 ```
 
 ## 2) Package Management
 
 ```bash
-# lihat template package tersedia
+# list available package templates
 fsda list-pckg
 
-# tambahkan package
+# add packages
 fsda add-pckg app_core
 fsda add-pckg app_ui
 fsda add-pckg app_l10n
 
-# tambahkan infra package
+# add infra package
 fsda add-pckg infra_http
-# short infra name juga didukung (akan di-resolve)
+# infra short name is also supported (auto-resolved)
 fsda add-pckg http
 ```
 
 ## 3) Create App and Module
 
 ```bash
-# buat app
+# generate app
 fsda gen-app daylook
 
-# sinkronisasi dependency app dari workspace/packages
+# sync app dependencies from workspace/packages
 fsda configure-app daylook
 
-# buat module
+# generate module
 fsda gen-module travel
 ```
 
 ## 4) Create Feature and Slice
 
 ```bash
-# buat feature
+# generate feature
 fsda gen-feature destination -m travel --ds remote
 
 # generate retrieval slice + detail UI
@@ -60,7 +60,7 @@ fsda gen-slice bookmark -f destination -m travel -s Mp -u pmi,dialog
 fsda gen-slice create -f destination -m travel -s Mp -u form
 ```
 
-Sequence code:
+Sequence codes:
 
 - `M` mutation
 - `Mp` mutation + param
@@ -80,7 +80,7 @@ fsda gen-ui popular -f destination -m travel -u main
 fsda gen-ui bookmark -f destination -m travel -u pmi
 ```
 
-UI code yang didukung:
+Supported UI codes:
 
 - `detail`
 - `dialog`
@@ -94,10 +94,10 @@ UI code yang didukung:
 ## 6) Register Module to App
 
 ```bash
-# register module wrapper ke app
+# register module wrapper into app
 fsda reg travel -a daylook
 
-# register DI feature
+# register feature DI
 fsda di destination -m travel -a daylook
 
 # remove registration
@@ -106,19 +106,19 @@ fsda rm-reg travel -a daylook
 
 ## 7) Compose Commands (New)
 
-Gunakan command compose sesuai mode UI:
+Use compose command based on UI intent:
 
 ```bash
-# compose page utama retrieval
+# compose retrieval primary page
 fsda compose-main popular -f destination -m travel -a daylook -p destination_page
 
-# compose page utama form mutation
+# compose form mutation primary page
 fsda compose-form create -f destination -m travel -a daylook -p destination_create_page
 
-# compose page pagination
+# compose pagination page
 fsda compose-pag popular -f destination -m travel -a daylook -p destination_page
 
-# compose popup menu action ke page existing
+# compose popup menu action into existing page
 fsda compose-pmi bookmark -f destination -m travel -a daylook -p destination_page
 
 # compose section mode (retrieval auto-bootstrap + section method)
@@ -131,18 +131,18 @@ Mode guidance:
 - `compose-form`: form mutation flow
 - `compose-pag`: pagination retrieval flow
 - `compose-pmi`: popup action injection
-- `compose-sec`: retrieval section compose (provider auto-exec + section method generated; placement manual)
+- `compose-sec`: retrieval section compose (provider auto-exec + section method generated; placement remains manual)
 
 ## 8) Compose Behavior Notes
 
-- mutation compose (`compose-pmi`, `compose-form`) tidak auto-execute mutation saat provider create
-- `compose-sec` mengeksekusi method retrieval saat provider create
-- retrieval compose (`compose-main`, `compose-pag`) bisa auto-bootstrap retrieval method
-- listener success message key mengikuti pola:
+- mutation compose (`compose-pmi`, `compose-form`) does not auto-execute mutation during provider create
+- `compose-sec` executes retrieval method during provider create
+- retrieval compose (`compose-main`, `compose-pag`) may auto-bootstrap retrieval method
+- listener success key follows:
 
 `<featureCamel><slicePascal>Success`
 
-Contoh: `destinationBookmarkSuccess`
+Example: `destinationBookmarkSuccess`
 
 ## 9) One Full Example
 

@@ -1,66 +1,66 @@
 # Sequence Decision Guide
 
-Dokumen ini membantu memilih sequence yang paling sesuai untuk sebuah feature slice.
+This document helps choose the most suitable sequence for a feature slice.
 
 ## Purpose
 
-Pertanyaan pertama saat memulai implementasi di FSDA bukan lokasi folder, melainkan sequence apa yang paling tepat.
+The first question in FSDA is not folder location, but which sequence is most appropriate.
 
-Dokumen ini membantu mempercepat keputusan tersebut.
+This guide speeds up that decision.
 
 ## Quick Decision Flow
 
-Gunakan alur berikut:
+Use this flow:
 
-1. Apakah slice ini mengubah data?
-2. Jika ya, maka mulai dari keluarga `Mutation`.
-3. Jika tidak, maka mulai dari keluarga `Retrieval`.
-4. Apakah slice membutuhkan input?
-5. Apakah slice mengembalikan data hasil operasi?
-6. Apakah slice membutuhkan pagination, stream, atau offline-first behavior?
+1. Does this slice modify data?
+2. If yes, start with `Mutation` family.
+3. If not, start with `Retrieval` family.
+4. Does this slice require input?
+5. Does this slice return operation result?
+6. Does this slice need pagination, stream, or offline-first behavior?
 
 ## Mutation Family
 
-Gunakan:
+Use:
 
-* `Mutation` jika tidak membutuhkan param dan tidak mengembalikan data
-* `Mutation + Param` jika membutuhkan input
-* `Mutation + Return` jika mengembalikan hasil operasi
-* `Mutation + Return + Param` jika membutuhkan input dan mengembalikan hasil operasi
+* `Mutation` if it does not require params and does not return data
+* `Mutation + Param` if it needs input
+* `Mutation + Return` if it returns operation result
+* `Mutation + Return + Param` if it needs input and returns result
 
-Contoh:
+Examples:
 
-* `mark_all_read` → Mutation
-* `delete` → Mutation + Param
-* `take` → Mutation + Return
-* `create` → Mutation + Return + Param
+* `mark_all_read` -> Mutation
+* `delete` -> Mutation + Param
+* `take` -> Mutation + Return
+* `create` -> Mutation + Return + Param
 
 ## Retrieval Family
 
-Gunakan:
+Use:
 
-* `Retrieval` jika membaca data tanpa input tambahan
-* `Retrieval + Param` jika membaca data dengan input
-* `Retrieval + Pagination` jika daftar data perlu paging
-* `Retrieval + Stream` jika data terus berubah dan harus dipantau
-* `Retrieval + Stream + Param` jika stream juga membutuhkan input
-* `Retrieval + Offline First` jika local source menjadi prioritas awal atau membutuhkan mekanisme cache
+* `Retrieval` if it reads data without extra input
+* `Retrieval + Param` if it reads data with input
+* `Retrieval + Pagination` if list requires paging
+* `Retrieval + Stream` if data changes continuously and must be observed
+* `Retrieval + Stream + Param` if stream also requires input
+* `Retrieval + Offline First` if local source should be prioritized or requires cache mechanism
 
-Contoh:
+Examples:
 
-* `popular` → Retrieval
-* `detail` → Retrieval + Param
-* `list` → Retrieval + Pagination
-* `list` → Retrieval + Stream
-* `status` → Retrieval + Stream + Param
-* `list` → Retrieval + Offline First
+* `popular` -> Retrieval
+* `detail` -> Retrieval + Param
+* `list` -> Retrieval + Pagination
+* `list` -> Retrieval + Stream
+* `status` -> Retrieval + Stream + Param
+* `list` -> Retrieval + Offline First
 
 ## Selection Rule
 
-Satu feature slice harus dipetakan ke satu sequence yang paling jelas.
+One feature slice must map to one clear sequence.
 
-Jika satu slice terasa membutuhkan terlalu banyak sequence sekaligus, biasanya:
+If a slice seems to require too many sequences at once, usually:
 
-* slice-nya terlalu besar
-* boundary tanggung jawabnya belum cukup jelas
-* atau flow-nya perlu dipisah menjadi beberapa slice
+* the slice is too large
+* responsibility boundary is still unclear
+* or the flow should be split into multiple slices

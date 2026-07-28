@@ -1,14 +1,14 @@
 # Feature Slice Driven Architecture (FSDA)
 
-> Arsitektur Flutter yang pragmatis dan digerakkan oleh aturan, berfokus pada konsistensi, kemudahan pencarian, pemeliharaan, skalabilitas, dan automasi.
+> A pragmatic and rule-driven Flutter architecture focusing on consistency, discoverability, maintainability, scalability, and automation.
 
 
 
-## Apa itu Feature Slice Driven Architecture (FSDA)?
+## What is Feature Slice Driven Architecture (FSDA)?
 
-FSDA adalah arsitektur Flutter yang dirancang untuk membangun aplikasi yang konsisten, mudah dipahami, mudah dipelihara, dan mudah dikembangkan dalam jangka panjang.
+FSDA is a Flutter architecture designed to build applications that are consistent, easy to understand, easy to maintain, and easy to scale in the long run.
 
-Arsitektur ini menggabungkan berbagai konsep yang telah terbukti efektif dari:
+This architecture combines various proven concepts from:
 
 - Clean Architecture
 - Domain Driven Design (DDD)
@@ -20,39 +20,39 @@ Arsitektur ini menggabungkan berbagai konsep yang telah terbukti efektif dari:
 - SOLID Principles
 - Dependency Inversion Principle
 
-Namun FSDA tidak dimaksudkan sebagai salinan utuh dari satu filosofi tertentu.
+However, FSDA is not intended to be a direct copy of any single philosophy.
 
-Sebaliknya, FSDA berfokus pada bagaimana membangun struktur proyek yang konsisten, dapat diprediksi, mudah ditemukan, mudah dipahami, dan mudah diautomasi.
-
-
-
-## Mengapa FSDA?
-
-Banyak arsitektur menjelaskan:
-
-- Layer apa saja yang harus ada
-- Bagaimana dependency mengalir
-- Apa tanggung jawab setiap layer
-
-Namun sering kali tidak menjelaskan:
-
-- Di mana file harus diletakkan
-- Bagaimana struktur module dibangun
-- Bagaimana struktur feature dibangun
-- Bagaimana menjaga konsistensi antar developer
-- Bagaimana menjaga konsistensi antar project
-- Bagaimana mengurangi architectural drift
-- Bagaimana membuat struktur yang dapat diautomasi
-
-Akibatnya dua project yang mengaku menggunakan arsitektur yang sama sering kali memiliki struktur yang berbeda secara signifikan.
-
-FSDA hadir untuk mengurangi ambiguitas tersebut melalui aturan implementasi yang eksplisit dan konsisten.
+Instead, FSDA focuses on how to build project structures that are consistent, predictable, discoverable, understandable, and automatable.
 
 
 
-## Ringkasan Struktur
+## Why FSDA?
 
-FSDA menggunakan pendekatan Modular Monorepo.
+Many architectures explain:
+
+- What layers should exist
+- How dependencies flow
+- What the responsibilities of each layer are
+
+But they often do not explain:
+
+- Where files should be placed
+- How module structures are built
+- How feature structures are built
+- How to maintain consistency across developers
+- How to maintain consistency across projects
+- How to reduce architectural drift
+- How to create a structure that can be automated
+
+As a result, two projects claiming to use the same architecture often have significantly different structures.
+
+FSDA is here to reduce this ambiguity through explicit and consistent implementation rules.
+
+
+
+## Structure Summary
+
+FSDA uses a Modular Monorepo approach.
 
 ```text
 Workspace
@@ -61,29 +61,29 @@ Workspace
 └── Packages
 ```
 
-Setiap layer memiliki tanggung jawab yang jelas dan batasan yang eksplisit.
+Each layer has clear responsibilities and explicit boundaries.
 
 ---
 
 ### Workspace
 
-Workspace merupakan root dari seluruh sistem.
+Workspace is the root of the entire system.
 
-Workspace mengelompokkan:
+Workspace groups:
 
 - Apps
 - Modules
 - Shared Packages
 
-Workspace bukan tempat implementasi business logic.
+The Workspace is not a place for business logic implementation.
 
 ---
 
 ### App
 
-App Layer merupakan composition layer.
+The App Layer is a composition layer.
 
-Tanggung jawab App Layer:
+App Layer responsibilities:
 
 - Bootstrap application
 - Configure external services
@@ -93,9 +93,9 @@ Tanggung jawab App Layer:
 - Configure MaterialApp
 - Provide global state
 
-App Layer tidak mengandung business logic domain.
+The App Layer does not contain domain business logic.
 
-Contoh:
+Example:
 
 ```text
 lib/
@@ -108,11 +108,11 @@ lib/
 
 ### Module
 
-Module merupakan unit modular utama dalam FSDA.
+Module is the main modular unit in FSDA.
 
-Module mengelompokkan feature yang masih berada dalam domain bisnis yang sama.
+Modules group features that belong to the same business domain.
 
-Contoh:
+Example:
 
 ```text
 task/
@@ -121,15 +121,15 @@ task/
 └── task_milestone
 ```
 
-Module dapat digunakan oleh satu atau lebih aplikasi.
+Modules can be used by one or more applications.
 
 ---
 
 ### Feature
 
-Feature merupakan representasi capability bisnis dalam suatu module.
+A Feature is a representation of a business capability within a module.
 
-Contoh:
+Example:
 
 ```text
 task
@@ -140,15 +140,15 @@ product
 destination
 ```
 
-Feature menjadi boundary utama implementasi domain.
+A Feature serves as the primary boundary for domain implementation.
 
 ---
 
 ### Feature Slice
 
-Feature Slice merupakan unit pengembangan terkecil dalam FSDA.
+A Feature Slice is the smallest development unit in FSDA.
 
-Contoh:
+Example:
 
 ```text
 create
@@ -160,15 +160,15 @@ status
 mark_all_read
 ```
 
-Feature Slice memiliki satu tujuan yang jelas dan mengikuti satu sequence yang jelas.
+A Feature Slice has one clear purpose and follows one clear sequence.
 
 ---
 
 ### Shared Package
 
-Shared Package menyediakan fondasi yang digunakan bersama oleh seluruh sistem.
+Shared Packages provide a foundation that is shared across the entire system.
 
-Contoh:
+Example:
 
 ```text
 packages/
@@ -178,11 +178,11 @@ packages/
 └── app_ui
 ```
 
-Shared Package menyediakan kontrak, utilitas, fondasi UI, dan integrasi teknologi yang dapat digunakan oleh seluruh aplikasi dan module.
+Shared Packages provide contracts, utilities, UI foundations, and technology integrations that can be used by all applications and modules.
 
 
 
-## Layer Arsitektur
+## Architecture Layers
 
 *(Execution Flow)*
 ```
@@ -196,20 +196,20 @@ Data
  └─ implement Domain Contract
 ```
 
-Detail layer dan tanggung jawabnya dijelaskan pada:
+Layer details and responsibilities are explained in:
 
 * [Data Layer](layers/data-layer.md)
 * [Domain Layer](layers/domain-layer.md)
 * [Logic Layer](layers/logic-layer.md)
 * [UI Layer](layers/ui-layer.md)
 
-App sebagai composition layer dijelaskan terpisah pada:
+The App as a composition layer is explained separately in:
 
 * [App Layer](layers/app.md)
 
 
 
-## Ringkasan Dependency
+## Dependency Summary
 
 *(Dependency Rule)*
 ```
@@ -224,21 +224,21 @@ Logic ───┼──► Domain
 Data ────┘
 ```
 
-**Penting**: Arah panah dari UI ke Logic pada eksekusi flow bukanlah sebuah dependency struktural langsung dari layer UI, melainkan sebatas akses *method*. Yang bertugas merakit (compose) UI dan Logic adalah layer **App**. Layer UI, Logic, dan Data pada dasarnya bergantung (depend) ke layer Domain secara independen.
+**Important**: The arrow from UI to Logic in the execution flow is not a direct structural dependency from the UI layer, but rather merely a *method* access. The one responsible for assembling (composing) the UI and Logic is the **App** layer. The UI, Logic, and Data layers essentially depend on the Domain layer independently.
 
-Detail aturan dependency dijelaskan pada:
+Detailed dependency rules are explained in:
 
 * [Dependency Rules](dependency-rules.md)
 
 
 
-## Pengembangan Berbasis Sequence
+## Sequence-Based Development
 
-FSDA menggunakan pendekatan Sequence-Based Development.
+FSDA uses a Sequence-Based Development approach.
 
-Setiap Feature Slice harus mengikuti sequence yang telah didefinisikan.
+Every Feature Slice must follow a defined sequence.
 
-Contoh:
+Examples:
 
 - Mutation
 - Mutation + Param
@@ -251,21 +251,21 @@ Contoh:
 - Retrieval + Stream + Param
 - Retrieval + Offline First
 
-Sequence menyediakan pola implementasi yang konsisten, dapat diprediksi, dan mudah diautomasi.
+Sequences provide implementation patterns that are consistent, predictable, and easy to automate.
 
 
 
-## Prinsip
+## Principles
 
-Seluruh prinsip dasar FSDA dijelaskan pada:
+All core principles of FSDA are explained in:
 
 * [Principles](principles.md)
 
 
 
-## Struktur
+## Structure
 
-Struktur folder, module, feature, feature slice, dan sequence dijelaskan pada:
+The structure of folders, modules, features, feature slices, and sequences are explained in:
 
 * [Structure](structure.md)
 
@@ -273,7 +273,7 @@ Struktur folder, module, feature, feature slice, dan sequence dijelaskan pada:
 
 ## Shared Packages 
 
-Dokumentasi shared package disusun terpisah per package agar tanggung jawab tiap fondasi tetap eksplisit.
+Shared package documentation is compiled separately per package so that the responsibility of each foundation remains explicit.
 
 * [app_core](../packages/app-core.md)
 * [app_l10n](../packages/app-l10n.md)
@@ -281,21 +281,21 @@ Dokumentasi shared package disusun terpisah per package agar tanggung jawab tiap
 
 
 
-## Konvensi
+## Conventions
 
-Dokumen konvensi yang tersedia saat ini:
+Currently available convention documents:
 
 * [Naming Conventions](../conventions/naming-conventions.md)
 * [Coding Standards](../conventions/coding-standards.md)
 * [Commit Conventions](../conventions/commit-conventions.md)
 
-Konvensi lain akan dipublikasikan terpisah sesuai kebutuhan dokumentasi.
+Other conventions will be published separately according to documentation needs.
 
 
 
-## Dokumen Pendukung
+## Supporting Documents
 
-Dokumen pendukung berikut membantu menjelaskan fondasi, pengambilan keputusan, testing, dan arah tooling FSDA.
+The following supporting documents help explain the foundations, decision-making, testing, and tooling direction of FSDA.
 
 * [Foundations](foundations.md)
 * [Sequence Decision Guide](../guides/sequence-decision-guide.md)
@@ -305,20 +305,20 @@ Dokumen pendukung berikut membantu menjelaskan fondasi, pengambilan keputusan, t
 
 
 
-## Filosofi
+## Philosophy
 
-> Arsitektur yang baik membantu developer membuat keputusan.
+> A good architecture helps developers make decisions.
 
-> Arsitektur yang hebat mengurangi jumlah keputusan yang perlu dibuat oleh developer.
+> A great architecture reduces the number of decisions developers need to make.
 
-FSDA dibangun berdasarkan filosofi tersebut.
+FSDA is built upon this philosophy.
 
-Dengan aturan yang jelas, struktur yang konsisten, dan batasan yang eksplisit, developer dapat lebih fokus menyelesaikan masalah bisnis tanpa harus terus-menerus memikirkan bagaimana proyek seharusnya disusun.
+With clear rules, consistent structures, and explicit boundaries, developers can focus more on solving business problems without constantly having to think about how the project should be structured.
 
 
 
 ## Status
 
-🚧 Sedang Dalam Pengembangan Aktif
+🚧 Under Active Development
 
-FSDA terus berkembang berdasarkan pengalaman nyata dalam pengembangan aplikasi Flutter dan kebutuhan untuk menjaga konsistensi, skalabilitas, dan kemudahan automasi dalam jangka panjang.
+FSDA continues to evolve based on real-world experience in developing Flutter applications and the need to maintain consistency, scalability, and ease of automation in the long run.

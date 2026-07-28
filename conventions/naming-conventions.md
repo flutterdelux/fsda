@@ -1,28 +1,28 @@
 # Naming Conventions
 
-Dokumen ini mendefinisikan aturan penamaan (naming convention) pada FSDA.
+This document defines the naming conventions used in FSDA.
 
-Tujuan utama naming convention adalah:
+The primary goals of these conventions are:
 
-* Menjaga konsistensi struktur proyek.
-* Mempermudah navigasi kode.
-* Mempermudah automation dan code generation.
-* Membuat struktur dapat diprediksi.
-* Mengurangi keputusan naming yang bersifat subjektif.
+- Maintain a consistent project structure.
+- Improve code navigation.
+- Simplify automation and code generation.
+- Make the project structure predictable.
+- Reduce subjective naming decisions.
 
+---
 
-## General Rules
+# General Rules
 
+## File Naming
 
-### File Naming
-
-Gunakan:
+Use:
 
 ```text
 snake_case
 ```
 
-Contoh:
+Examples:
 
 ```text
 task_create_use_case.dart
@@ -33,15 +33,15 @@ inbox_mark_all_read_cubit.dart
 
 ---
 
-### Class Naming
+## Class Naming
 
-Gunakan:
+Use:
 
 ```text
 PascalCase
 ```
 
-Contoh:
+Examples:
 
 ```dart
 TaskCreateUseCase
@@ -52,15 +52,15 @@ InboxMarkAllReadCubit
 
 ---
 
-### Method Naming
+## Method Naming
 
-Gunakan:
+Use:
 
 ```text
 camelCase
 ```
 
-Contoh:
+Examples:
 
 ```dart
 createTask()
@@ -75,12 +75,11 @@ getPopularDestination()
 getRecentNote()
 ```
 
+---
 
+# Module Naming
 
-## Module Naming
-
-
-Gunakan nama domain bisnis.
+Use the business domain name.
 
 Format:
 
@@ -88,7 +87,7 @@ Format:
 <module>
 ```
 
-Contoh:
+Examples:
 
 ```text
 inbox
@@ -99,12 +98,11 @@ location
 travel
 ```
 
+---
 
+# Feature Naming
 
-## Feature Naming
-
-
-Gunakan nama resource utama yang dimiliki module.
+Use the primary resource owned by the module.
 
 Format:
 
@@ -112,7 +110,7 @@ Format:
 <feature>
 ```
 
-Contoh:
+Examples:
 
 ```text
 inbox
@@ -123,20 +121,17 @@ city
 destination
 ```
 
-
-
-## Slice Naming
-
-
-Feature slice adalah unit terkecil implementasi bisnis.
-
 ---
 
-### Mutation Slice
+# Slice Naming
 
-Gunakan action atau verb.
+A feature slice is the smallest unit of business implementation.
 
-Contoh:
+## Mutation Slice
+
+Use an action (verb).
+
+Examples:
 
 ```text
 create
@@ -149,11 +144,11 @@ mark_all_read
 
 ---
 
-### Retrieval Slice
+## Retrieval Slice
 
-Gunakan target data yang diretrieval.
+Use the target data being retrieved.
 
-Contoh:
+Examples:
 
 ```text
 list
@@ -164,16 +159,15 @@ popular
 mode
 ```
 
+---
 
+# Shared Naming
 
-## Shared Naming
+Shared components follow the ownership boundary.
 
+Their names should retain the originating feature or domain.
 
-Shared mengikuti ownership boundary.
-
-Nama shared tetap menggunakan ownership feature atau domain asalnya.
-
-Contoh:
+Examples:
 
 ```text
 product_status_x.dart
@@ -183,19 +177,18 @@ payment_status.dart
 PaymentStatus
 ```
 
-Bukan:
+Not:
 
 ```text
 shared_status_x.dart
 SharedStatusX
 ```
 
+---
 
+# Failure Naming
 
-## Failure Naming
-
-
-### File
+## File
 
 Format:
 
@@ -205,7 +198,7 @@ Format:
 
 ---
 
-### Enum
+## Enum
 
 Format:
 
@@ -213,7 +206,7 @@ Format:
 <Module>Failure
 ```
 
-Contoh:
+Examples:
 
 ```dart
 InboxFailure
@@ -223,19 +216,19 @@ TaskFailure
 
 ---
 
-### Enum Value
+## Enum Value
 
 Format:
 
 ```text
 <feature><slice><result>
 
-atau
+or
 
 <feature><result>
 ```
 
-Contoh:
+Examples:
 
 ```dart
 walletDeleteFailed
@@ -251,12 +244,11 @@ paymentStatusUnavailable
 noteNotFound
 ```
 
+---
 
+# Exception Naming
 
-## Exception Naming
-
-
-### File
+## File
 
 Format:
 
@@ -264,7 +256,7 @@ Format:
 <module>_exception.dart
 ```
 
-Contoh:
+Examples:
 
 ```text
 inbox_exception.dart
@@ -273,7 +265,7 @@ finance_exception.dart
 
 ---
 
-### Class
+## Class
 
 Format:
 
@@ -281,7 +273,7 @@ Format:
 <Module>Exception
 ```
 
-Contoh:
+Examples:
 
 ```dart
 InboxException
@@ -290,7 +282,7 @@ FinanceException
 
 ---
 
-### Factory
+## Factory
 
 Format:
 
@@ -298,7 +290,7 @@ Format:
 <feature><slice><result>
 ```
 
-Contoh:
+Examples:
 
 ```dart
 InboxException.inboxMarkAllReadFailed()
@@ -310,25 +302,24 @@ TaskException.taskCreateFailed()
 ProductException.productDetailNotFound()
 ```
 
-Jika tidak terikat pada slice dan hanya terikat pada feature, maka gunakan format:
+If the exception is not associated with a slice but only with a feature, use:
 
 ```text
 <feature><result>
 ```
 
-contoh:
+Examples:
 
 ```dart
 ProductException.productUnavailable()
 ProductException.productNotFound()
 ```
 
+---
 
+# Failure Extension Naming
 
-## Failure Extension Naming
-
-
-### File
+## File
 
 Format:
 
@@ -338,7 +329,7 @@ Format:
 
 ---
 
-### Class
+## Class
 
 Format:
 
@@ -346,7 +337,7 @@ Format:
 <Module>FailureX
 ```
 
-Contoh:
+Examples:
 
 ```dart
 InboxFailureX
@@ -355,19 +346,19 @@ FinanceFailureX
 
 ---
 
-### Localization Key
+## Localization Key
 
 Format:
 
 ```text
 failure<Feature><Slice><Result>
 
-atau
+or
 
 failure<Feature><Result>
 ```
 
-Contoh:
+Examples:
 
 ```text
 failureWalletDeleteFailed
@@ -379,12 +370,11 @@ failureInboxMarkAllReadFailed
 failureDestinationNotFound
 ```
 
+---
 
+# Feature Barrel Naming
 
-## Feature Barrel Naming
-
-
-### File
+## File
 
 Format:
 
@@ -394,16 +384,15 @@ Format:
 
 ---
 
-### Export Scope
+## Export Scope
 
-Feature barrel hanya mengekspor resource publik milik feature tersebut.
+A feature barrel should only export the public resources owned by that feature.
 
+---
 
+# Module Barrel Naming
 
-## Module Barrel Naming
-
-
-### File
+## File
 
 Format:
 
@@ -411,7 +400,7 @@ Format:
 <module>.dart
 ```
 
-Contoh:
+Examples:
 
 ```text
 inbox.dart
@@ -419,14 +408,13 @@ task.dart
 finance.dart
 ```
 
-Module barrel meneruskan export dari feature barrel yang ingin diekspos keluar module.
+A module barrel re-exports the feature barrels that should be exposed outside the module.
 
+---
 
+# Enum Naming
 
-## Enum Naming
-
-
-### File
+## File
 
 Format:
 
@@ -434,7 +422,7 @@ Format:
 <name>.dart
 ```
 
-Contoh:
+Examples:
 
 ```text
 payment_status.dart
@@ -446,7 +434,7 @@ task_priority.dart
 
 ---
 
-### Enum
+## Enum
 
 Format:
 
@@ -454,7 +442,7 @@ Format:
 <Name>
 ```
 
-Contoh:
+Examples:
 
 ```dart
 PaymentStatus
@@ -464,18 +452,17 @@ ThemeMode
 TaskPriority
 ```
 
-Enum tidak menggunakan suffix:
+Enums should **not** use the suffix:
 
 ```text
 Enum
 ```
 
+---
 
+# Entity Naming
 
-## Entity Naming
-
-
-### File
+## File
 
 Format:
 
@@ -483,7 +470,7 @@ Format:
 <feature>_entity.dart
 ```
 
-atau
+or
 
 ```text
 <feature>_<slice>_entity.dart
@@ -491,7 +478,7 @@ atau
 
 ---
 
-### Class
+## Class
 
 Format:
 
@@ -499,13 +486,13 @@ Format:
 <Feature>Entity
 ```
 
-atau
+or
 
 ```dart
 <Feature><Slice>Entity
 ```
 
-Contoh:
+Examples:
 
 ```dart
 UserEntity
@@ -515,20 +502,13 @@ TaskEntity
 ProductEntity
 ```
 
-Entity wajib menggunakan suffix:
+Entities must use the `Entity` suffix to avoid naming collisions with external packages.
 
-```text
-Entity
-```
+---
 
-untuk menghindari collision dengan package eksternal.
+# Param Naming
 
-
-
-## Param Naming
-
-
-### Folder
+## Folder
 
 Format:
 
@@ -536,7 +516,9 @@ Format:
 params/
 ```
 
-### File
+---
+
+## File
 
 Format:
 
@@ -546,7 +528,7 @@ Format:
 
 ---
 
-### Class
+## Class
 
 Format:
 
@@ -554,7 +536,7 @@ Format:
 <Feature><Slice>Param
 ```
 
-Contoh:
+Examples:
 
 ```dart
 TaskCreateParam
@@ -564,14 +546,19 @@ WalletDeleteParam
 ProductDetailParam
 ```
 
-Dipilih naming `Param` over `Params` (konvensi global) karena untuk menjaga konsistensi object modelling (Entity - Param - Dto - Request - Response) yang semuanya menggunakan bentuk singular.
+`Param` is preferred over `Params` to maintain consistency with the object model:
 
+```
+Entity → Param → Dto → Request → Response
+```
 
+where every type uses the singular form.
 
-## Repository Naming
+---
 
+# Repository Naming
 
-### Contract File
+## Contract File
 
 Format:
 
@@ -581,7 +568,7 @@ Format:
 
 ---
 
-### Contract Class
+## Contract Class
 
 Format:
 
@@ -591,11 +578,11 @@ Format:
 
 ---
 
-### Method
+## Method
 
-Gunakan nama bisnis yang natural. Namun tetap mengikuti contract dan konsistensi naming secara keseluruhan. Agar discoverability dan predictability tetap terjaga.
+Use natural business-oriented names while keeping them consistent across repository contracts.
 
-Contoh:
+Examples:
 
 ```dart
 createTask()
@@ -611,12 +598,11 @@ getCityList()
 watchPaymentStatus()
 ```
 
+---
 
+# Use Case Naming
 
-## Use Case Naming
-
-
-### File
+## File
 
 Format:
 
@@ -624,7 +610,7 @@ Format:
 <feature>_<slice>_use_case.dart
 ```
 
-Contoh:
+Examples:
 
 ```text
 task_create_use_case.dart
@@ -636,7 +622,7 @@ product_detail_use_case.dart
 
 ---
 
-### Class
+## Class
 
 Format:
 
@@ -644,7 +630,7 @@ Format:
 <Feature><Slice>UseCase
 ```
 
-Contoh:
+Examples:
 
 ```dart
 TaskCreateUseCase
@@ -654,42 +640,43 @@ WalletDeleteUseCase
 ProductDetailUseCase
 ```
 
-Use case menggunakan slice.
+Use cases are named after slices, not additional actions.
 
-Bukan action tambahan.
+---
 
+# Converter Naming
 
-
-## Converter Naming
-
-
-### File
+## File
 
 Format:
 
 ```text
 <feature>_converter.dart
+```
 
-atau
+or
 
+```text
 <feature>_<slice>_converter.dart
 ```
 
 ---
 
-### Class
+## Class
 
 Format:
 
 ```dart
 <Feature>Converter
+```
 
-atau
+or
 
+```dart
 <Feature><Slice>Converter
 ```
 
-Contoh:
+Examples:
 
 ```dart
 TaskConverter
@@ -697,24 +684,25 @@ TaskConverter
 DestinationPopularConverter
 ```
 
+---
 
+# DTO Naming
 
-## DTO Naming
-
-
-### File
+## File
 
 Format:
 
 ```text
 <feature>_dto.dart
+```
 
-atau
+or
 
+```text
 <feature>_<slice>_dto.dart
 ```
 
-Contoh:
+Examples:
 
 ```text
 city_dto.dart
@@ -724,19 +712,21 @@ destination_popular_dto.dart
 
 ---
 
-### Class
+## Class
 
 Format:
 
 ```dart
 <Feature>Dto
+```
 
-atau
+or
 
+```dart
 <Feature><Slice>Dto
 ```
 
-Contoh:
+Examples:
 
 ```dart
 CityDto
@@ -744,12 +734,11 @@ CityDto
 DestinationPopularDto
 ```
 
+---
 
+# Request Naming
 
-## Request Naming
-
-
-### File
+## File
 
 Format:
 
@@ -759,7 +748,7 @@ Format:
 
 ---
 
-### Class
+## Class
 
 Format:
 
@@ -767,7 +756,7 @@ Format:
 <Feature><Slice>Request
 ```
 
-Contoh:
+Examples:
 
 ```dart
 WalletDeleteRequest
@@ -775,12 +764,11 @@ WalletDeleteRequest
 TaskCreateRequest
 ```
 
+---
 
+# Response Naming
 
-## Response Naming
-
-
-### File
+## File
 
 Format:
 
@@ -790,7 +778,7 @@ Format:
 
 ---
 
-### Class
+## Class
 
 Format:
 
@@ -798,7 +786,7 @@ Format:
 <Feature><Slice>Response
 ```
 
-Contoh:
+Examples:
 
 ```dart
 ProductDetailResponse
@@ -806,12 +794,11 @@ ProductDetailResponse
 PaymentStatusResponse
 ```
 
+---
 
+# Datasource Naming
 
-## Datasource Naming
-
-
-### File
+## File
 
 Format:
 
@@ -827,7 +814,7 @@ Format:
 
 ---
 
-### Class
+## Class
 
 Format:
 
@@ -843,11 +830,11 @@ Format:
 
 ---
 
-### Method
+## Method
 
-Datasource method harus mengikuti repository contract yang digunakan oleh feature slice tersebut.
+Datasource methods should follow the repository contract for the corresponding feature slice.
 
-Contoh:
+Examples:
 
 ```dart
 markAllInboxRead()
@@ -863,12 +850,11 @@ getCityList()
 watchPaymentStatus()
 ```
 
+---
 
+# Repository Implementation Naming
 
-## Repository Implementation Naming
-
-
-### Implementation File
+## Implementation File
 
 Format:
 
@@ -878,7 +864,7 @@ Format:
 
 ---
 
-### Implementation Class
+## Implementation Class
 
 Format:
 
@@ -886,12 +872,11 @@ Format:
 <Feature>RepositoryImpl
 ```
 
+---
 
+# Logic Naming
 
-## Logic Naming
-
-
-### Slice Folder
+## Slice Folder
 
 Format:
 
@@ -899,7 +884,7 @@ Format:
 <slice>
 ```
 
-Contoh:
+Examples:
 
 ```text
 create
@@ -911,7 +896,7 @@ status
 
 ---
 
-### State File
+## State File
 
 Format:
 
@@ -921,7 +906,7 @@ Format:
 
 ---
 
-### State Class
+## State Class
 
 Format:
 
@@ -931,7 +916,7 @@ Format:
 
 ---
 
-### Cubit File
+## Cubit File
 
 Format:
 
@@ -941,7 +926,7 @@ Format:
 
 ---
 
-### Cubit Class
+## Cubit Class
 
 Format:
 
@@ -949,12 +934,11 @@ Format:
 <Feature><Slice>Cubit
 ```
 
+---
 
+# UI Naming
 
-## UI Naming
-
-
-### Slice Folder
+## Slice Folder
 
 Format:
 
@@ -964,7 +948,7 @@ Format:
 
 ---
 
-### View File
+## View File
 
 Format:
 
@@ -974,7 +958,7 @@ Format:
 
 ---
 
-### View Class
+## View Class
 
 Format:
 
@@ -982,7 +966,7 @@ Format:
 <Feature><Slice>View
 ```
 
-Contoh:
+Examples:
 
 ```dart
 TaskCreateView
@@ -990,23 +974,23 @@ TaskCreateView
 ProductDetailView
 ```
 
-UI menggunakan istilah:
+Use the term:
 
 ```text
 View
 ```
 
-Bukan:
+instead of:
 
 ```text
 Page
 ```
 
-karena Page merupakan responsibility App Layer.
+because `Page` belongs to the App Layer responsibility.
 
 ---
 
-### Widget File
+## Widget File
 
 Format:
 
@@ -1016,7 +1000,7 @@ Format:
 
 ---
 
-### Widget Class
+## Widget Class
 
 Format:
 
@@ -1024,7 +1008,7 @@ Format:
 <Feature><Slice><Widget>
 ```
 
-Contoh:
+Examples:
 
 ```dart
 TaskCreateForm
@@ -1034,12 +1018,11 @@ InboxMarkAllReadPopupMenuItem
 WalletDeleteDialog
 ```
 
+---
 
+# Module Compose Naming
 
-## Module Compose Naming
-
-
-### DI
+## DI
 
 Format:
 
@@ -1047,7 +1030,7 @@ Format:
 <module>_di.dart
 ```
 
-Contoh:
+Examples:
 
 ```text
 inbox_di.dart
@@ -1057,7 +1040,7 @@ task_di.dart
 
 ---
 
-### Route
+## Route
 
 Format:
 
@@ -1065,7 +1048,7 @@ Format:
 <module>_route.dart
 ```
 
-Contoh:
+Examples:
 
 ```text
 inbox_route.dart
@@ -1073,28 +1056,27 @@ inbox_route.dart
 task_route.dart
 ```
 
+---
 
+# App Compose Naming
 
-## App Compose Naming
+The application layer is responsible for composing UI and Logic.
 
+A page may represent a single primary slice or serve as an aggregate surface that combines multiple slices.
 
-App bertanggung jawab meng-compose UI dan Logic.
-
-Page dapat merepresentasikan satu primary slice atau menjadi aggregate surface yang menggabungkan beberapa slice sekaligus.
-
-Logic juga dapat diregistrasikan pada page scope atau scope yang lebih tinggi seperti root/global scope bila lifecycle dan kebutuhan composition mengharuskannya.
+Logic may also be registered at the page scope or a higher scope (such as the root/global scope) when required by lifecycle or composition needs.
 
 ---
 
-### Page File
+## Page File
 
-Default format untuk single-slice page:
+Default format for a single-slice page:
 
 ```text
 <feature>_<slice>_page.dart
 ```
 
-Contoh:
+Examples:
 
 ```text
 task_create_page.dart
@@ -1104,9 +1086,9 @@ product_detail_page.dart
 inbox_mark_all_read_page.dart
 ```
 
-Jika page menjadi aggregate surface, gunakan nama feature atau context yang paling representatif.
+If the page represents an aggregate surface, use the most representative feature or context name.
 
-Contoh:
+Examples:
 
 ```text
 product_page.dart
@@ -1115,15 +1097,15 @@ dashboard_page.dart
 
 ---
 
-### Page Class
+## Page Class
 
-Default format untuk single-slice page:
+Default format for a single-slice page:
 
 ```dart
 <Feature><Slice>Page
 ```
 
-Contoh:
+Examples:
 
 ```dart
 TaskCreatePage
@@ -1133,20 +1115,20 @@ ProductDetailPage
 InboxMarkAllReadPage
 ```
 
-Untuk aggregate page, gunakan nama surface yang paling representatif.
+For aggregate pages, use the most representative surface name.
 
-Contoh:
+Examples:
 
 ```dart
 ProductPage
 DashboardPage
 ```
 
-Page bertugas meng-compose:
+A page is responsible for composing:
 
-* View
-* Logic
-* Dependency Injection untuk lingkup UI & Logic
-* Listener
-* Provider
-* Navigation untuk spesifik aksi route terkait
+- View
+- Logic
+- Dependency Injection for the UI and Logic scope
+- Listeners
+- Providers
+- Navigation for route-specific actions

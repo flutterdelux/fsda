@@ -2,46 +2,46 @@
 
 ## 1. Modular First
 
-Aplikasi dibangun dari kumpulan module yang independen.
+Applications are built from a collection of independent modules.
 
-Setiap module merepresentasikan satu business domain yang dapat dikembangkan, diuji, dipelihara, dan digunakan kembali secara terpisah.
+Each module represents a single business domain that can be developed, tested, maintained, and reused independently.
 
-Module menjadi unit organisasi utama dalam codebase.
+Modules serve as the primary organizational unit within the codebase.
 
-Contoh:
+Examples:
 
 * Inbox Module
 * Task Module
 * Finance Module
 * Product Module
 
-App tidak berisi business logic.
+The App does not contain business logic.
 
-App hanya mengkomposisikan module yang dibutuhkan.
+The App only composes the required modules.
 
 ## 2. Feature-Oriented Design
 
-Setiap module terdiri dari satu atau lebih feature.
+Each module consists of one or more features.
 
-Feature menjadi batas fungsional yang jelas di dalam suatu business domain.
+A feature serves as a clear functional boundary within a business domain.
 
-Contoh pada Task Module:
+Example in Task Module:
 
 * Task Feature
 * Task Category Feature
 * Task Milestone Feature
 
-Feature tidak dibagi berdasarkan layer secara global.
+Features are not globally divided by layers.
 
-Feature menjadi pusat organisasi kode.
+Features are the center of code organization.
 
 ## 3. Sequence-Driven Development
 
-Implementasi feature slice harus mengikuti sequence pattern yang telah didefinisikan.
+The implementation of a feature slice must follow a defined sequence pattern.
 
-Sequence mendefinisikan pola aliran data, struktur implementasi, serta bentuk interaksi antar layer.
+A sequence defines the data flow pattern, implementation structure, and interaction form between layers.
 
-Contoh sequence:
+Sequence examples:
 
 * Mutation
 * Mutation + Param
@@ -54,9 +54,9 @@ Contoh sequence:
 * Retrieval + Stream + Param
 * Retrieval + Offline First
 
-Setiap feature slice harus dapat dipetakan ke tepat satu sequence yang jelas.
+Every feature slice must map to exactly one clear sequence.
 
-Contoh:
+Example:
 
 ```
 mark_all_read  -> Mutation
@@ -70,20 +70,20 @@ detail         -> Retrieval + Param
 list           -> Retrieval + Pagination
 ```
 
-Dengan pendekatan ini seluruh implementasi menjadi:
+With this approach, all implementations become:
 
 * predictable
-* konsisten
-* mudah dipelajari
-* mudah diautomasi
+* consistent
+* easy to learn
+* easy to automate
 
 ## 4. Single Responsibility per Feature Slice
 
-Setiap feature slice hanya merepresentasikan satu tujuan bisnis yang spesifik.
+Each feature slice represents only one specific business goal.
 
-Feature slice tidak boleh menggabungkan beberapa tujuan yang berbeda ke dalam satu implementasi.
+A feature slice must not combine multiple distinct goals into a single implementation.
 
-Contoh feature slice:
+Feature slice examples:
 
 * create
 * update
@@ -93,41 +93,41 @@ Contoh feature slice:
 * status
 * mark_all_read
 
-Setiap feature slice harus memiliki tanggung jawab yang jelas, dapat dipahami secara mandiri, dan dapat dipetakan ke satu sequence yang telah didefinisikan.
+Each feature slice must have a clear responsibility, be understandable on its own, and map to a defined sequence.
 
-Feature slice menjadi unit terkecil pengembangan dalam FSDA.
+A feature slice is the smallest development unit in FSDA.
 
-## 5. Aliran Data Eksplisit
+## 5. Explicit Data Flow
 
-Aliran data harus selalu terlihat dan dapat ditelusuri.
+Data flow must always be visible and traceable.
 
-Data bergerak secara eksplisit melalui layer.
+Data moves explicitly through layers:
 
 UI → Logic → Domain → Data
 
-Tidak diperbolehkan membuat alur tersembunyi yang sulit dipahami.
+Hidden flows that are difficult to understand are not allowed.
 
-Developer harus dapat mengikuti perjalanan data dari UI sampai sumber data dengan mudah.
+Developers must be able to easily trace the journey of data from the UI to the data source.
 
 ## 6. Dependency Inward
 
-Ketergantungan selalu mengarah ke dalam.
+Dependencies always point inward.
 
-Layer yang lebih luar boleh mengetahui layer yang lebih dalam.
+Outer layers can know about inner layers.
 
-Layer yang lebih dalam tidak boleh mengetahui layer yang lebih luar.
+Inner layers must not know about outer layers.
 
 
 ```
-(Dalam)
+(Inner)
 Domain
 
 ↑
 Logic & UI & Data
-(Luar)
+(Outer)
 ```
 
-Atau dapat digambarkan sebagai struktur composition di App:
+Or illustrated as a composition structure in App:
 ```
 App (Composition Root)
  ├── UI
@@ -140,77 +140,77 @@ Logic ───┼──► Domain
 Data ────┘
 ```
 
-Domain menjadi pusat bisnis yang independen terhadap implementasi teknis.
+Domain becomes an independent business core that is decoupled from technical implementation details.
 
 ## 7. Shared by Boundary
 
-Komponen yang digunakan bersama harus ditempatkan pada boundary terdekat yang membutuhkannya.
+Shared components must be placed at the nearest boundary that requires them.
 
-Shared bukan tempat penyimpanan kode umum tanpa batas.
+Shared is not a dumping ground for unlimited general code.
 
-Setiap shared component harus memiliki cakupan penggunaan yang jelas.
+Each shared component must have a clear usage scope.
 
 Shared Placement Guidelines:
 
-* Digunakan oleh beberapa slice dalam satu feature → letakkan pada shared yang berada dalam boundary feature tersebut.
-* Digunakan oleh beberapa feature dalam satu module → letakkan pada module shared.
-* Digunakan oleh seluruh aplikasi → letakkan pada app atau package yang sesuai.
-* Komponen tidak harus dipindahkan ke boundary yang lebih tinggi hanya karena diakses oleh boundary yang lebih tinggi. Ownership tetap mengikuti boundary penggunaan utamanya.
+* Used by multiple slices within a single feature → place in the shared directory within that feature boundary.
+* Used by multiple features within a single module → place in module shared.
+* Used across the entire app → place in app or appropriate package.
+* Components do not need to be moved to a higher boundary simply because they are accessed by a higher boundary. Ownership follows its primary usage boundary.
 
 ## 8. Consistency Over Preference
 
-Konsistensi lebih penting daripada preferensi pribadi.
+Consistency is more important than personal preference.
 
-Jika suatu pola sudah dipilih, seluruh codebase harus mengikuti pola tersebut.
+Once a pattern is chosen, the entire codebase must follow it.
 
-Developer tidak boleh membuat variasi baru hanya karena lebih menyukai gaya tertentu.
+Developers must not introduce new variations simply because they prefer a specific style.
 
-Codebase yang konsisten lebih mudah dipelajari dan dipelihara dibanding codebase yang memiliki banyak variasi.
+A consistent codebase is easier to learn and maintain than a codebase with many variations.
 
 ## 9. Discoverability First
 
-Struktur kode harus memudahkan developer menemukan sesuatu tanpa perlu mencari terlalu jauh.
+Code structure must make it easy for developers to find things without searching too far.
 
-Developer harus dapat menjawab pertanyaan berikut dengan cepat:
+Developers should be able to quickly answer questions like:
 
-* Di mana feature ini berada?
-* Di mana use case ini berada?
-* Di mana state ini berada?
-* Di mana widget ini berada?
+* Where is this feature located?
+* Where is this use case located?
+* Where is this state located?
+* Where is this widget located?
 
-Navigasi kode harus lebih diutamakan dibanding optimasi struktur yang terlalu kompleks.
+Code navigation must be prioritized over overly complex structural optimizations.
 
 ## 10. Convention Over Configuration
 
-Keputusan yang berulang harus diselesaikan melalui convention.
+Repetitive decisions should be resolved through conventions.
 
-Developer tidak perlu terus-menerus memikirkan:
+Developers should not have to constantly think about:
 
-* nama folder
-* nama file
-* lokasi class
-* lokasi state
-* lokasi widget
+* folder names
+* file names
+* class locations
+* state locations
+* widget locations
 
-Convention yang jelas mengurangi diskusi yang berulang dan mempercepat pengembangan.
+Clear conventions reduce repeated discussions and speed up development.
 
 ## 11. Scalable by Default
 
-Struktur harus tetap nyaman digunakan ketika project berkembang.
+The structure must remain comfortable to use as the project grows.
 
-Struktur yang baik harus tetap dapat digunakan saat aplikasi memiliki:
+A good structure must hold up whether the application has:
 
-* puluhan module
-* ratusan feature
-* ribuan file
+* tens of modules
+* hundreds of features
+* thousands of files
 
-Keputusan arsitektur harus dapat diterapkan pada berbagai skala aplikasi, sehingga ketika project berkembang maupun menyusut, struktur dan prinsip arsitektur tetap konsisten.
+Architectural decisions must apply to various application scales, ensuring consistency whether the project grows or shrinks.
 
 ## 12. Automation Friendly
 
-Arsitektur harus dapat dipahami oleh manusia maupun tooling.
+The architecture must be understandable by both humans and tooling.
 
-Convention yang konsisten memungkinkan:
+Consistent conventions enable:
 
 * code generation
 * scaffolding
@@ -218,4 +218,4 @@ Convention yang konsisten memungkinkan:
 * validation
 * automation
 
-Semakin sedikit pengecualian dalam struktur, semakin mudah arsitektur diotomatisasi.
+The fewer exceptions in the structure, the easier it is to automate.

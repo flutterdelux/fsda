@@ -1,20 +1,20 @@
-# Fondasi
+# Foundations
 
-Dokumen ini menjelaskan fondasi abstraksi yang sering muncul pada contoh-contoh FSDA.
+This document explains the foundational abstractions that frequently appear in FSDA examples.
 
-## Tujuan
+## Objective
 
-FSDA tidak hanya bergantung pada struktur folder, tetapi juga pada beberapa abstraction dasar yang membantu menjaga alur implementasi tetap konsisten.
+FSDA does not only depend on folder structures, but also on several basic abstractions that help maintain a consistent implementation flow.
 
-Dokumen ini tidak mengunci implementasi final satu package tertentu, tetapi menjelaskan peran abstraction yang umum dipakai.
+This document does not lock the final implementation to one specific package, but explains the role of commonly used abstractions.
 
-## Konsep Inti
+## Core Concepts
 
-Abstraction yang sering muncul antara lain:
+Abstractions that frequently appear include:
 
 * `Failure`
 * `Exception`
-* `Result` atau `AsyncResult`
+* `Result` or `AsyncResult`
 * `UseCase`
 * `Repository Contract`
 * `RepositoryExceptionHandler`
@@ -22,11 +22,11 @@ Abstraction yang sering muncul antara lain:
 
 ## Failure
 
-`Failure` merepresentasikan kegagalan di sisi domain.
+`Failure` represents a failure on the domain side.
 
-Failure dipakai oleh layer di atas Data sebagai bentuk error yang sudah diterjemahkan ke bahasa bisnis atau boundary yang lebih stabil.
+Failure is used by layers above Data as a form of error that has been translated into business language or a more stable boundary.
 
-Pada FSDA, failure yang bersifat module-scope diletakkan di:
+In FSDA, module-scope failures are placed in:
 
 ```text
 module/shared/domain/errors/
@@ -34,56 +34,56 @@ module/shared/domain/errors/
 
 ## Exception
 
-`Exception` merepresentasikan kegagalan teknis pada Data layer.
+`Exception` represents technical failures in the Data layer.
 
-Exception tidak boleh bocor ke Logic atau UI. Exception harus diterjemahkan terlebih dahulu menjadi Failure.
+Exceptions must not leak to Logic or UI. Exceptions must first be translated into Failures.
 
-Pada FSDA, exception yang bersifat module-scope diletakkan di:
+In FSDA, module-scope exceptions are placed in:
 
 ```text
 module/shared/data/errors/
 ```
 
-## Result dan AsyncResult
+## Result and AsyncResult
 
-`Result` atau `AsyncResult` membantu menjaga hasil operasi tetap eksplisit.
+`Result` or `AsyncResult` helps keep the outcome of operations explicit.
 
-Pendekatan ini biasanya digunakan agar keberhasilan dan kegagalan dapat diperlakukan secara konsisten tanpa melemparkan error ke layer atas secara sembarangan.
+This approach is usually used so that successes and failures can be treated consistently without arbitrarily throwing errors to upper layers.
 
 ## UseCase
 
-`UseCase` menjadi entry point bisnis pada Domain layer.
+`UseCase` acts as the business entry point in the Domain layer.
 
-UseCase biasanya:
+A UseCase typically:
 
-* menerima input berupa `Param`
-* memanggil `Repository Contract`
-* mengembalikan `Result` atau `AsyncResult`
+* receives input in the form of a `Param`
+* calls the `Repository Contract`
+* returns a `Result` or `AsyncResult`
 
 ## Repository Contract
 
-Repository contract berada pada Domain.
+Repository contracts reside in the Domain.
 
-Repository contract mendefinisikan operasi bisnis yang dibutuhkan, tanpa mengetahui bagaimana detail implementasinya dilakukan.
+A Repository contract defines the required business operations without knowing the details of how they are implemented.
 
 ## RepositoryExceptionHandler
 
-Abstraction ini biasanya digunakan pada Data layer untuk membantu menerjemahkan exception teknis menjadi failure yang lebih stabil.
+This abstraction is usually used in the Data layer to help translate technical exceptions into more stable failures.
 
-Implementasi konkretnya dapat berbeda, tetapi perannya tetap sama: menjaga alur error translation tetap konsisten.
+Its concrete implementation may vary, but its role remains the same: keeping the error translation flow consistent.
 
 ## AppLogger
 
-`AppLogger` atau abstraction logging sejenis dipakai untuk mencatat kejadian teknis tanpa mencampurkan detail logging ke setiap flow bisnis secara acak.
+`AppLogger` or similar logging abstractions are used to log technical events without randomly mixing logging details into every business flow.
 
-Jika logging dibutuhkan lintas banyak boundary, letakkan abstraction-nya pada fondasi yang stabil seperti `app_core` atau package shared yang sesuai.
+If logging is needed across many boundaries, place its abstraction in a stable foundation like `app_core` or an appropriate shared package.
 
-## Panduan Penempatan
+## Placement Guidelines
 
-Tidak semua abstraction harus diletakkan di tempat yang sama untuk semua project.
+Not all abstractions must be placed in the same location for all projects.
 
-Gunakan prinsip berikut:
+Use the following principles:
 
-* abstraction yang lintas sistem dan stabil cocok berada di shared package seperti `app_core`
-* abstraction yang hanya relevan di satu module tetap lebih baik berada pada boundary module tersebut
-* jangan memindahkan fondasi ke boundary yang lebih tinggi sebelum reuse dan ownership-nya benar-benar jelas
+* abstractions that cross the system and are stable belong in a shared package like `app_core`
+* abstractions that are only relevant in one module are better kept within that module's boundary
+* do not move foundations to a higher boundary until their reuse and ownership are completely clear

@@ -1,17 +1,17 @@
 # Logic Layer
 
-Logic adalah layer yang berfokus pada state management dan menjadi penghubung antara domain dengan UI. Orkestrasi tertingginya tetap berada pada App, sehingga Logic hanya menyediakan kebutuhan state management dan membiarkan App menyusunnya bersama UI.
+Logic is the layer focused on state management and acts as a bridge between the domain and UI. Its highest orchestration remains in the App, so Logic only provides state management needs and lets the App assemble them with the UI.
 
 
 
 ## Responsibilities
 
-Logic bertanggung jawab menyediakan:
+Logic is responsible for providing:
 
 * State
-* Cubit / Bloc / Provider / Controller atau state management lainnya
+* Cubit / Bloc / Provider / Controller or other state management
 
-Logic tidak bertanggung jawab terhadap:
+Logic is not responsible for:
 
 * API
 * Database
@@ -21,7 +21,7 @@ Logic tidak bertanggung jawab terhadap:
 
 ## Logic Structure
 
-Grouping di dalam layer logic bisa dilakukan berdasarkan slice fitur.
+Grouping within the logic layer can be done based on feature slices.
 
 ```text
 logic/
@@ -34,11 +34,11 @@ logic/
 
 ## Cubit
 
-Logic mengorkestrasi use case melalui state management yang digunakan. Satu Cubit biasanya hanya mengakses satu use case, sehingga kebutuhan state management-nya dapat tetap terfokus dan sederhana.
+Logic orchestrates use cases through the state management being used. A single Cubit typically accesses only one use case, keeping its state management needs focused and simple.
 
-Namun, dalam keadaan yang lebih kompleks, satu Cubit dapat mengakses lebih dari satu use case, dengan catatan state management-nya tetap terfokus dan use case-nya saling berkaitan.
+However, in more complex situations, a single Cubit may access more than one use case, provided that its state management remains focused and the use cases are interrelated.
 
-Contoh:
+Example:
 
 ```dart
 class ProductDetailCubit extends Cubit<ProductDetailState> {
@@ -72,9 +72,9 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
 
 ## State
 
-State adalah data atau snapshot yang mewakili keadaan aplikasi pada momen tertentu. State bersifat immutable, sehingga setiap perubahan nilai atau data akan menghasilkan state baru. State biasanya terdiri dari beberapa status yang jika dikelompokkan ke operasi Mutation dan Retrieval dapat digambarkan seperti berikut:
+State is data or a snapshot representing the application's condition at a specific moment. State is immutable, meaning every change in value or data results in a new state. State usually consists of several statuses, which, when categorized into Mutation and Retrieval operations, can be illustrated as follows:
 
-Pada baseline Flutter saat ini, detail implementasi state dijelaskan pada [Development Workflow](../../guides/development-workflow.md).
+In the current Flutter baseline, state implementation details are explained in the [Development Workflow](../../guides/development-workflow.md).
 
 | Mutation        | Retrieval       |
 |-----------------|-----------------|
@@ -83,11 +83,11 @@ Pada baseline Flutter saat ini, detail implementasi state dijelaskan pada [Devel
 | Success         | Loaded          |
 | Failure         | Failure         |
 
-Status state tidak harus selalu empat seperti contoh di atas. Jumlahnya bisa lebih atau kurang tergantung kebutuhan. Yang terpenting, status state harus jelas dan konsisten dalam menggambarkan keadaan aplikasi.
+State statuses do not always have to be four like the example above. The number can be more or less depending on the needs. Most importantly, the state status must clearly and consistently describe the application's condition.
 
-State dibuat pure tanpa terikat pada state management yang digunakan. Sehingga jika di masa depan perlu mengganti state management, cukup ganti state management-nya saja tanpa perlu mengubah state-nya.
+State is made pure without being tied to the state management being used. Thus, if there is a need to change state management in the future, only the state management needs to be changed without having to alter the state itself.
 
-Contoh:
+Example:
 
 ```dart
 sealed class ProductDetailState {
@@ -155,13 +155,12 @@ ui/
 
 ## Why This Layer Exists
 
-Logic ada untuk mengelola state dan alur interaksi aplikasi.
+Logic exists to manage state and application interaction flows.
 
 
 
 ## Key Principle
 
-State pada Logic dibuat murni tanpa terikat pada implementasi state management yang digunakan.
+State in Logic is created purely without being tied to the state management implementation being used.
 
-Logic hanya menjadi penghubung antara domain dengan UI, sehingga tidak boleh 
-mengetahui implementasi teknis dari datasource maupun UI.
+Logic solely acts as a bridge between the domain and UI, and therefore must not know the technical implementations of datasources or the UI.

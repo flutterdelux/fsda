@@ -1,10 +1,10 @@
 # FSDA CLI Commands Reference
 
-Dokumen ini mengikuti command surface terbaru di fsda_cli.
+This document follows the latest fsda_cli command surface.
 
 ## Workspace Rule
 
-Semua command berikut dijalankan dari workspace root yang berisi fsda.yaml:
+Run the following commands from the workspace root that contains fsda.yaml:
 
 - fsda configure
 - fsda configure-app `app`
@@ -26,48 +26,48 @@ Semua command berikut dijalankan dari workspace root yang berisi fsda.yaml:
 - fsda rm-reg `module` -a `app`
 - fsda fix-import [-m `module`] [-a `app`]
 
-`fsda create <workspace>` dijalankan di luar workspace.
+`fsda create <workspace>` is intentionally run outside the workspace root.
 
 ## Command List
 
 ### fsda create `workspace`
 
-Membuat workspace FSDA baru (apps, modules, packages, fsda.yaml).
+Create a new FSDA workspace (apps, modules, packages, fsda.yaml).
 
 ### fsda configure
 
-Sinkronisasi workspace/packages dari root `packages:` pada fsda.yaml.
+Synchronize workspace packages from the root `packages:` section in fsda.yaml.
 
 ### fsda configure-app `app`
 
-Sinkronisasi dependency app berdasarkan package yang aktif di workspace/packages.
+Synchronize app dependencies based on active packages in workspace/packages.
 
 ### fsda list-pckg
 
-Menampilkan daftar template package yang tersedia (termasuk `infra_...`).
+List available package templates (including `infra_...`).
 
 ### fsda add-pckg `name`
 
-Menambahkan satu template package ke workspace/packages dan sinkronkan fsda.yaml.
+Add one package template to workspace/packages and sync fsda.yaml.
 
-Perilaku penting:
+Important behavior:
 
-- jika `name` exact match template, langsung dipakai
-- jika `name` short infra (misalnya `http`), CLI mencoba resolve ke `infra_http`
-- package yang ter-comment di fsda.yaml akan diaktifkan
-- package yang belum ada di fsda.yaml akan ditambahkan
+- if `name` matches a template exactly, it is used directly
+- if `name` is an infra short name (for example `http`), CLI resolves it to `infra_http`
+- packages commented in fsda.yaml are activated
+- packages missing in fsda.yaml are appended
 
 ### fsda gen-app `app`
 
-Membuat project Flutter app di `apps/<app>` sesuai template FSDA.
+Create a Flutter app project in `apps/<app>` using the FSDA template.
 
 ### fsda gen-module `module`
 
-Membuat module package di `modules/<module>`.
+Create a module package in `modules/<module>`.
 
 ### fsda gen-feature `feature` -m `module` [--ds `datasource_mode`]
 
-Membuat feature di `modules/<module>/lib/src/features/<feature>`.
+Create a feature in `modules/<module>/lib/src/features/<feature>`.
 
 Datasource mode (`--ds`):
 
@@ -77,13 +77,13 @@ Datasource mode (`--ds`):
 
 ### fsda regen-feature `feature` -m `module` [--ds `datasource_mode`]
 
-Melengkapi baseline file feature yang hilang tanpa menimpa file existing.
+Fill missing baseline feature files without overwriting existing files.
 
 ### fsda gen-slice `slice` -f `feature` -m `module` -s `sequence_code` [-d `method`] [-u `ui_code`]...
 
-Generate slice dan weave ke checkpoint file sesuai sequence.
+Generate a slice and weave it into checkpoint files based on sequence rules.
 
-Sequence yang didukung:
+Supported sequence codes:
 
 - M
 - Mp
@@ -96,21 +96,21 @@ Sequence yang didukung:
 - Rsp
 - Rof
 
-Catatan:
+Notes:
 
-- `-d` optional
-- `-u` optional dan repeatable
-- target baseline datasource/repository harus sudah tersedia
+- `-d` is optional
+- `-u` is optional and repeatable
+- target baseline datasource/repository files must already exist
 
 ### fsda gen-ui `slice` -f `feature` -m `module` -u `ui_code`
 
-Generate UI bundle dan apply efek manifest `ui.yaml`:
+Generate UI bundle and apply `ui.yaml` manifest effects:
 
-- inject ARB keys ke semua `.arb` module (idempotent)
-- inject export UI ke feature barrel
-- generate file UI di boundary `ui/<slice>/...`
+- inject ARB keys into all module `.arb` files (idempotent)
+- inject UI exports into feature barrel
+- generate UI files under `ui/<slice>/...`
 
-UI code yang didukung:
+Supported UI codes:
 
 - detail
 - dialog
@@ -125,73 +125,73 @@ UI code yang didukung:
 
 ### fsda compose-main `slice` -f `feature` -m `module` -a `app` -p `target_page`
 
-Compose retrieval/main flow sebagai page scaffold utama.
+Compose retrieval/main flow as the primary page scaffold.
 
-Perilaku:
+Behavior:
 
-- membangun/replace target page
-- sinkronkan base route builder ke `NotFoundPage` + update child route
-- pada retrieval, provider boleh auto-trigger bootstrap method (`sl()..method()`)
+- builds/replaces target page
+- syncs base route builder to `NotFoundPage` + updates child route
+- for retrieval, provider can auto-trigger bootstrap method (`sl()..method()`)
 
 ### fsda compose-form `slice` -f `feature` -m `module` -a `app` -p `target_page`
 
-Compose flow form (mutasi berbasis form) sebagai page scaffold utama.
+Compose form flow (form-based mutation) as the primary page scaffold.
 
-Perilaku:
+Behavior:
 
 - inject mutation cubit provider + form cubit provider
-- inject form widget `onListen` ke form cubit
+- inject form widget `onListen` to form cubit
 - inject submit action method + listener + loading overlay
-- sinkronkan base route builder ke `NotFoundPage` + update child route
-- tidak auto-trigger mutation method di provider
+- syncs base route builder to `NotFoundPage` + updates child route
+- does not auto-trigger mutation in provider
 
 ### fsda compose-pag `slice` -f `feature` -m `module` -a `app` -p `target_page`
 
-Compose retrieval pagination page dengan state handling khusus pagination.
+Compose retrieval pagination page with pagination-aware state handling.
 
-Perilaku:
+Behavior:
 
-- generate page pagination + state mapping
-- sinkronkan base route builder ke `NotFoundPage` + update child route
-- provider retrieval boleh auto-bootstrap method
+- generates pagination page + state mapping
+- syncs base route builder to `NotFoundPage` + updates child route
+- retrieval provider may auto-bootstrap method
 
 ### fsda compose-pmi `slice` -f `feature` -m `module` -a `app` -p `target_page`
 
 Compose popup menu action injection.
 
-Perilaku:
+Behavior:
 
 - inject provider/listener/method
-- inject popup menu action ke page target
-- jika ada dialog widget, eksekusi mutation dilakukan dialog-first
-- tidak auto-trigger mutation method di provider
+- inject popup menu action into target page
+- if dialog widget exists, mutation execution follows dialog-first flow
+- does not auto-trigger mutation in provider
 
 ### fsda compose-sec `slice` -f `feature` -m `module` -a `app` -p `target_page`
 
-Compose section mode (manual widget wiring oleh developer).
+Compose section mode (manual widget wiring by developer).
 
-Perilaku:
+Behavior:
 
-- inject provider retrieval + auto-eksekusi method retrieval saat provider create
-- generate execution method untuk trigger manual (retry/refresh)
-- generate method section widget (contoh: `_destinationPopularSection()`) untuk dipanggil manual di body Scaffold/layout mana pun
-- tidak inject popup action
-- listener tidak auto-inject
-- section placement tetap manual oleh developer
+- inject retrieval provider and auto-execute retrieval method during provider create
+- generate execution method for manual trigger (retry/refresh)
+- generate section widget method (for example: `_destinationPopularSection()`) so developers can place it manually in Scaffold body or any layout container
+- does not inject popup action
+- listener is not auto-injected
+- section placement remains manual by developer
 
 ## Compose Execution Semantics
 
-- mutation-oriented compose (`compose-pmi`, `compose-form`) tidak mengeksekusi mutation saat provider create
-- `compose-sec` (section retrieval) mengeksekusi method retrieval saat provider create
-- retrieval-oriented compose (`compose-main`, `compose-pag`) boleh auto-bootstrap method retrieval di provider create
+- mutation-oriented compose (`compose-pmi`, `compose-form`) must not execute mutation during provider create
+- `compose-sec` (retrieval section mode) executes retrieval method during provider create
+- retrieval-oriented compose (`compose-main`, `compose-pag`) may auto-bootstrap retrieval method during provider create
 
 ## Listener Localization Convention
 
-Untuk listener success message hasil compose, key l10n menggunakan pola:
+For composed listener success messages, l10n key pattern is:
 
 - `<featureCamel><slicePascal>Success`
 
-Contoh:
+Examples:
 
 - `inboxMarkAllReadSuccess`
 - `walletDeleteSuccess`
@@ -201,7 +201,7 @@ Contoh:
 
 ### fsda reg `module` -a `app`
 
-Register module wrapper ke app:
+Register module wrapper into app:
 
 - app pubspec dependency
 - DI registration
@@ -211,25 +211,25 @@ Register module wrapper ke app:
 
 ### fsda di `feature` -m `module` -a `app`
 
-Generate/merge feature DI registration di wrapper module app.
+Generate/merge feature DI registration in app module wrapper.
 
 ### fsda rm-reg `module` -a `app`
 
-Remove module registration dari app target.
+Remove module registration from target app.
 
 ### fsda fix-import [-m `module`] [-a `app`]
 
-Automasi rapikan directive/import tanpa edit manual satu-per-satu file.
+Automate import cleanup and directive ordering without editing files one by one.
 
-Perilaku:
+Behavior:
 
-- menjalankan `dart fix --apply --code=directives_ordering --code=unused_import`
-- target bisa module (`-m`) dan/atau app (`-a`) dalam satu command
-- wajib minimal salah satu target (`-m` atau `-a`)
+- runs `dart fix --apply --code=directives_ordering --code=unused_import`
+- target can be module (`-m`) and/or app (`-a`) in a single command
+- requires at least one target (`-m` or `-a`)
 
 ## Legacy Note
 
-`fsda compose ... --main` adalah surface lama/transisional. Gunakan command family compose yang spesifik.
+`fsda compose ... --main` is legacy/transitional surface. Use the explicit compose command family.
 
 ## Quick Example
 

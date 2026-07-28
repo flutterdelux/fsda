@@ -1,44 +1,44 @@
 # app_core
 
-Package fondasi untuk kontrak dan utilitas inti yang stabil dan digunakan lintas aplikasi, module, atau package lain.
+Foundation package for stable core contracts and utilities used across apps, modules, or other shared packages.
 
 ## Purpose
 
-`app_core` menjadi tempat untuk resource paling dasar yang tidak membawa business feature tertentu dan tidak terikat pada implementasi teknologi spesifik.
+`app_core` stores the most basic resources that do not carry specific business feature ownership and do not depend on concrete technology implementations.
 
-Tujuannya adalah menyediakan surface yang kecil, stabil, dan aman dijadikan acuan bersama.
+The goal is to provide a small, stable, and safe shared surface.
 
 ## Typical Responsibilities
 
-Contoh isi yang cocok berada di `app_core`:
+Examples of resources suitable for `app_core`:
 
-* contract dasar seperti `Failure`, `Result`, `AsyncResult`, atau `UseCase`
-* abstraction kecil yang dipakai lintas module
-* utility inti yang benar-benar technology-agnostic
-* extension atau helper yang sangat umum dan tidak membawa ownership feature tertentu
+* base contracts such as `Failure`, `Result`, `AsyncResult`, or `UseCase`
+* small abstractions reused across modules
+* core technology-agnostic utilities
+* extensions/helpers that are very general and do not carry specific feature ownership
 
 ## Good Candidates
 
-Letakkan sesuatu di `app_core` jika resource tersebut:
+Place resources in `app_core` when they:
 
-* dipakai lintas banyak module atau package
-* bersifat stabil dan jarang berubah karena kebutuhan feature tertentu
-* tidak mengandung business capability spesifik
-* tidak bergantung pada UI atau integrasi teknologi konkret
+* are reused by many modules or packages
+* are stable and rarely change due to specific feature needs
+* do not contain specific business capability
+* do not depend on UI or concrete technology integration
 
 ## Not For
 
-`app_core` bukan tempat untuk:
+`app_core` is not for:
 
-* feature bisnis
-* widget atau design system
-* repository implementation atau datasource
-* konfigurasi teknologi konkret seperti Http, Supabase, Firebase, dan sejenisnya
+* business features
+* widgets or design system components
+* repository implementation or datasource
+* concrete technology configuration such as Http, Supabase, Firebase, and similar
 
 ## Dependency Position
 
-`app_core` idealnya menjadi salah satu fondasi paling bawah dalam shared packages.
+`app_core` should be one of the lowest shared foundations.
 
-Semakin kecil dan stabil surface `app_core`, semakin aman package ini dijadikan dependency oleh App, Module, maupun shared package lain.
+The smaller and more stable the `app_core` surface, the safer it is as dependency for App, Module, and other shared packages.
 
-Dalam baseline Flutter saat ini, module umumnya bergantung pada `app_core` untuk mengakses contract dan abstraction yang dipakai bersama lintas app maupun module.
+In current Flutter baseline, modules commonly depend on `app_core` to access shared contracts and abstractions across apps and modules.
