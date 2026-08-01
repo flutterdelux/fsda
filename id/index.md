@@ -12,10 +12,10 @@ hero:
   actions:
     - theme: brand
       text: Getting Started
-      link: /getting-started
+      link: /id/getting-started
     - theme: alt
       text: View Architecture
-      link: /architecture/architecture
+      link: /id/architecture/architecture
 
 features:
   - title: Rule-Driven

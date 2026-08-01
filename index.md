@@ -6,15 +6,15 @@ hero:
   text: "Feature Slice Driven Architecture"
   tagline: "A pragmatic, rule-driven Flutter architecture focused on consistency, discoverability, and long-term maintainability."
   image:
-    src: /logo.png
+    src: /images/logo.png
     alt: FSDA Logo
   actions:
     - theme: brand
       text: Getting Started
-      link: /en/getting-started
+      link: /getting-started
     - theme: alt
       text: View Architecture
-      link: /en/architecture/architecture
+      link: /architecture/architecture
 
 features:
   - title: Rule-Driven
