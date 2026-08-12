@@ -163,7 +163,7 @@ import '../entities/destination_entity.dart';
 abstract interface class DestinationRepository {
   // ------- Retrieval -------
 
-  AsyncResult<List<DestinationEntity>> destinationPopular();
+  AsyncResult<List<DestinationEntity>> getDestinationPopular();
 
   // ------- Mutation -------
 }
@@ -185,7 +185,7 @@ class DestinationPopularUseCase
 
   @override
   AsyncResult<List<DestinationEntity>> call() =>
-      _repository.destinationPopular();
+      _repository.getDestinationPopular();
 }
 ```
 
@@ -277,7 +277,7 @@ import '../dtos/destination_dto.dart';
 abstract interface class DestinationRemoteDataSource {
   // ------- Retrieval -------
 
-  Future<List<DestinationDto>> destinationPopular();
+  Future<List<DestinationDto>> getDestinationPopular();
 
   // ------- Mutation -------
 }
@@ -300,7 +300,7 @@ class DestinationRemoteDataSourceImpl implements DestinationRemoteDataSource {
   // ------- Retrieval -------
 
   @override
-  Future<List<DestinationDto>> destinationPopular() async {
+  Future<List<DestinationDto>> getDestinationPopular() async {
     final response = await _apiClient.get<Map<String, dynamic>>(
       '/destinations/popular',
     );
@@ -347,12 +347,12 @@ class DestinationRepositoryImpl
   // ------- Retrieval -------
 
   @override
-  AsyncResult<List<DestinationEntity>> destinationPopular() async {
+  AsyncResult<List<DestinationEntity>> getDestinationPopular() async {
     try {
-      final dtos = await _remoteDataSource.destinationPopular();
+      final dtos = await _remoteDataSource.getDestinationPopular();
       return Result.success(dtos.map((e) => e.toEntity()).toList());
     } catch (e, st) {
-      return handleException('destinationPopular', e, st);
+      return handleException('getDestinationPopular', e, st);
     }
   }
 
