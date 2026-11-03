@@ -146,21 +146,32 @@ Feature menjadi boundary utama implementasi domain.
 
 ### Feature Slice
 
-Feature Slice merupakan unit pengembangan terkecil dalam FSDA.
+Slice fitur adalah unit modular di dalam sebuah feature yang mengelompokkan komponen dengan tanggung jawab terkait. Sebuah slice dapat memiliki bagian Logic di `logic/<slice>`, bagian UI di `ui/<slice>`, atau keduanya. Folder bernama sama pada Logic dan UI merupakan bagian dari satu slice.
 
 Contoh:
 
 ```text
-create
-update
-delete
-list
-detail
-status
-mark_all_read
+features/product/
+├── logic/
+│   ├── update/
+│   └── form_update/
+└── ui/
+	└── update/
 ```
 
-Feature Slice memiliki satu tujuan yang jelas dan mengikuti satu sequence yang jelas.
+Contoh: `logic/update` dan `ui/update` adalah bagian Logic dan UI dari slice `update`. Slice `form_update` memiliki tanggung jawab berbeda dan mendukung alur update; slice ini dapat memiliki bagian Logic saja.
+
+Slice tidak harus memiliki keterkaitan langsung dengan sequence. App sebagai orchestrator memilih dan menghubungkan bagian UI dan Logic yang diperlukan dalam alur fitur. Bagian Logic dari slice `update` dapat memanggil beberapa Use Case yang masing-masing memiliki sequence; slice `form_update` dapat mengelola state/form tanpa memanggil Use Case. Beberapa slice berbeda dapat memiliki keterkaitan dengan Use Case atau sequence yang sama.
+
+Secara konseptual, struktur kebutuhan FSDA dapat dibaca sebagai:
+
+```text
+Module 1 ──► banyak Feature
+Feature 1 ──► banyak Alur Fitur
+Alur Fitur 1 ──► komposisi Slice dan/atau Sequence
+```
+
+Alur fitur (*feature flow*) adalah pengelompokan konseptual untuk menjelaskan satu kebutuhan/kemampuan yang berjalan. Ia tidak menambahkan layer atau folder baru. App menggunakan dan mengorkestrasi bagian slice UI/Logic serta sequence yang berkaitan agar alur tersebut dapat berjalan.
 
 ---
 
@@ -184,17 +195,27 @@ Shared Package menyediakan kontrak, utilitas, fondasi UI, dan integrasi teknolog
 
 ## Layer Arsitektur
 
-*(Execution Flow)*
+*(Execution Flow — interaksi runtime)*
 ```
-UI
- ↓ (calls)
-Logic
- ↓ (calls)
-Domain
+User
+ ↓ event
+UI slice (presentasi; mengirim callback)
+ ↓ callback / data melalui composition
+App (orchestrator)
+ ├── mengirim input ke Logic slice
+ ├── membaca state Logic dan memberikannya ke UI
+ └── memanggil aksi Logic
+		↓
+	Logic slice(s)
+		↓ 0..n Use Case
+	Use Case(s) ──► Repository contract (Domain)
+					  ⇣ implementasi runtime
+				Repository implementation (Data)
+					  ↓
+				Data source / external system
+```
 
-Data
- └─ implement Domain Contract
-```
+Use Case-to-data flow di atas adalah sequence. UI dan Logic slice berada di luar definisi sequence. Nilai hasil bergerak kembali melalui Use Case dan Logic; App menghubungkan state atau callback tersebut ke UI. UI tidak memanggil Logic secara langsung.
 
 Detail layer dan tanggung jawabnya dijelaskan pada:
 
@@ -224,7 +245,7 @@ Logic ───┼──► Domain
 Data ────┘
 ```
 
-**Penting**: Arah panah dari UI ke Logic pada eksekusi flow bukanlah sebuah dependency struktural langsung dari layer UI, melainkan sebatas akses *method*. Yang bertugas merakit (compose) UI dan Logic adalah layer **App**. Layer UI, Logic, dan Data pada dasarnya bergantung (depend) ke layer Domain secara independen.
+Panah dependency menunjukkan bahwa App dapat meng-compose UI, Logic, Domain, dan implementasi Data (misalnya saat registrasi DI). UI, Logic, dan Data masing-masing bergantung ke Domain sesuai kontraknya. Tidak ada dependency langsung UI → Logic; App mengorkestrasi bagian UI dan Logic melalui callback, provider, atau mekanisme composition lain.
 
 Detail aturan dependency dijelaskan pada:
 
@@ -236,22 +257,13 @@ Detail aturan dependency dijelaskan pada:
 
 FSDA menggunakan pendekatan Sequence-Based Development.
 
-Setiap Feature Slice harus mengikuti sequence yang telah didefinisikan.
+Sequence adalah pola aliran dari Use Case melalui kontrak Repository hingga implementasi Data. Sequence tidak mencakup UI atau Logic slice. Tipe Use Case ditentukan oleh kombinasi flow dan signature: async, sync, atau stream; masing-masing dapat berupa void, param, return, atau return + param. Kombinasi tersebut menghasilkan 12 tipe sequence.
 
-Contoh:
+Satu alur fitur dapat melibatkan satu atau lebih slice dan/atau sequence. Satu slice dapat berkaitan dengan beberapa sequence, dan satu sequence dapat berkaitan dengan beberapa slice atau alur fitur. App mengorkestrasi bagian UI/Logic yang relevan bersama sequence yang dibutuhkan.
 
-- Mutation
-- Mutation + Param
-- Mutation + Return
-- Mutation + Return + Param
-- Retrieval
-- Retrieval + Param
-- Retrieval + Pagination
-- Retrieval + Stream
-- Retrieval + Stream + Param
-- Retrieval + Offline First
+Istilah deskriptif **alur fitur** (*feature flow*) digunakan untuk menyebut keseluruhan proses seperti update product. Istilah ini menjelaskan keterkaitan slice, sequence, dan orkestrasi App; ia bukan unit folder atau abstraksi arsitektur formal yang wajib dibuat.
 
-Sequence menyediakan pola implementasi yang konsisten, dapat diprediksi, dan mudah diautomasi.
+Contohnya, App menggunakan dan mengorkestrasi bagian UI `ui/update`, bagian Logic `logic/update` dan `logic/form_update`, serta dua Use Case/sequence untuk upload image dan update product. Pada alur delete product, App dapat menggunakan bagian UI `ui/delete`, bagian Logic `logic/delete`, dan satu sequence delete. Susunan setiap alur ditentukan oleh kebutuhannya.
 
 
 

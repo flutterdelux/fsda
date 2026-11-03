@@ -29,7 +29,7 @@ The UI is not responsible for:
 
 ## UI Structure
 
-Visuals tied to a slice are grouped within the slice. If the visual is shared, place it in shared.
+The UI part of a feature slice is grouped under `ui/<slice>`. If a visual is shared by multiple slices, place it in shared.
 
 ```text
 ui/
@@ -52,7 +52,7 @@ class ProductDetailView extends StatelessWidget {
 }
 ```
 
-The View only receives data.
+The View receives data and the callbacks it needs to report user interactions.
 
 The View does not call the repository.
 
@@ -127,12 +127,12 @@ The UI exists to present information to the user.
 
 ## Key Principle
 
-The UI only displays data.
+The UI displays data and exposes interactions through events/callbacks provided by App.
 
-The UI does not orchestrate business.
+The UI does not orchestrate business and does not call Logic (Cubit/Bloc/Controller) directly. App connects UI callbacks with Logic actions and provides UI with the state/data needed for presentation.
 
-The UI does not know about data implementation.
+UI may handle local presentation concerns such as reading form input, validating fields for immediate feedback, and composing input values. It exposes values or interaction results through callbacks; App passes them to Logic as appropriate. Business rules and application state remain the responsibility of Domain/Logic.
 
-The UI is only allowed to know the domain models needed for presentation, not repository contracts or use cases.
+The UI does not know about data implementation, Logic implementation, repository contracts, or Use Cases.
 
 The App Layer is responsible for composing the UI and Logic.

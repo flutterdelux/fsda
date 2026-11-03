@@ -10,8 +10,9 @@ Sebagai panduan komparatif, kita akan mengambil komponen *boilerplate* dari repo
 - App: `wikuy`
 - Module: `travel`
 - Feature: `destination`
-- Slice: `list`
-- Sequence: `R` (Retrieval)
+- Logic slice: `list`
+- UI slice: `list`
+- Use Case sequence: async return (`ReturnUseCase<List<DestinationEntity>>`)
 - UI: `lsv` (list vertical)
 - Method: `getDestinationList`
 - Compose target page: `destination_list_page`
@@ -230,7 +231,7 @@ Jalankan *post-hook* berikut di dalam folder `modules/travel` untuk me-resolve *
 cd modules/travel
 flutter pub get
 flutter gen-l10n
-dart run build_runner build --force-jit --delete-conflicting-outputs
+dart run build_runner build --delete-conflicting-outputs
 cd ../../
 ```
 
@@ -364,9 +365,11 @@ export 'src/shared/ui/extensions/travel_failure_x.dart';
 
 :::
 
-### 4.3. Slice
+### 4.3. Sequence dan Slice
 
-Karena slice ini menggunakan tipe sequence `R` (Retrieval), buat *file* yang dibutuhkan di dalam feature `destination`. 
+Use Case `destination_list` tidak membutuhkan input dan mengembalikan daftar Entity secara async, sehingga contract sequence-nya adalah `ReturnUseCase<List<DestinationEntity>>`. Secara terpisah, implementasi memiliki Logic slice `list` dan UI slice `list`; App mengorkestrasi keduanya. UI menerima data serta callback dan tidak memanggil Cubit secara langsung.
+
+Buat file Use Case, Logic slice, UI slice, serta Data/Domain yang dibutuhkan di dalam feature `destination`.
 
 ```bash
 cd modules/travel/lib/src/features/destination
@@ -545,8 +548,6 @@ class DestinationRepositoryImpl
   @override
   AppLogger get log => _log;
 
-  // ------- Retrieval -------
-
   @override
   AsyncResult<List<DestinationEntity>> getDestinationList() async {
     try {
@@ -557,7 +558,6 @@ class DestinationRepositoryImpl
     }
   }
 
-  // ------- Mutation -------
 }
 ```
 
@@ -589,7 +589,7 @@ import '../entities/destination_entity.dart';
 import '../repositories/destination_repository.dart';
 
 class DestinationListUseCase
-    extends NoParamUseCase<List<DestinationEntity>> {
+  extends ReturnUseCase<List<DestinationEntity>> {
   final DestinationRepository _repository;
 
   const DestinationListUseCase({
@@ -910,7 +910,7 @@ Jalankan perintah berikut di dalam folder `modules/travel` untuk men-generate ar
 ```bash
 cd modules/travel
 flutter gen-l10n
-dart run build_runner build --force-jit --delete-conflicting-outputs
+dart run build_runner build --delete-conflicting-outputs
 cd ../../
 ```
 
@@ -1131,7 +1131,7 @@ extension FailureX on Failure {
 
 ## 6. Compose Slice ke Page
 
-View skeleton sudah dibuat di slice list, jadi tinggal dicompose di page target beserta logic nya.
+View skeleton sudah dibuat di slice list. Compose View dan Logic pada Page milik App; Page mengorkestrasi pemanggilan Cubit dan memberikan callback ke UI. Interaksi user memicu callback tersebut, bukan pemanggilan Logic langsung dari UI.
 
 ```text
 lib/

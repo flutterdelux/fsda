@@ -37,38 +37,9 @@ Features are the center of code organization.
 
 ## 3. Sequence-Driven Development
 
-The implementation of a feature slice must follow a defined sequence pattern.
+Sequence standardizes the flow from a Use Case through the Domain Repository contract to its Data implementation. Sequence types are based on the Use Case signature: three flows (async, sync, stream), each with four forms (void, param, return, return + param), resulting in 12 types.
 
-A sequence defines the data flow pattern, implementation structure, and interaction form between layers.
-
-Sequence examples:
-
-* Mutation
-* Mutation + Param
-* Mutation + Return
-* Mutation + Return + Param
-* Retrieval
-* Retrieval + Param
-* Retrieval + Pagination
-* Retrieval + Stream
-* Retrieval + Stream + Param
-* Retrieval + Offline First
-
-Every feature slice must map to exactly one clear sequence.
-
-Example:
-
-```
-mark_all_read  -> Mutation
-
-delete         -> Mutation + Param
-
-create         -> Mutation + Return + Param
-
-detail         -> Retrieval + Param
-
-list           -> Retrieval + Pagination
-```
+A sequence is related to a Use Case contract and the Domain-to-Data flow, not owned by a UI slice. The Logic part of a slice may call one or more Use Cases; a slice may also manage local state without a Use Case. App orchestrates the relevant UI/Logic parts with the sequences needed for a feature flow. See [Sequence Pattern](sequence-pattern.md) for the contracts and types.
 
 With this approach, all implementations become:
 
@@ -77,11 +48,11 @@ With this approach, all implementations become:
 * easy to learn
 * easy to automate
 
-## 4. Single Responsibility per Feature Slice
+## 4. Feature Slices and Responsibility
 
-Each feature slice represents only one specific business goal.
+A feature slice is a modular grouping of related components within a feature. It may have an implementation part under `logic/<slice>`, `ui/<slice>`, or both. The folders `logic/update` and `ui/update` are the Logic and UI parts of the `update` slice. UI exposes interactions through callbacks; App connects those callbacks to Logic.
 
-A feature slice must not combine multiple distinct goals into a single implementation.
+A slice should have a clear focus. Its Logic part may call multiple Use Cases/sequences, or no Use Case at all. Different slices may be related to the same Use Case/sequence, and a feature flow may involve several slices and sequences.
 
 Feature slice examples:
 
@@ -93,17 +64,21 @@ Feature slice examples:
 * status
 * mark_all_read
 
-Each feature slice must have a clear responsibility, be understandable on its own, and map to a defined sequence.
+Each slice should have a clear responsibility and be understandable on its own. A slice name groups a feature responsibility; a sequence describes the Use Case-to-Data contract and is not determined by the slice name.
 
-A feature slice is the smallest development unit in FSDA.
+In FSDA, a Module may contain many Features, a Feature may support many feature flows, and a feature flow may involve multiple slices and/or sequences. App uses and orchestrates related components to run each flow.
 
 ## 5. Explicit Data Flow
 
 Data flow must always be visible and traceable.
 
-Data moves explicitly through layers:
+At runtime, App orchestrates communication between UI and Logic. UI provides callbacks for interactions and receives data/state for presentation; it does not call Logic directly.
 
-UI → Logic → Domain → Data
+User → UI part (callback) → App (composition/orchestration)
+			   ├── provides data/state to UI
+			   └── dispatches actions/input to Logic part(s)
+				      ↓ calls related Use Case(s)
+			      Sequence(s): Domain contract → Data implementation
 
 Hidden flows that are difficult to understand are not allowed.
 

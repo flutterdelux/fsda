@@ -1,66 +1,47 @@
-# Sequence Decision Guide
+# Sequence and Feature Slice Decision Guide
 
-This document helps choose the most suitable sequence for a feature slice.
+Sequence and feature slice answer different questions:
 
-## Purpose
+* **Sequence**: what contract defines a Use Case-to-Data flow?
+* **Feature slice**: what related components are grouped into a modular unit within a feature, and which Logic/UI parts are needed?
 
-The first question in FSDA is not folder location, but which sequence is most appropriate.
+Choose a sequence from the Use Case contract, not from a slice name. The relationship between slices and sequences follows the feature flow; it is not a fixed one-to-one mapping.
 
-This guide speeds up that decision.
+## Determine a Use Case Sequence Type
 
-## Quick Decision Flow
+Decide two things from the Use Case contract:
 
-Use this flow:
+1. Is its flow `async`, `sync`, or `stream`?
+2. Is its signature `void`, `param`, `return`, or `return + param`?
 
-1. Does this slice modify data?
-2. If yes, start with `Mutation` family.
-3. If not, start with `Retrieval` family.
-4. Does this slice require input?
-5. Does this slice return operation result?
-6. Does this slice need pagination, stream, or offline-first behavior?
+Together these determine one of the 12 Use Case contracts listed in [Sequence Pattern](../architecture/sequence-pattern.md). Examples:
 
-## Mutation Family
+* Async operation with no input or result payload → `VoidUseCase`.
+* Async operation with input and no result payload → `ParamUseCase<P>`.
+* Async operation returning an Entity without input → `ReturnUseCase<T>`.
+* Async operation accepting a Param and returning an Entity → `ReturnParamUseCase<T, P>`.
+* For sync and stream operations, use the corresponding contract ending in `Sync` or `Stream`.
 
-Use:
+Pagination, a specific limit such as `5`, offline-first behavior, and state transformation are not separate sequence types. Place each behavior in the Param/Use Case, Logic, or Data according to its ownership. For example, `list` and `recent` slices may be related to the same Use Case and sequence type but provide different parameters. App orchestrates the relevant UI/Logic parts and sequences for each flow.
 
-* `Mutation` if it does not require params and does not return data
-* `Mutation + Param` if it needs input
-* `Mutation + Return` if it returns operation result
-* `Mutation + Return + Param` if it needs input and returns result
+## Identify Related Feature Slices
 
-Examples:
+After identifying the requirement and its Use Cases, group components according to their responsibilities:
 
-* `mark_all_read` -> Mutation
-* `delete` -> Mutation + Param
-* `take` -> Mutation + Return
-* `create` -> Mutation + Return + Param
+* The Logic part of a slice manages state and may call one or more Use Cases. A form slice may manage local input/validation state without calling a Use Case.
+* The UI part of a slice groups its views and widgets. UI presents data and sends interactions through callbacks.
+* App uses and orchestrates the related UI/Logic parts and sequences, including passing inputs and dispatching actions.
 
-## Retrieval Family
+The folders `logic/update` and `ui/update` are the Logic and UI parts of the `update` slice. A differently named slice such as `form_update` can support the same feature flow.
 
-Use:
+## Example: Product Update
 
-* `Retrieval` if it reads data without extra input
-* `Retrieval + Param` if it reads data with input
-* `Retrieval + Pagination` if list requires paging
-* `Retrieval + Stream` if data changes continuously and must be observed
-* `Retrieval + Stream + Param` if stream also requires input
-* `Retrieval + Offline First` if local source should be prioritized or requires cache mechanism
+* App orchestrates the UI part `ui/update` and Logic parts `logic/update` and `logic/form_update`.
+* Logic `update` calls image-upload and product-update Use Cases, each with its own sequence.
+* Slice `form_update` manages form state and may have no direct relationship with a sequence.
 
-Examples:
+## Example: Reusing a Sequence
 
-* `popular` -> Retrieval
-* `detail` -> Retrieval + Param
-* `list` -> Retrieval + Pagination
-* `list` -> Retrieval + Stream
-* `status` -> Retrieval + Stream + Param
-* `list` -> Retrieval + Offline First
+App may orchestrate `list` and `recent` slices with UI parts `ui/list` and `ui/recent`, and Logic parts related to the same Use Case/sequence. The `recent` flow may supply a limit of `5`, while `list` supplies pagination parameters.
 
-## Selection Rule
-
-One feature slice must map to one clear sequence.
-
-If a slice seems to require too many sequences at once, usually:
-
-* the slice is too large
-* responsibility boundary is still unclear
-* or the flow should be split into multiple slices
+Use **feature flow** as a descriptive term for the whole requirement. It is not a required folder or additional architectural abstraction.

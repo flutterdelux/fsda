@@ -21,11 +21,11 @@ Logic tidak bertanggung jawab terhadap:
 
 ## Logic Structure
 
-Grouping di dalam layer logic bisa dilakukan berdasarkan slice fitur.
+Logic menyimpan bagian state/orchestration dari slice fitur di dalam `logic/<slice>`. Nama folder tersebut mengikuti nama slice, bukan nama sequence. Jika slice yang sama memiliki bagian UI, folder UI-nya menggunakan nama sepadan di `ui/<slice>`; App yang mengorkestrasi kedua bagian tersebut.
 
 ```text
 logic/
-└── <slice>/
+└── <logic_slice>/
     ├── feature_slice_cubit.dart
     └── feature_slice_state.dart
 ```
@@ -34,9 +34,9 @@ logic/
 
 ## Cubit
 
-Logic mengorkestrasi use case melalui state management yang digunakan. Satu Cubit biasanya hanya mengakses satu use case, sehingga kebutuhan state management-nya dapat tetap terfokus dan sederhana.
+Logic memanggil Use Case melalui state management yang digunakan. Bagian Logic dari satu slice dapat memanggil satu atau lebih Use Case yang berkaitan dengan tanggung jawab slice tersebut. App mengorkestrasi bagian UI/Logic dan sequence yang relevan dalam alur fitur.
 
-Namun, dalam keadaan yang lebih kompleks, satu Cubit dapat mengakses lebih dari satu use case, dengan catatan state management-nya tetap terfokus dan use case-nya saling berkaitan.
+Slice seperti `form_update` juga dapat memiliki bagian Logic untuk mengelola state form/input atau koordinasi lokal tanpa memanggil Use Case secara langsung. Dengan demikian, tidak setiap slice memiliki sequence.
 
 Contoh:
 
@@ -117,21 +117,19 @@ final class ProductDetailFailure extends ProductDetailState {
 
 
 
-## Flow
+## Hubungan dengan App dan Sequence
 
 ```text
-UI
- ↓
-Cubit
- ↓
-Use Case
- ↓
-Repository Contract
- ↓
-Repository Impl
- ↓
-Datasource
+UI slice --callback--> App orchestrator --action/input--> Logic slice(s)
+                |
+                +--> Use Case(s)
+                  ↓
+                  Repository contract
+                  ⇣ implemented by
+                  Repository/Data source
 ```
+
+Use Case hingga Data adalah sequence. UI dan Logic slice berada di luar sequence; App menghubungkan interaksi dan data antar layer. Satu bagian Logic dapat memanggil beberapa Use Case, dan beberapa bagian Logic dapat berkaitan dengan Use Case yang sama.
 
 
 

@@ -135,10 +135,12 @@ Use Cases are the business entry points.
 
 Use Cases orchestrate repository contracts.
 
+The Use Case contract determines its sequence type from its flow and signature. The example accepts a Param and returns an Entity asynchronously, so it extends `ReturnParamUseCase<T, P>`.
+
 Example:
 
 ```dart
-class ProductDetailUseCase extends UseCase<ProductEntity, ProductDetailParam> {
+class ProductDetailUseCase extends ReturnParamUseCase<ProductEntity, ProductDetailParam> {
   final ProductRepository _repository;
 
   const ProductDetailUseCase({required ProductRepository productRepository})

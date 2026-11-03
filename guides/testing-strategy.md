@@ -11,36 +11,23 @@ Testing in FSDA is used to:
 * make sequence implementation predictable
 * reduce regression risk as modules grow
 
-## Testing Artifact Hierarchy
+## Testing References
 
-FSDA testing follows three explicit artifacts:
-
-1. Sequence: the primary reference for interaction flow.
-2. Blueprint: the primary reference for implementation structure.
-3. Testing Blueprint: the primary reference for automated tests derived from the implemented blueprint.
-
-Use them in this order: Sequence -> Blueprint -> Testing Blueprint.
-
-Reference boundary rule:
-
-* Blueprint translates and constrains Sequence into implementation contracts.
-* Automated tests must primarily reference Blueprint contracts.
-* Sequence remains upstream context for Blueprint, not a direct replacement for Blueprint in test design.
+Design tests according to each layer's responsibility, Use Case sequence contracts, feature-slice boundaries, and App composition.
 
 ## FSDA Testing Principles
 
 Use these principles as the default baseline:
 
-* Translate Sequence into Blueprint first, then design tests from that Blueprint. Do not design tests from folders alone.
 * Test by ownership boundary. Keep assertions near the layer that owns the behavior.
 * Keep test ownership explicit: one production unit file should have one dedicated test file when practical.
 * Validate contract, not implementation details.
 * Keep tests deterministic and fast by default.
 * Add integration depth only where composition risk exists.
 
-## Retrieval Pilot Baseline (Travel / Destination / Popular)
+## Pilot Baseline (Travel / Destination / Popular)
 
-The first concrete FSDA testing pilot is Retrieval (R) on travel destination popular.
+The first concrete FSDA testing pilot covers the `getPopularDestination` Use Case and the `popular` Logic/UI slice in the travel/destination feature.
 
 Use this as a reference baseline for future slices:
 
@@ -48,9 +35,9 @@ Use this as a reference baseline for future slices:
 | --- | --- | --- |
 | Module Domain | use case contract forwarding and failure behavior | `domain/usecases/*_use_case_test.dart` |
 | Module Data | datasource parsing, repository mapping, exception translation | `data/datasources/*_impl_test.dart`, `data/repositories/*_impl_test.dart` |
-| Module Logic | state transitions (loading, loaded, empty, failure) | `logic/<slice>/*_cubit_test.dart` |
-| Module UI | widget behavior per owned widget file | `ui/<slice>/widgets/*_test.dart` and `ui/<slice>/widgets/parts/*_test.dart` |
-| App Integration | page orchestration, DI composition, route smoke | `test/modules/.../*_widget_test.dart`, `test/modules/.../*_di_test.dart` |
+| Module Logic | state transitions (loading, loaded, empty, failure) per slice | `logic/<logic_slice>/*_cubit_test.dart` |
+| Module UI | widget behavior per owned widget file | `ui/<ui_slice>/widgets/*_test.dart` and `ui/<ui_slice>/widgets/parts/*_test.dart` |
+| App Integration | App-owned UI/Logic/Use Case composition, DI, and route smoke | `test/modules/.../*_widget_test.dart`, `test/modules/.../*_di_test.dart` |
 
 ## Layer-Based Testing Matrix
 
@@ -77,9 +64,9 @@ Use this baseline approach:
 
 * Domain: unit tests for use cases, contract behavior, and business rules
 * Data: tests for mapping, error translation, repository behavior, and technical adapters
-* Logic: tests for state transitions and orchestration logic
-* UI: widget tests for key presentation and interaction
-* App: integration or smoke tests for composition, routes, and dependency wiring
+* Logic: tests for state transitions and orchestration in each relevant slice
+* UI: widget tests for presentation and interactions in each relevant UI part
+* App: integration or smoke tests for composition, routes, dependency wiring, and callback/event dispatch to Logic
 
 ### Entity Test Policy
 
@@ -99,33 +86,18 @@ Optional when the entity is:
 
 In early test rollout, it is valid to prioritize higher-risk boundaries first (use case, data translation, logic state, UI state, app wiring), then add entity tests when entity behavior evolves.
 
-## Sequence-Based Testing
+## Sequence Contract and Feature Slice Testing
 
-Besides layer focus, tests must also follow sequence behavior through blueprint-defined contracts.
+A sequence is a Use Case-to-Data contract. Test each Use Case according to its flow/signature, independently of the Logic/UI slice name. At minimum, verify:
 
-### Minimum Scenario Checklist Per Sequence
+* Async/sync Use Cases: forwarded input (if any), result or `void`, and failure behavior.
+* Stream Use Cases: emissions, failure emissions, and cancellation/close where lifecycle applies.
+* Param Use Cases: mapping of Param values to repository/data contracts.
+* Return Use Cases: result payloads, including DTO-to-Entity mapping at the responsible boundary.
 
-| Sequence | Minimum Scenarios |
-| --- | --- |
-| Mutation (M) | success, failure, expected side effect |
-| Mutation + Param (Mp) | valid param, invalid param, failure mapping |
-| Mutation + Return (Mr) | success return payload, failure, side effect consistency |
-| Mutation + Return + Param (Mrp) | valid param + return, invalid param path, failure mapping |
-| Retrieval (R) | loading, loaded, empty, failure |
-| Retrieval + Param (Rp) | valid param loaded, invalid param path, failure |
-| Retrieval + Pagination (Rpag) | first page, append page, end-of-list, pagination failure |
-| Retrieval + Stream (Rs) | initial emission, update emission, failure/close behavior |
-| Retrieval + Stream + Param (Rsp) | valid param stream, update emission, failure/close behavior |
-| Retrieval + Offline First (Rof) | local hit, remote fallback, cache update/sync behavior |
+Pagination, specific limits, offline-first behavior, and state transformation are tested at the layer that owns them. For example, pagination/load-more and a limit of `5` belong in tests for the Logic part that builds parameters; cache/fallback behavior belongs in Data tests; loading/loaded/error state belongs in Logic tests; rendering and callbacks belong in UI tests.
 
-Example focus:
-
-* Mutation: valid input, invalid input, success flow, failure flow
-* Mutation + Return: verify return result and relevant side effects
-* Retrieval: success, empty state, failure, loading
-* Retrieval + Pagination: page progression, append behavior, end-of-list behavior
-* Retrieval + Stream: initial emission, update emission, failure emission when relevant
-* Retrieval + Offline First: local hit, remote fallback, sync behavior when applicable
+When a Logic part calls multiple Use Cases, test orchestration for each success/failure path. A form Logic part with no Use Case is tested for input, local validation, and state transitions. UI is tested without direct Logic access, using callbacks and data as its boundaries.
 
 ## Recommended Test File Structure
 
@@ -138,10 +110,10 @@ modules/
 				└── src/
 						└── features/
 								└── <feature>/
-										├── domain/usecases/<feature>_<slice>_use_case_test.dart
+										├── domain/usecases/<use_case_name>_test.dart
 										├── data/repositories/<feature>_repository_impl_test.dart
-										├── logic/<slice>/<feature>_<slice>_cubit_test.dart
-										└── ui/<slice>/views/<feature>_<slice>_view_test.dart
+										├── logic/<logic_slice>/<feature>_<logic_slice>_cubit_test.dart
+										└── ui/<ui_slice>/views/<feature>_<ui_slice>_view_test.dart
 
 apps/
 └── <app>/
@@ -201,9 +173,9 @@ Use test doubles intentionally:
 
 Avoid mocking value objects such as Params, Entities, or basic enums.
 
-## Definition Of Done Per Slice
+## Definition of Done per Layer Slice and Feature Flow
 
-A slice is test-complete when the implemented layers in that slice satisfy these minimum checks:
+A feature flow is test-complete when its implemented layer parts and Use Case contracts satisfy these minimum checks:
 
 * [ ] Domain: use case success/failure behavior is covered.
 * [ ] Domain: entity behavior is covered when the entity contains business logic or invariants.
@@ -212,8 +184,8 @@ A slice is test-complete when the implemented layers in that slice satisfy these
 * [ ] Data: repository mapping and exception-to-failure translation are covered.
 * [ ] Logic: state transitions for the slice scenarios are covered.
 * [ ] UI: critical widget states/interactions are covered per owned widget file, including `parts/` widgets when they define visual or interaction contracts.
-* [ ] App: DI registration/resolution and route/page orchestration smoke are covered when the slice introduces app wiring.
-* [ ] Sequence checklist: minimum scenarios for the selected sequence are covered.
+* [ ] App: DI registration/resolution, route/page composition, and UI callback-to-Logic dispatch are covered when the flow introduces App wiring.
+* [ ] Use Case sequence contract: signature, input/result, failure, and stream lifecycle are covered as applicable.
 
 ## CI Quality Gate Recommendations
 
@@ -236,9 +208,9 @@ Suggested initial coverage floor (adjust by team maturity):
 Use incremental rollout:
 
 1. Finalize this strategy and shared templates.
-2. Pilot one real slice (for example: `travel/destination/popular` on Retrieval).
+2. Pilot one real feature flow (for example: `travel/destination/popular`).
 3. Stabilize checklist and naming from pilot learnings.
-4. Expand module by module, sequence by sequence.
+4. Expand module by module, covering relevant Use Case contracts and Logic/UI parts.
 5. Enforce CI gates after baseline coverage is realistic.
 
 ## Test Case Template
@@ -326,11 +298,9 @@ Notes:
 * Prefer HTML per package, and use combined report for numeric summary.
 * If a module depends on UI packages that use Material icons, set `flutter.uses-material-design: true` in that module `pubspec.yaml` to avoid warnings when running tests from module root.
 
-## Related Specs
+## References
 
-* Sequence reference: `specs/sequences/`
-* Code blueprint reference: `specs/blueprints/`
-* Testing blueprint reference: [specs/tests/retrieval_test.md](../specs/tests/retrieval_test.md)
+* Follow the layer rules and Use Case contracts described in [Sequence Pattern](../architecture/sequence-pattern.md), together with test examples available in the repository.
 
 ## What To Prioritize
 

@@ -22,8 +22,9 @@ Secara umum, tooling diarahkan untuk membantu:
 
 Selama tooling belum final, implementasi tetap mengandalkan:
 
+* aturan tiap layer
 * sequence pattern
-* blueprint
+* aturan slice fitur
 * naming conventions
 * dependency rules
 * review manual terhadap structure dan flow

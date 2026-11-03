@@ -324,33 +324,33 @@ domain/
 
 ### 3. Logic
 
-Berisi state management.
+Berisi bagian Logic dari slice feature: state management dan koordinasi lokal.
 
 ```text
 logic/
-└── <feature_slice>/
+└── <logic_slice>/
     ├── ...state_management.dart
     └── ...state.dart
 ```
 
 ### 4. UI
 
-Berisi tampilan dalam bentuk view dan komponen presentasi.
+Berisi bagian UI dari slice feature dalam bentuk view dan komponen presentasi.
 
 ```text
 ui/
-└── <feature_slice>/
+└── <ui_slice>/
     ├── views/
     │   └── ..._view.dart
     └── widgets/
         └── ..._<widget>.dart
 ```
 
-## Struktur Feature Slice
+## Slice Fitur
 
-Feature Slice merupakan unit implementasi terkecil dalam FSDA.
+Slice fitur adalah unit modular di dalam feature yang mengelompokkan komponen dengan tanggung jawab terkait. Implementasinya dapat memiliki bagian Logic di `logic/<slice>`, bagian UI di `ui/<slice>`, atau keduanya. `logic/update` dan `ui/update` adalah bagian-bagian dari slice `update`. Sequence berada pada jalur Use Case-to-Data dan tidak ditentukan oleh nama slice.
 
-Feature slice ini berbanding lurus dengan flow use case bisnis. Namun implementasi struktur folder nya lebih ke Logic dan UI. Sedangkan untuk implementasi di layer lain (Data & Domain) langsung dibuat per file dan ada juga sebagai method.
+Bagian Logic dari slice dapat memanggil satu atau beberapa Use Case, atau mengelola state lokal tanpa Use Case. Use Case dan sequence dapat berkaitan dengan beberapa slice/alur fitur. App mengorkestrasi bagian UI/Logic dan sequence yang relevan sebagai satu alur fitur; hubungan tersebut tidak harus satu-ke-satu.
 
 
 ```text
@@ -383,11 +383,11 @@ features/
     │   └── usecases/
     │       └── <feature>_<slice>_use_case.dart
     ├── logic/
-    │   └── <slice>/
+    │   └── <logic_slice>/
     │       ├── <feature>_<slice>_cubit.dart
     │       └── <feature>_<slice>_state.dart
     └── ui/
-        ├── <slice>/
+        ├── <ui_slice>/
         │   ├── views/
         │   │   └── <feature>_<slice>_view.dart
         │   └── widgets/

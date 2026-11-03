@@ -118,14 +118,13 @@ wallet
 task
 product
 city
-destination
 ```
 
 ---
 
-# Slice Naming
+# Feature Slice Naming
 
-A feature slice is the smallest unit of business implementation.
+A feature slice is a modular grouping of related components within a feature. It may have Logic and/or UI implementation parts. The folders `logic/update` and `ui/update` are parts of the `update` slice; `logic/form_update` indicates another slice. Sequences belong to the Use Case-to-Data flow, not to the slice folder structure. App orchestrates the related parts and sequences for each feature flow.
 
 ## Mutation Slice
 
@@ -640,7 +639,7 @@ WalletDeleteUseCase
 ProductDetailUseCase
 ```
 
-Use cases are named after slices, not additional actions.
+Use Case names describe the related business operation. Use Cases belong to Domain and are not placed inside slice folders; App orchestrates the relevant Logic/UI parts with the Use Cases required by a feature flow.
 
 ---
 

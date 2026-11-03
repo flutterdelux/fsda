@@ -49,19 +49,21 @@ Then continue with supporting documents:
 
 ## Getting Started Paths (Wikuy)
 
-For practical end-to-end onboarding, choose one path:
+For practical end-to-end onboarding, follow the manual path:
 
 1. [Manual E2E (without FSDA CLI)](/getting-started-wikuy)
-2. [CLI-Driven E2E (mostly FSDA CLI + small manual finalization)](/getting-started-cli-wikuy)
 
-Both paths target the same output:
+For CLI installation, commands, and workflows, see the dedicated [FSDA CLI documentation](https://flutterdelux.github.io/fsda_cli/).
+
+The manual guide targets:
 
 * Workspace: `Wikuy`
 * App: `wikuy`
 * Module: `travel`
 * Feature: `destination`
-* Slice: `list`
-* Sequence: `R`
+* Logic slice: `list`
+* UI slice: `list`
+* Use Case sequence: async return (`ReturnUseCase<List<DestinationEntity>>`)
 * UI: `lsv`
 * Main page class: `DestinationListPage`
 * API source: `GET /destinations`

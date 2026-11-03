@@ -47,21 +47,3 @@ Lanjutkan dengan dokumen pendukung berikut:
 * [Anti-Patterns](guides/anti-patterns.md)
 * [Tooling](guides/tooling.md)
 
-## Getting Started Paths (Wikuy)
-
-Untuk praktik end-to-end yang langsung bisa diikuti, gunakan salah satu jalur berikut:
-
-1. [Manual E2E (tanpa FSDA CLI)](getting-started-cli-wikuy)
-2. [CLI-Driven E2E (mayoritas FSDA CLI + finalisasi manual)](getting-started-cli-wikuy)
-
-Keduanya menghasilkan target yang sama:
-
-* Workspace: `Wikuy`
-* App: `wikuy`
-* Module: `travel`
-* Feature: `destination`
-* Slice: `list`
-* Sequence: `R`
-* UI: `lsv`
-* Main page class: `DestinationListPage`
-* API source: `GET /destinations`

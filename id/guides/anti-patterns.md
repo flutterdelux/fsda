@@ -12,13 +12,13 @@ Anti-pattern membantu menjaga arsitektur tetap konsisten dengan menunjukkan bent
 
 Hindari pola berikut:
 
-* mulai implementasi dari folder, bukan dari sequence
+* mulai implementasi dari folder sebelum memahami alur fitur dan tanggung jawab tiap layer
 * menaruh business orchestration di UI
 * membiarkan DTO atau response bocor ke Logic atau UI
 * mengakses repository implementation langsung dari layer yang tidak semestinya
 * memindahkan resource ke shared terlalu cepat tanpa ownership yang jelas
 * membuat variasi naming sendiri di luar convention
-* menggabungkan beberapa tujuan bisnis berbeda ke dalam satu slice
+* menggabungkan beberapa tanggung jawab yang tidak berkaitan ke dalam satu slice fitur
 * membiarkan circular dependence antar feature
 
 
@@ -37,18 +37,18 @@ Contoh yang keliru:
 Masalah dari pendekatan ini:
 
 * struktur mudah melebar tanpa alasan yang jelas
-* file yang dibuat sering tidak mengikuti blueprint sequence yang tepat
+* implementasi dan test mudah melenceng dari aturan layer atau kontrak sequence
 * naming dan dependency jadi mudah drift
 
 Pendekatan yang benar:
 
 * mulai dari requirement
-* tentukan feature slice
-* tentukan sequence yang paling sesuai
-* buka blueprint
-* baru turunkan ke folder, file, class, dan flow implementasi
+* tentukan alur fitur dan Use Case yang diperlukan
+* tetapkan sequence dari kontrak Use Case
+* tentukan slice fitur serta bagian Logic/UI yang terkait
+* baru turunkan ke folder, file, class, dependency, dan flow implementasi
 
-Dengan kata lain, folder tetap dibuat, tetapi folder mengikuti keputusan sequence, bukan sebaliknya.
+Dengan kata lain, folder mengikuti batas layer dan slice; sequence ditentukan oleh kontrak Use Case. App mengorkestrasi bagian-bagian yang terkait.
 
 
 ## App vs Module Confusion

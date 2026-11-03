@@ -37,38 +37,9 @@ Feature menjadi pusat organisasi kode.
 
 ## 3. Sequence-Driven Development
 
-Implementasi feature slice harus mengikuti sequence pattern yang telah didefinisikan.
+Sequence menstandarkan jalur implementasi dari Use Case ke kontrak Repository dan implementasi Data. Jenisnya mengikuti signature Use Case: tiga flow (async, sync, stream), masing-masing dengan empat bentuk (void, param, return, return + param), sehingga terdapat 12 tipe sequence.
 
-Sequence mendefinisikan pola aliran data, struktur implementasi, serta bentuk interaksi antar layer.
-
-Contoh sequence:
-
-* Mutation
-* Mutation + Param
-* Mutation + Return
-* Mutation + Return + Param
-* Retrieval
-* Retrieval + Param
-* Retrieval + Pagination
-* Retrieval + Stream
-* Retrieval + Stream + Param
-* Retrieval + Offline First
-
-Setiap feature slice harus dapat dipetakan ke tepat satu sequence yang jelas.
-
-Contoh:
-
-```
-mark_all_read  -> Mutation
-
-delete         -> Mutation + Param
-
-create         -> Mutation + Return + Param
-
-detail         -> Retrieval + Param
-
-list           -> Retrieval + Pagination
-```
+Sequence berkaitan dengan kontrak Use Case dan alur Domain-to-Data, bukan dengan UI. Bagian Logic dari slice dapat memanggil satu atau beberapa Use Case; sebuah slice juga dapat mengelola state lokal tanpa Use Case. App mengorkestrasi bagian UI/Logic dengan sequence yang relevan untuk menjalankan alur fitur. Detail tipe dan kontraknya dijelaskan di [Sequence Pattern](sequence-pattern.md).
 
 Dengan pendekatan ini seluruh implementasi menjadi:
 
@@ -77,11 +48,11 @@ Dengan pendekatan ini seluruh implementasi menjadi:
 * mudah dipelajari
 * mudah diautomasi
 
-## 4. Single Responsibility per Feature Slice
+## 4. Slice Fitur dan Tanggung Jawab
 
-Setiap feature slice hanya merepresentasikan satu tujuan bisnis yang spesifik.
+Slice fitur adalah unit modular di dalam feature yang mengelompokkan komponen dengan tanggung jawab terkait. Slice dapat memiliki bagian implementasi pada `logic/<slice>`, `ui/<slice>`, atau keduanya. Folder `logic/update` dan `ui/update` adalah dua bagian layer dari slice `update`. UI mengekspos interaksi melalui callback; App yang menghubungkannya dengan Logic.
 
-Feature slice tidak boleh menggabungkan beberapa tujuan yang berbeda ke dalam satu implementasi.
+Satu slice perlu memiliki fokus yang jelas. Bagian Logic dapat memanggil beberapa Use Case/sequence atau tidak memanggil Use Case sama sekali. Beberapa slice dapat berkaitan dengan Use Case/sequence yang sama, dan satu alur fitur dapat menghubungkan beberapa slice dengan beberapa sequence.
 
 Contoh feature slice:
 
@@ -93,17 +64,25 @@ Contoh feature slice:
 * status
 * mark_all_read
 
-Setiap feature slice harus memiliki tanggung jawab yang jelas, dapat dipahami secara mandiri, dan dapat dipetakan ke satu sequence yang telah didefinisikan.
+Setiap slice harus memiliki tanggung jawab yang jelas dan dapat dipahami secara mandiri. Nama slice mengelompokkan tanggung jawab feature; sequence menyatakan kontrak aliran Use Case-to-data dan tidak ditentukan oleh nama slice.
 
-Feature slice menjadi unit terkecil pengembangan dalam FSDA.
+Dalam struktur FSDA, satu Module dapat memiliki banyak Feature, satu Feature dapat mendukung banyak alur fitur, dan satu alur fitur dapat melibatkan beberapa slice dan/atau sequence. App menggunakan dan mengorkestrasi komponen-komponen yang berkaitan agar alur fitur berjalan.
 
 ## 5. Aliran Data Eksplisit
 
 Aliran data harus selalu terlihat dan dapat ditelusuri.
 
-Data bergerak secara eksplisit melalui layer.
+Data bergerak secara eksplisit melalui layer. Pada runtime, App mengorkestrasi komunikasi UI dan Logic; UI menyediakan callback untuk interaksi dan menerima data/state untuk ditampilkan, bukan memanggil Logic secara langsung.
 
-UI → Logic → Domain → Data
+```
+User → UI part (callback) → App (composition/orchestration)
+			   ├── provides data/state to UI
+			   └── dispatches actions/input to Logic part(s)
+				      ↓ calls related Use Case(s)
+			      Sequence(s): Domain contract → Data implementation
+```                  
+
+Data mengimplementasikan kontrak yang didefinisikan Domain, sehingga arah dependency struktural Data tetap mengarah ke Domain.
 
 Tidak diperbolehkan membuat alur tersembunyi yang sulit dipahami.
 
@@ -123,7 +102,7 @@ Layer yang lebih dalam tidak boleh mengetahui layer yang lebih luar.
 Domain
 
 ↑
-Logic & UI & Data
+Logic, UI & Data
 (Luar)
 ```
 

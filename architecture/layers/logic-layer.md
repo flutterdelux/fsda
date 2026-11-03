@@ -21,7 +21,7 @@ Logic is not responsible for:
 
 ## Logic Structure
 
-Grouping within the logic layer can be done based on feature slices.
+Logic stores the state/orchestration part of a feature slice under `logic/<slice>`. The folder name follows the slice, not a sequence. If the same slice also has a UI part, its corresponding folder is under `ui/<slice>`; App composes both parts.
 
 ```text
 logic/
@@ -34,9 +34,9 @@ logic/
 
 ## Cubit
 
-Logic orchestrates use cases through the state management being used. A single Cubit typically accesses only one use case, keeping its state management needs focused and simple.
+Logic calls Use Cases through the selected state-management mechanism. The Logic part of a slice may call one or more related Use Cases. App orchestrates Logic with the related UI parts and sequences within a feature flow.
 
-However, in more complex situations, a single Cubit may access more than one use case, provided that its state management remains focused and the use cases are interrelated.
+A slice such as `form_update` may manage form/input state or local coordination without calling a Use Case. Therefore, a slice does not necessarily have a direct relationship with a sequence.
 
 Example:
 
@@ -117,21 +117,19 @@ final class ProductDetailFailure extends ProductDetailState {
 
 
 
-## Flow
+## Relationship to App and Sequence
 
 ```text
-UI
- ↓
-Cubit
- ↓
-Use Case
- ↓
-Repository Contract
- ↓
-Repository Impl
- ↓
-Datasource
+UI part --callback--> App orchestrator --action/input--> Logic part(s)
+                                                      |
+                                                      +--> related Use Case(s)
+                                                               ↓
+                                                      Repository contract
+                                                               ⇣ implemented by
+                                                      Repository/Data source
 ```
+
+The Use Case-to-Data path is a sequence. UI and Logic slices are not part of the sequence; App orchestrates interaction and data between the layers. A Logic part may call multiple Use Cases, and multiple Logic parts may be related to the same Use Case.
 
 
 

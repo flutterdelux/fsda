@@ -57,7 +57,6 @@ FSDA uses a Modular Monorepo approach.
 ```text
 Workspace
 ├── Apps
-├── Modules
 └── Packages
 ```
 
@@ -146,21 +145,32 @@ A Feature serves as the primary boundary for domain implementation.
 
 ### Feature Slice
 
-A Feature Slice is the smallest development unit in FSDA.
+A feature slice is a modular grouping of related components within a feature, organized around a responsibility. It may have a Logic part under `logic/<slice>`, a UI part under `ui/<slice>`, or both. Matching Logic and UI folder names are parts of the same slice.
 
 Example:
 
 ```text
-create
-update
-delete
-list
-detail
-status
-mark_all_read
+features/product/
+├── logic/
+│   ├── update/
+│   └── form_update/
+└── ui/
+	└── update/
 ```
 
-A Feature Slice has one clear purpose and follows one clear sequence.
+Here, `logic/update` and `ui/update` are the Logic and UI parts of the `update` slice. The `form_update` slice has a separate responsibility that supports the update flow and may have only a Logic part.
+
+A slice does not need a direct relationship with a sequence. App, as the orchestrator, composes the UI and Logic parts needed for a feature flow. The Logic part of `update` may call multiple Use Cases, each with its own sequence; `form_update` may manage form state without calling a Use Case. Different slices may also be related to the same Use Case or sequence.
+
+The conceptual FSDA hierarchy can be summarized as:
+
+```text
+One Module → many Features
+One Feature → many Feature Flows
+One Feature Flow → a composition of Slices and/or Sequences
+```
+
+A **feature flow** is a conceptual term for describing a requirement or capability in motion. It does not introduce another layer or required folder. App composes and orchestrates related components so the flow can run.
 
 ---
 
@@ -184,17 +194,27 @@ Shared Packages provide contracts, utilities, UI foundations, and technology int
 
 ## Architecture Layers
 
-*(Execution Flow)*
+*(Execution Flow — runtime interaction)*
 ```
-UI
- ↓ (calls)
-Logic
- ↓ (calls)
-Domain
+User
+ ↓ event
+UI part (presentation; sends callback)
+ ↓ callback / data through composition
+App (orchestrator)
+ ├── provides input to Logic
+ ├── reads Logic state and provides it to UI
+ └── dispatches Logic actions
+		↓
+	Logic part(s)
+		↓ calls related Use Case(s)
+	Use Case(s) ──► Repository contract (Domain)
+					  ⇣ implemented at runtime by
+				Repository implementation (Data)
+					  ↓
+				Data source / external system
+```
 
-Data
- └─ implement Domain Contract
-```
+The Use Case-to-Data flow is a sequence. UI and Logic slices are outside the sequence definition. Results return through the Use Case and Logic; App connects Logic state and UI callbacks. UI does not call Logic directly.
 
 Layer details and responsibilities are explained in:
 
@@ -224,7 +244,7 @@ Logic ───┼──► Domain
 Data ────┘
 ```
 
-**Important**: The arrow from UI to Logic in the execution flow is not a direct structural dependency from the UI layer, but rather merely a *method* access. The one responsible for assembling (composing) the UI and Logic is the **App** layer. The UI, Logic, and Data layers essentially depend on the Domain layer independently.
+The dependency arrows show that App can compose UI, Logic, Domain, and Data implementations (for example, during DI registration). UI, Logic, and Data each depend on Domain according to their contracts. There is no direct UI → Logic dependency; App orchestrates the UI and Logic parts through callbacks, providers, or another composition mechanism.
 
 Detailed dependency rules are explained in:
 
@@ -236,22 +256,13 @@ Detailed dependency rules are explained in:
 
 FSDA uses a Sequence-Based Development approach.
 
-Every Feature Slice must follow a defined sequence.
+Sequence describes the Use Case-to-Data flow. Its type is determined by the combination of Use Case flow and signature: async, sync, or stream, each with void, param, return, or return + param. This results in 12 sequence types.
 
-Examples:
+A feature flow may involve one or more slices and/or sequences. A slice may be related to several sequences, and a sequence may be related to several slices or feature flows. App orchestrates the relevant UI/Logic parts with the required sequences.
 
-- Mutation
-- Mutation + Param
-- Mutation + Return
-- Mutation + Return + Param
-- Retrieval
-- Retrieval + Param
-- Retrieval + Pagination
-- Retrieval + Stream
-- Retrieval + Stream + Param
-- Retrieval + Offline First
+Use **feature flow** as a descriptive term for the whole process, such as updating a product. It describes the relationships among slices, sequences, and App orchestration; it is not a required folder or formal architectural abstraction.
 
-Sequences provide implementation patterns that are consistent, predictable, and easy to automate.
+For example, App composes the UI part `ui/update`, Logic parts `logic/update` and `logic/form_update`, and two Use Cases/sequences for uploading an image and updating a product. For deleting a product, App may compose `ui/delete`, `logic/delete`, and one delete sequence. The composition depends on the flow's requirements.
 
 
 

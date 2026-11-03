@@ -6,25 +6,12 @@ Dokumen ini mendefinisikan strategi testing praktis untuk proyek FSDA.
 
 Testing strategy membantu memastikan tiap layer dapat diverifikasi tanpa mengaburkan boundary arsitektur.
 
-## Hirarki Artefak Testing
+## Acuan Testing
 
-Pada FSDA, acuan testing dibaca berurutan:
-
-1. Sequence: acuan utama alur interaksi.
-2. Blueprint: acuan utama bentuk implementasi kode.
-3. Testing Blueprint: acuan utama desain automated test dari blueprint yang sudah diimplementasikan.
-
-Urutan wajib: Sequence -> Blueprint -> Testing Blueprint.
-
-Aturan boundary rujukan:
-
-* Blueprint menerjemahkan dan membatasi Sequence menjadi kontrak implementasi.
-* Automated test wajib menjadikan Blueprint sebagai acuan utama.
-* Sequence tetap konteks hulu untuk Blueprint, bukan pengganti langsung Blueprint saat mendesain test.
+Rancang test dengan mengikuti tanggung jawab tiap layer, kontrak sequence Use Case, batas slice fitur, dan komposisi App.
 
 ## Prinsip Testing FSDA
 
-* Terjemahkan sequence ke blueprint dulu, lalu turunkan test dari blueprint.
 * Test berdasarkan ownership boundary tiap layer.
 * Satu unit file produksi sebaiknya punya satu file test khusus (jika relevan).
 * Validasi kontrak/behavior, bukan detail internal yang tidak penting.
@@ -32,9 +19,9 @@ Aturan boundary rujukan:
 * Tambahkan kedalaman integration hanya pada area composition risk.
 * Gunakan style BDD yang eksplisit dan mudah dibaca.
 
-## Baseline Pilot Retrieval (Travel / Destination / Popular)
+## Baseline Pilot (Travel / Destination / Popular)
 
-Pilot pertama yang dijadikan baseline adalah Retrieval (R) pada slice travel destination popular.
+Pilot pertama yang dijadikan baseline adalah Use Case `getPopularDestination` beserta Logic/UI slice `popular` pada feature travel/destination.
 
 Ringkasan fokusnya:
 
@@ -42,9 +29,9 @@ Ringkasan fokusnya:
 | --- | --- | --- |
 | Module Domain | kontrak use case | `domain/usecases/*_use_case_test.dart` |
 | Module Data | parsing response, mapping, translation error | `data/datasources/*_impl_test.dart`, `data/repositories/*_impl_test.dart` |
-| Module Logic | state transition (loading, loaded, empty, failure) | `logic/<slice>/*_cubit_test.dart` |
-| Module UI | perilaku widget per file ownership | `ui/<slice>/widgets/*_test.dart` dan `ui/<slice>/widgets/parts/*_test.dart` |
-| App Integration | page orchestration + DI composition | `test/modules/.../*_widget_test.dart`, `test/modules/.../*_di_test.dart` |
+| Module Logic | state transition (loading, loaded, empty, failure) per slice | `logic/<logic_slice>/*_cubit_test.dart` |
+| Module UI | perilaku widget per file ownership | `ui/<ui_slice>/widgets/*_test.dart` dan `ui/<ui_slice>/widgets/parts/*_test.dart` |
+| App Integration | App-owned orchestration (wiring callback/event ke Logic), route, dan DI composition | `test/modules/.../*_widget_test.dart`, `test/modules/.../*_di_test.dart` |
 
 ## Matriks Testing Berbasis Layer
 
@@ -54,7 +41,7 @@ Ringkasan fokusnya:
 | Data | Mapping dan translasi teknis | Unit/contract test untuk mapping DTO-Entity, mapping request/response, translasi exception ke failure, behavior repository | Assertion UI dan state-flow |
 | Logic | Orkestrasi state | Unit test untuk state transition dan orkestrasi use case | Assertion detail implementasi datasource |
 | UI | Behavior presentasi | Widget test untuk render, interaction, visual loading/empty/error | Assertion repository dan transport |
-| App | Wiring komposisi | Integration atau smoke test untuk route, wiring DI, komposisi module, komposisi localization | Mengulang rule bisnis level rendah |
+| App | Wiring komposisi dan orkestrasi | Integration atau smoke test untuk route, wiring DI, callback/event dari UI ke Logic, komposisi module, dan localization | Mengulang rule bisnis level rendah; menempatkan pemanggilan Logic di UI |
 
 ## Portofolio Jenis Test
 
@@ -71,9 +58,9 @@ Gunakan pendekatan berikut sebagai baseline:
 
 * Domain: unit test untuk use case, contract behavior, dan rule bisnis
 * Data: test untuk mapping, translation error, repository behavior, dan adapter teknis
-* Logic: test untuk state transition dan orchestration logic
-* UI: widget test untuk presentation dan interaction utama
-* App: integration atau smoke test untuk composition, route, dan dependency wiring
+* Logic: test untuk state transition dan orchestration logic pada setiap slice yang relevan
+* UI: widget test untuk presentation dan interaction utama pada setiap bagian UI slice yang relevan
+* App: integration atau smoke test untuk composition, route, dependency wiring, dan pemanggilan Logic melalui event/callback yang disusun App
 
 ### Policy Entity Test
 
@@ -93,33 +80,18 @@ Opsional ketika entity:
 
 Pada rollout awal testing, valid untuk memprioritaskan boundary berisiko tinggi dulu (use case, translasi data, state logic, state UI, wiring app), lalu menambah entity test saat behavior entity berkembang.
 
-## Sequence-Based Testing
+## Sequence Contract dan Slice Testing
 
-Selain berdasarkan layer, testing juga mengikuti skenario sequence melalui kontrak yang sudah ditegaskan di blueprint.
+Sequence adalah kontrak Use Case-to-data. Uji behavior setiap Use Case berdasarkan flow/signature contract yang dipakainya, bukan berdasarkan nama Logic/UI slice. Minimal verifikasi:
 
-### Checklist Skenario Minimum per Sequence
+* Async/sync Use Case: input yang diteruskan (jika ada), hasil atau `void`, dan failure.
+* Stream Use Case: emission berurutan, failure emission, serta cancel/close bila dimiliki lifecycle.
+* Param Use Case: pemetaan input dari Param ke repository/data contract.
+* Return Use Case: nilai hasil, termasuk pemetaan DTO ke Entity pada boundary yang bertanggung jawab.
 
-| Sequence | Skenario Minimum |
-| --- | --- |
-| Mutation (M) | success, failure, expected side effect |
-| Mutation + Param (Mp) | valid param, invalid param, failure mapping |
-| Mutation + Return (Mr) | success return payload, failure, side effect consistency |
-| Mutation + Return + Param (Mrp) | valid param + return, invalid param path, failure mapping |
-| Retrieval (R) | loading, loaded, empty, failure |
-| Retrieval + Param (Rp) | valid param loaded, invalid param path, failure |
-| Retrieval + Pagination (Rpag) | first page, append page, end-of-list, pagination failure |
-| Retrieval + Stream (Rs) | initial emission, update emission, failure/close behavior |
-| Retrieval + Stream + Param (Rsp) | valid param stream, update emission, failure/close behavior |
-| Retrieval + Offline First (Rof) | local hit, remote fallback, cache update/sync behavior |
+Pagination, limit tertentu, offline-first, serta transformasi state diuji pada layer pemilik behavior tersebut. Contohnya, pagination/load-more dan limit `5` diuji pada Logic slice yang membentuk parameter; cache/fallback diuji di Data; state loading/loaded/error diuji di Logic; rendering dan callback diuji di UI.
 
-Contoh fokus pengujian tambahan:
-
-* Mutation: input valid, input invalid, success flow, failure flow
-* Mutation + Return: verifikasi hasil return dan side effect yang relevan
-* Retrieval: success, empty state, failure, loading
-* Retrieval + Pagination: page progression, append behavior, end-of-list behavior
-* Retrieval + Stream: initial emission, update emission, failure emission bila relevan
-* Retrieval + Offline First: local hit, remote fallback, sync behavior bila ada
+Bagian Logic yang memanggil beberapa Use Case perlu test untuk orkestrasi sukses/gagal masing-masing jalur. Logic form yang tidak memanggil Use Case tetap diuji untuk input, validasi lokal, dan transisi state. UI slice diuji tanpa mengakses Logic langsung, dengan callback dan data sebagai batas test.
 
 ## Struktur File Test yang Direkomendasikan
 
@@ -132,10 +104,10 @@ modules/
 				└── src/
 						└── features/
 								└── <feature>/
-										├── domain/usecases/<feature>_<slice>_use_case_test.dart
+										├── domain/usecases/<use_case_name>_test.dart
 										├── data/repositories/<feature>_repository_impl_test.dart
-										├── logic/<slice>/<feature>_<slice>_cubit_test.dart
-										└── ui/<slice>/views/<feature>_<slice>_view_test.dart
+										├── logic/<logic_slice>/<feature>_<logic_slice>_cubit_test.dart
+										└── ui/<ui_slice>/views/<feature>_<ui_slice>_view_test.dart
 
 apps/
 └── <app>/
@@ -188,7 +160,7 @@ Gunakan test double secara sengaja:
 
 Hindari mocking value object seperti Params, Entities, atau enum sederhana.
 
-## Definition Of Done per Slice
+## Definition Of Done per Layer Slice and Feature Flow
 
 Sebuah slice dianggap test-complete ketika layer yang memang diimplementasikan pada slice tersebut memenuhi checklist minimum berikut:
 
@@ -199,8 +171,9 @@ Sebuah slice dianggap test-complete ketika layer yang memang diimplementasikan p
 * [ ] Data: behavior repository untuk mapping dan translasi exception ke failure ter-cover.
 * [ ] Logic: state transition untuk skenario slice ter-cover.
 * [ ] UI: state/interaksi widget kritis ter-cover per file ownership, termasuk widget `parts/` jika memuat kontrak visual/interaksi.
-* [ ] App: smoke komposisi route/page serta registrasi/resolusi DI ter-cover jika slice menambah wiring app.
-* [ ] Sequence checklist: skenario minimum sequence terkait ter-cover.
+* [ ] App: smoke komposisi route/page, registrasi/resolusi DI, dan jalur callback/event App → Logic ter-cover jika slice menambah wiring app.
+* [ ] Use Case sequence contract: signature, input/result, failure, dan stream lifecycle ter-cover sesuai tipe contract yang digunakan.
+* [ ] Alur fitur: wiring App antar UI/Logic slices dan Use Case dependencies yang relevan ter-cover.
 
 ## Rekomendasi Quality Gate CI
 
@@ -225,7 +198,7 @@ Gunakan rollout bertahap:
 1. finalisasi strategi dan template bersama
 2. pilot satu slice nyata (contoh: `travel/destination/popular` pada Retrieval)
 3. stabilisasi checklist dan naming dari hasil pilot
-4. perluas module demi module, sequence demi sequence
+4. perluas module demi module, pastikan kontrak Use Case dan jenis Logic/UI slice yang relevan mendapat test
 5. aktifkan gate CI saat baseline coverage sudah realistis
 
 ## Template Test Case
@@ -311,11 +284,9 @@ Catatan:
 * Disarankan HTML per package, sedangkan gabungan dipakai untuk summary angka.
 * Jika module memakai package UI yang menggunakan Material icons, tambahkan `flutter.uses-material-design: true` di `pubspec.yaml` module supaya warning tidak muncul saat test dari root module.
 
-## Referensi Specs
+## Referensi
 
-* Sequence: `specs/sequences/`
-* Blueprint kode: `specs/blueprints/`
-* Blueprint testing: [specs/tests/retrieval_test.md](/specs/tests/retrieval_test.md)
+* Gunakan aturan tiap layer, kontrak Use Case pada [Sequence Pattern](../architecture/sequence-pattern.md), serta contoh test yang tersedia pada repository sebagai acuan.
 
 ## What To Prioritize
 

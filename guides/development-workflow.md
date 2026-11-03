@@ -164,29 +164,23 @@ This phase is repeated throughout the development lifecycle.
 
 ### 2.1 Identify Requirements
 
-Translate business requirements into feature slices.
+Translate each requirement into a feature flow. Identify the Use Cases and presentation/state needs, determine sequence types from Use Case contracts, then identify the related feature slices and the Logic/UI parts each needs. App orchestrates these components.
 
 Example:
 
-| Requirement | Module | Feature | Slice |
-|-------------|---------|---------|-------|
-| Delete wallet | finance | wallet | delete |
-| Create task | task | task | create |
-| Product detail | product | product | detail |
-| Watch payment status | subscription | payment | status |
+| Requirement | Module | Feature | Use Cases / Sequences | Related feature slices |
+| --- | --- | --- | --- | --- |
+| Delete wallet | finance | wallet | delete Use Case and its sequence | `delete`: `logic/delete` + `ui/delete` parts |
+| Create task | task | task | create Use Case and its sequence | `create`: `logic/create` + `ui/create`; `form_create`: `logic/form_create` |
+| Product update | product | product | upload-image and update-product Use Cases, each with a sequence | `update`: `logic/update` + `ui/update`; `form_update`: `logic/form_update` |
 
 ---
 
-### 2.2 Determine the Sequence
+### 2.2 Determine Use Case Sequence Types
 
-Choose the sequence that matches the implementation.
+Choose a sequence type for each Use Case based on its flow and signature. The 12 combinations are async/sync/stream × void/param/return/return + param. This decision is made per Use Case, not per slice.
 
-| Slice | Sequence | Code |
-|--------|----------|------|
-| delete | Mutation + Param | Mp |
-| create | Mutation + Return + Param | Mrp |
-| detail | Retrieval + Param | Rp |
-| status | Retrieval + Stream + Param | Rsp |
+For example, `ProductImageUploadUseCase` and `ProductUpdateUseCase` each have a sequence determined by their signatures. App orchestrates the Logic part `logic/update` that calls both Use Cases, together with the related UI and form state.
 
 ---
 
@@ -333,21 +327,22 @@ feature1/
 
 ---
 
-### 2.6 Create the Slice Skeleton
+### 2.6 Plan Feature Slices and Sequences
 
-Create the slice directory according to the selected sequence.
+List the Use Cases and determine a sequence type for each. Separately, identify the related feature slices and their Logic/UI implementation parts. App composes the parts that are needed for the feature flow.
 
-Examples:
-
-```text
-detail/
-```
-
-or
+Example:
 
 ```text
-create/
+slice: update
+├── logic/update/ # calls UploadImageUseCase and UpdateProductUseCase
+└── ui/update/    # form, buttons, callbacks; no direct access to Logic
+
+slice: form_update
+└── logic/form_update/ # manages input/form state
 ```
+
+Not every slice needs both Logic and UI parts. A Logic part may call multiple Use Cases with their own sequences, or manage local state without a Use Case. App determines which parts are composed together.
 
 ---
 
@@ -423,21 +418,19 @@ Shared UI
 
 ---
 
-### 2.11 Validate Against the Blueprint
+### 2.11 Validate Against FSDA Rules
 
-Compare the implementation against the blueprint sequence.
-
-Verify that the following are consistent with the blueprint:
+Review the implementation against the rules for each layer, sequence contract, feature-slice boundary, and App orchestration. Verify:
 
 ```text
-folder
-file
-class
-dependency
-flow
+ownership of each component
+dependencies between layers
+Use Case signature and sequence flow
+relationship of slices to the feature flow
+App orchestration between UI and Logic
 ```
 
----
+These should follow the applicable FSDA rules.
 
 ## Phase 3 — App Composition
 
@@ -647,7 +640,7 @@ Do not start with the API.
 
 Do not start with the folder structure.
 
-Always start from:
+Start from:
 
 ```text
 Requirement
@@ -656,13 +649,15 @@ Module
 ↓
 Feature
 ↓
-Slice
+Feature Flow
 ↓
-Sequence
+Use Cases and Sequences
 ↓
-Blueprint
+Related Feature Slices
 ↓
-Implementation
+App Composition
+↓
+Implementation and Tests
 ```
 
-The **Sequence** and the **Blueprint** are the single source of truth for every implementation.
+Follow the rules for each layer, sequence, and feature slice. App uses and orchestrates related components to run the feature flow.

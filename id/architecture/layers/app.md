@@ -25,6 +25,10 @@ Hubungan tersebut membuat App menjadi titik komposisi tertinggi dalam aplikasi.
 
 UI dan Logic nantinya akan dikombinasikan oleh App.
 
+App juga menjadi pemilik orkestrasi komunikasi UI dan Logic. UI mengirim event melalui callback yang diberikan App dan menerima data/state untuk dirender; App meneruskan input/aksi tersebut kepada Logic dan menyusun state Logic untuk UI. UI tidak bergantung atau memanggil Cubit/Bloc secara langsung.
+
+Dengan demikian, data dari UI menuju Logic maupun state dari Logic menuju UI selalu melewati composition App. Validasi input lokal yang hanya diperlukan untuk feedback presentasi boleh dilakukan di UI; App menentukan kapan data tersebut diteruskan ke Logic.
+
 Page pada App dapat merepresentasikan satu primary slice atau menjadi aggregate surface yang menggabungkan beberapa slice sekaligus.
 
 Logic juga dapat diregistrasikan pada page scope atau scope yang lebih tinggi seperti root/global scope bila lifecycle dan kebutuhan composition mengharuskannya.
@@ -36,6 +40,8 @@ ProductDetailPage
  ├── BlocProvider
  └── ProductDetailView
 ```
+
+Provider, callback untuk aksi UI, dan listener yang menghubungkan hasil Logic ke kebutuhan App disusun pada Page atau composition scope yang sesuai.
 
 Routing management juga menjadi tanggung jawab App. Route tiap module disusun di App dengan grouping module masing-masing, kemudian digabungkan menjadi satu.
 

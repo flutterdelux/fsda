@@ -328,7 +328,7 @@ Contains state management.
 
 ```text
 logic/
-└── <feature_slice>/
+└── <slice>/
     ├── ...state_management.dart
     └── ...state.dart
 ```
@@ -339,18 +339,18 @@ Contains displays in the form of views and presentation components.
 
 ```text
 ui/
-└── <feature_slice>/
+└── <slice>/
     ├── views/
     │   └── ..._view.dart
     └── widgets/
         └── ..._<widget>.dart
 ```
 
-## Feature Slice Structure
+## Feature Slices
 
-A Feature Slice is the smallest implementation unit in FSDA.
+A feature slice is a modular grouping of related components within a feature. It may have a Logic part under `logic/<slice>`, a UI part under `ui/<slice>`, or both. Matching Logic and UI folder names are parts of the same slice. A differently named slice, such as `form_update`, has a separate responsibility.
 
-This feature slice is directly proportional to the business use case flow. However, its folder structure implementation leans more towards Logic and UI. Meanwhile, implementations in other layers (Data & Domain) are directly created per file and also exist as methods.
+Sequences belong to the Use Case-to-Data flow, not to the slice folder structure. App orchestrates the relevant UI/Logic parts with the Use Case sequences that are related to a feature flow. The relationship is not one-to-one: a Logic part can call multiple Use Cases, and several slices can be related to the same Use Case or sequence.
 
 
 ```text
@@ -383,11 +383,11 @@ features/
     │   └── usecases/
     │       └── <feature>_<slice>_use_case.dart
     ├── logic/
-    │   └── <slice>/
+    │   └── <logic_slice>/
     │       ├── <feature>_<slice>_cubit.dart
     │       └── <feature>_<slice>_state.dart
     └── ui/
-        ├── <slice>/
+        ├── <ui_slice>/
         │   ├── views/
         │   │   └── <feature>_<slice>_view.dart
         │   └── widgets/

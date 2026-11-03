@@ -9,10 +9,6 @@ const idSidebar = [
         text: 'Wikuy E2E',
         link: '/id/getting-started-wikuy',
       },
-      {
-        text: 'Wikuy CLI-Driven E2E',
-        link: '/id/getting-started-cli-wikuy',
-      },
     ],
   },
   {
@@ -51,17 +47,6 @@ const idSidebar = [
       { text: 'Anti Patterns', link: '/id/guides/anti-patterns' },
     ],
   },
-  {
-    text: 'FSDA CLI',
-    collapsed: false,
-    items: [
-      { text: 'Installation', link: '/id/cli/installation' },
-      { text: 'Commands', link: '/id/cli/commands' },
-      { text: 'Workflow', link: '/id/cli/workflow' },
-      { text: 'UI Slice', link: '/id/cli/ui_slice' },
-      { text: 'Cheat Sheet', link: '/id/cli/cheat_sheet_fsda_cli' },
-    ],
-  },
 ]
 
 const enSidebar = [
@@ -72,10 +57,6 @@ const enSidebar = [
       {
         text: 'Wikuy E2E',
         link: '/getting-started-wikuy',
-      },
-      {
-        text: 'Wikuy CLI-Driven E2E',
-        link: '/getting-started-cli-wikuy',
       },
     ],
   },
@@ -136,17 +117,6 @@ const enSidebar = [
       { text: 'Anti Patterns', link: '/guides/anti-patterns' },
     ],
   },
-  {
-    text: 'FSDA CLI',
-    collapsed: false,
-    items: [
-      { text: 'Installation', link: '/cli/installation' },
-      { text: 'Commands', link: '/cli/commands' },
-      { text: 'Workflow', link: '/cli/workflow' },
-      { text: 'UI Slice', link: '/cli/ui_slice' },
-      { text: 'Cheat Sheet', link: '/cli/cheat_sheet_fsda_cli' },
-    ],
-  },
 ]
 
 const sharedThemeConfig = {
@@ -172,7 +142,7 @@ export default defineConfig({
         nav: [
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Architecture', link: '/architecture/architecture' },
-          { text: 'CLI', link: '/cli/commands' },
+          { text: 'FSDA CLI', link: 'https://flutterdelux.github.io/fsda_cli/' },
         ],
         sidebar: enSidebar,
       },
@@ -188,7 +158,7 @@ export default defineConfig({
         nav: [
           { text: 'Getting Started', link: '/id/getting-started' },
           { text: 'Architecture', link: '/id/architecture/architecture' },
-          { text: 'CLI', link: '/id/cli/commands' },
+          { text: 'FSDA CLI', link: 'https://flutterdelux.github.io/fsda_cli/' },
         ],
         sidebar: idSidebar,
       },

@@ -25,16 +25,20 @@ This relationship makes the App the highest composition point in the application
 
 UI and Logic will eventually be combined by the App.
 
-A Page in the App can represent one primary slice or become an aggregate surface that combines several slices at once.
+App owns the orchestration between UI and Logic. UI sends events through callbacks provided by App and receives data/state for rendering; App passes inputs/actions to Logic and composes Logic state for UI. UI does not depend on or call Cubit/Bloc directly.
+
+A Page in the App can represent one primary feature flow or become an aggregate surface that composes several related slices and sequences at once.
 
 Logic can also be registered at the page scope or a higher scope such as the root/global scope if the lifecycle and composition needs require it.
+
+Input validation performed locally for presentation feedback may remain in UI. App decides when to pass the resulting input to Logic.
 
 Example:
 
 ```text
 ProductDetailPage
- ├── BlocProvider
- └── ProductDetailView
+ ├── BlocProvider (Logic composition)
+ └── ProductDetailView (UI part)
 ```
 
 Routing management is also the responsibility of the App. The route of each module is arranged in the App by grouping each module, then combined into one.

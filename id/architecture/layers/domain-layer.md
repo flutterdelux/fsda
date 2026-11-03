@@ -135,10 +135,13 @@ Use Case adalah entry point bisnis.
 
 Use Case mengorkestrasi repository contract.
 
+Contract Use Case menentukan tipe sequence berdasarkan flow dan signature-nya. Contoh berikut menerima Param dan mengembalikan Entity secara async, sehingga menggunakan `ReturnParamUseCase<T, P>`.
+
 Contoh:
 
 ```dart
-class ProductDetailUseCase extends UseCase<ProductEntity, ProductDetailParam> {
+class ProductDetailUseCase
+  extends ReturnParamUseCase<ProductEntity, ProductDetailParam> {
   final ProductRepository _repository;
 
   const ProductDetailUseCase({required ProductRepository productRepository})

@@ -12,8 +12,10 @@ Final shape is not fixed yet, including flow, delivery model, and implementation
 
 In general, tooling is aimed to help with:
 
-* scaffolding module, feature, and slice
-* naming and structure validation
+* layer, sequence, and feature-slice rules
+* naming conventions
+* dependency rules
+* manual review of structure and flow
 * dependency rule validation
 * code generation or template application
 * repeated workflow automation
@@ -23,7 +25,7 @@ In general, tooling is aimed to help with:
 While tooling is not final, implementation still relies on:
 
 * sequence pattern
-* blueprint
+* layer, sequence, and feature-slice rules
 * naming conventions
 * dependency rules
 * manual review of structure and flow

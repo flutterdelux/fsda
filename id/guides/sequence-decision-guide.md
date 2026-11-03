@@ -1,66 +1,47 @@
-# Sequence Decision Guide
+# Panduan Menentukan Sequence dan Slice
 
-Dokumen ini membantu memilih sequence yang paling sesuai untuk sebuah feature slice.
+Sequence dan slice menjawab dua pertanyaan berbeda:
 
-## Purpose
+* **Sequence**: kontrak apa yang mengatur alur Use Case-to-Data?
+* **Slice fitur**: komponen mana yang dikelompokkan sebagai unit modular dengan tanggung jawab terkait, dan bagian Logic/UI apa yang diperlukan?
 
-Pertanyaan pertama saat memulai implementasi di FSDA bukan lokasi folder, melainkan sequence apa yang paling tepat.
+Tentukan sequence dari kontrak Use Case, bukan dari nama slice. Keterkaitan slice dan sequence mengikuti alur fitur, bukan aturan satu-ke-satu.
 
-Dokumen ini membantu mempercepat keputusan tersebut.
+## Menentukan Tipe Sequence Use Case
 
-## Quick Decision Flow
+Tentukan dua hal dari kontrak Use Case:
 
-Gunakan alur berikut:
+1. Flow-nya: `async`, `sync`, atau `stream`?
+2. Signature-nya: `void`, `param`, `return`, atau `return + param`?
 
-1. Apakah slice ini mengubah data?
-2. Jika ya, maka mulai dari keluarga `Mutation`.
-3. Jika tidak, maka mulai dari keluarga `Retrieval`.
-4. Apakah slice membutuhkan input?
-5. Apakah slice mengembalikan data hasil operasi?
-6. Apakah slice membutuhkan pagination, stream, atau offline-first behavior?
+Gabungan keduanya menentukan satu dari 12 contract Use Case yang dijelaskan pada [Sequence Pattern](../architecture/sequence-pattern.md). Contoh:
 
-## Mutation Family
+* Operasi async tanpa input dan tanpa payload hasil → `VoidUseCase`.
+* Operasi async yang menerima input dan tidak mengembalikan payload → `ParamUseCase<P>`.
+* Operasi async yang mengembalikan entity tanpa input → `ReturnUseCase<T>`.
+* Operasi async yang menerima param dan mengembalikan entity → `ReturnParamUseCase<T, P>`.
+* Untuk operasi sync dan stream, gunakan varian contract yang berakhiran `Sync` atau `Stream`.
 
-Gunakan:
+Pagination, limit tertentu seperti `5`, offline-first, serta transformasi state bukan sequence type tersendiri. Tempatkan perilakunya pada Param/Use Case, Logic, atau Data sesuai ownership-nya. Misalnya, slice `list` dan `recent` dapat memiliki keterkaitan dengan Use Case dan tipe sequence yang sama, tetapi alur masing-masing dapat memberikan parameter berbeda. App mengorkestrasi bagian UI/Logic dan sequence terkait untuk tiap alur.
 
-* `Mutation` jika tidak membutuhkan param dan tidak mengembalikan data
-* `Mutation + Param` jika membutuhkan input
-* `Mutation + Return` jika mengembalikan hasil operasi
-* `Mutation + Return + Param` jika membutuhkan input dan mengembalikan hasil operasi
+## Menentukan Logic dan UI Slice
 
-Contoh:
+Setelah memahami requirement dan Use Case yang diperlukan, kelompokkan kode berdasarkan tanggung jawab layer:
 
-* `mark_all_read` → Mutation
-* `delete` → Mutation + Param
-* `take` → Mutation + Return
-* `create` → Mutation + Return + Param
+* Bagian Logic dari slice menyimpan state serta dapat memanggil satu atau beberapa Use Case. Slice form juga dapat memiliki bagian Logic untuk input/validasi lokal tanpa memanggil Use Case.
+* Bagian UI dari slice mengelompokkan View dan widget terkait; UI menyajikan data dan mengirim interaksi melalui callback.
+* App menggunakan dan mengorkestrasi bagian UI/Logic serta sequence yang berkaitan, termasuk menyampaikan input dan meneruskan aksi.
 
-## Retrieval Family
+Folder `logic/update` dan `ui/update` merupakan bagian Logic/UI dari satu slice fitur `update`. Slice fitur `form_update` memiliki tanggung jawab lain dan dapat mendukung alur fitur yang sama.
 
-Gunakan:
+## Tidak Ada Pemetaan Satu-ke-Satu
 
-* `Retrieval` jika membaca data tanpa input tambahan
-* `Retrieval + Param` jika membaca data dengan input
-* `Retrieval + Pagination` jika daftar data perlu paging
-* `Retrieval + Stream` jika data terus berubah dan harus dipantau
-* `Retrieval + Stream + Param` jika stream juga membutuhkan input
-* `Retrieval + Offline First` jika local source menjadi prioritas awal atau membutuhkan mekanisme cache
+Contoh alur update product:
 
-Contoh:
+* App mengorkestrasi bagian UI `ui/update` dan bagian Logic `logic/update` serta `logic/form_update`.
+* Logic `update` memanggil Use Case upload image dan update product, yang masing-masing memiliki sequence.
+* Slice `form_update` mengelola form/state dan dapat tidak memiliki keterkaitan langsung dengan sequence.
 
-* `popular` → Retrieval
-* `detail` → Retrieval + Param
-* `list` → Retrieval + Pagination
-* `list` → Retrieval + Stream
-* `status` → Retrieval + Stream + Param
-* `list` → Retrieval + Offline First
+Contoh reuse: App menggunakan dan mengorkestrasi slice `list` dan `recent` melalui bagian UI `ui/list` dan `ui/recent`, serta bagian Logic yang masing-masing berkaitan dengan Use Case/sequence yang sama. Alur `recent` dapat memberi limit `5`, sedangkan alur `list` mengirim parameter pagination.
 
-## Selection Rule
-
-Satu feature slice harus dipetakan ke satu sequence yang paling jelas.
-
-Jika satu slice terasa membutuhkan terlalu banyak sequence sekaligus, biasanya:
-
-* slice-nya terlalu besar
-* boundary tanggung jawabnya belum cukup jelas
-* atau flow-nya perlu dipisah menjadi beberapa slice
+Sebut keseluruhan requirement tersebut sebagai **alur fitur** (*feature flow*) bila perlu merujuk komposisinya. Ini istilah deskriptif, bukan unit arsitektur baru atau struktur folder wajib.

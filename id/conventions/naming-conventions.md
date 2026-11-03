@@ -128,7 +128,7 @@ destination
 ## Slice Naming
 
 
-Feature slice adalah unit terkecil implementasi bisnis.
+Gunakan istilah **slice fitur** untuk unit modular di dalam feature yang mengelompokkan komponen dengan tanggung jawab terkait. Implementasinya dapat memiliki bagian Logic, UI, atau keduanya. Folder `logic/update` dan `ui/update` adalah bagian dari slice `update`; folder `logic/form_update` menandai slice lain. Sequence berada pada alur Use Case-to-Data, bukan sebagai bagian dari struktur slice.
 
 ---
 
@@ -654,9 +654,7 @@ WalletDeleteUseCase
 ProductDetailUseCase
 ```
 
-Use case menggunakan slice.
-
-Bukan action tambahan.
+Nama Use Case mengikuti operasi bisnis yang terkait dengan alur fitur. Use Case berada di Domain dan tidak ditempatkan di dalam folder slice; App mengorkestrasi bagian Logic/UI slice dengan Use Case yang dibutuhkan.
 
 
 

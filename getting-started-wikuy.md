@@ -10,8 +10,9 @@ As a comparative guide, we will take the *boilerplate* components from the [fsda
 - App: `wikuy`
 - Module: `travel`
 - Feature: `destination`
-- Slice: `list`
-- Sequence: `R` (Retrieval)
+- Logic slice: `list`
+- UI slice: `list`
+- Use Case sequence: async return (`ReturnUseCase<List<DestinationEntity>>`)
 - UI: `lsv` (list vertical)
 - Method: `getDestinationList`
 - Compose target page: `destination_list_page`
@@ -230,7 +231,7 @@ Run the following *post-hook* inside the `modules/travel` folder to resolve *dep
 cd modules/travel
 flutter pub get
 flutter gen-l10n
-dart run build_runner build --force-jit --delete-conflicting-outputs
+dart run build_runner build --delete-conflicting-outputs
 cd ../../
 ```
 
@@ -364,9 +365,11 @@ export 'src/shared/ui/extensions/travel_failure_x.dart';
 
 :::
 
-### 4.3. Slice
+### 4.3. Sequence and Feature Slice
 
-Since this slice uses the `R` (Retrieval) sequence type, create the required *files* inside the `destination` feature.
+The `destination_list` Use Case has no input and asynchronously returns a list of Entities, so its sequence contract is `ReturnUseCase<List<DestinationEntity>>`. Separately, the feature has a `list` slice with Logic and UI parts; App orchestrates them. UI receives data and callbacks and does not call the Cubit directly.
+
+Create the Use Case, Logic part, UI part, and required Data/Domain files inside the `destination` feature.
 
 ```bash
 cd modules/travel/lib/src/features/destination
@@ -588,8 +591,7 @@ import 'package:app_core/app_core.dart';
 import '../entities/destination_entity.dart';
 import '../repositories/destination_repository.dart';
 
-class DestinationListUseCase
-    extends NoParamUseCase<List<DestinationEntity>> {
+class DestinationListUseCase extends ReturnUseCase<List<DestinationEntity>> {
   final DestinationRepository _repository;
 
   const DestinationListUseCase({
@@ -910,7 +912,7 @@ Run the following command inside the `modules/travel` folder to generate arb and
 ```bash
 cd modules/travel
 flutter gen-l10n
-dart run build_runner build --force-jit --delete-conflicting-outputs
+dart run build_runner build --delete-conflicting-outputs
 cd ../../
 ```
 

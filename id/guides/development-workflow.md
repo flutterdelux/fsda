@@ -164,29 +164,23 @@ Phase ini dilakukan berulang selama pengembangan aplikasi.
 
 ### 2.1 Identify Requirement
 
-Ubah requirement menjadi feature slice.
+Ubah requirement menjadi alur fitur, lalu identifikasi Use Case dan kebutuhan state/presentasi. Tentukan sequence dari kontrak Use Case. Secara terpisah, tentukan slice fitur yang terkait dan bagian Logic/UI yang diperlukan. App akan mengorkestrasi bagian-bagian tersebut.
 
 Contoh:
 
-| Requirement          | Module       | Feature | Slice  |
-| -------------------- | ------------ | ------- | ------ |
-| Delete wallet        | finance      | wallet  | delete |
-| Create task          | task         | task    | create |
-| Product detail       | product      | product | detail |
-| Watch payment status | subscription | payment | status |
+| Requirement | Module | Feature | Use Case / Sequence | Slice fitur terkait |
+| --- | --- | --- | --- | --- |
+| Delete wallet | finance | wallet | delete Use Case dan sequence-nya | slice `delete`: bagian `logic/delete` + `ui/delete` |
+| Create task | task | task | create Use Case dan sequence-nya | slice `create`: bagian `logic/create` + `ui/create`; slice `form_create`: bagian `logic/form_create` |
+| Product update | product | product | upload image dan update product Use Cases beserta sequence masing-masing | slice `update`: bagian `logic/update` + `ui/update`; slice `form_update`: bagian `logic/form_update` |
 
 ---
 
 ### 2.2 Determine Sequence
 
-Tentukan sequence yang sesuai.
+Pilih sequence type untuk setiap Use Case berdasarkan flow dan signature-nya. Sequence dipilih dari 12 kombinasi async/sync/stream × void/param/return/return + param. Ini bukan keputusan per slice.
 
-| Slice  | Sequence                     | Code |
-| ------ | ---------------------------- | ---- |
-| delete | Mutation + Param             | Mp   |
-| create | Mutation + Return + Param    | Mrp  | 
-| detail | Retrieval + Param            | Rp   |
-| status | Retrieval + Stream + Param   | Rsp  |
+Contoh: `ProductImageUploadUseCase` dan `ProductUpdateUseCase` masing-masing memiliki sequence sesuai signature-nya. App mengorkestrasi bagian Logic `logic/update` yang memanggil kedua Use Case, bersama bagian UI dan state form yang terkait.
 
 ---
 
@@ -328,21 +322,22 @@ feature1/
 
 ---
 
-### 2.6 Create Slice Skeleton
+### 2.6 Plan Layer Slices and Use Case Sequences
 
-Buat struktur slice sesuai sequence.
+Buat daftar Use Case dan tentukan sequence type masing-masing. Secara terpisah, identifikasi slice fitur yang terkait serta bagian Logic/UI yang diperlukan. App mengorkestrasi komponen tersebut untuk menjalankan alur fitur.
 
 Contoh:
 
 ```text
-detail/
+slice: update
+├── logic/update/ # memanggil UploadImageUseCase dan UpdateProductUseCase
+└── ui/update/    # form, tombol, dan callback; tanpa akses langsung ke Logic
+
+slice: form_update
+└── logic/form_update/ # mengelola input/state form
 ```
 
-atau
-
-```text
-create/
-```
+Tidak semua slice memiliki bagian UI maupun Logic. Bagian Logic dapat memanggil beberapa Use Case yang masing-masing memiliki sequence, atau mengelola state lokal tanpa Use Case. App menentukan bagian-bagian yang disusun bersama.
 
 ---
 
@@ -392,7 +387,15 @@ Repository Implementation
 
 ---
 
-### 2.9 Create Logic
+### 2.9 Implement Use Case Sequences
+
+Implementasikan setiap Use Case mengikuti contract sequence-nya dari Domain ke Data.
+
+---
+
+### 2.10 Complete Logic
+
+Implementasikan bagian Logic dari setiap slice yang membutuhkan state dan koordinasi Use Case. Slice form/state yang tidak memanggil Use Case tetap valid.
 
 Urutan:
 
@@ -404,7 +407,9 @@ Cubit / Bloc / Controller
 
 ---
 
-### 2.10 Create UI
+### 2.11 Create UI
+
+Implementasikan bagian UI dari slice sebagai presentasi dumb yang menerima data dan callback. UI boleh memvalidasi input untuk feedback lokal, lalu mengekspos nilai melalui callback. App menyampaikan aksi/input ke Logic dan memberikan data/state Logic ke UI.
 
 Urutan:
 
@@ -418,21 +423,20 @@ Shared UI
 
 ---
 
-### 2.11 Validate Against Blueprint
+### 2.12 Validate Against FSDA Rules
 
-Bandingkan implementasi dengan blueprint sequence.
-
-Pastikan:
+Tinjau implementasi terhadap aturan tiap layer, kontrak sequence, batas slice, dan orkestrasi App. Pastikan:
 
 ```text
-folder
-file
-class
 dependency
-flow
+ownership tiap komponen
+dependency antar layer
+signature dan aliran sequence
+keterkaitan slice dengan alur fitur
+orkestrasi App antara UI dan Logic
 ```
 
-sesuai dengan blueprint.
+sesuai dengan aturan FSDA yang berlaku.
 
 
 
@@ -444,7 +448,7 @@ Phase ini menghubungkan module ke aplikasi.
 
 ### 3.1 Create App Composition Page
 
-Compose Logic dan UI pada App layer.
+App menjadi orchestrator yang menyusun Logic dan UI. App membuat atau menyediakan Logic, menangani pemanggilannya, lalu memberikan state dan callback yang diperlukan ke UI. UI hanya menjadi titik interaksi/presentasi dan tidak mengakses Cubit/Bloc secara langsung.
 
 Contoh:
 
@@ -461,6 +465,8 @@ apps/
 ```
 
 Page pada App dapat mewakili satu primary slice atau mengagregasi beberapa slice sekaligus.
+
+Contohnya, Page dapat membuat Cubit dan memanggil method awal saat provider dibuat. Untuk aksi berikutnya, Page menyediakan callback ke widget UI; ketika user berinteraksi, callback milik App itulah yang memanggil Logic.
 
 Logic dapat diregistrasikan di page scope atau scope yang lebih tinggi seperti root/global scope sesuai kebutuhan lifecycle dan composition.
 
@@ -490,13 +496,15 @@ abstract final class Module1Route {
 routes: [
   ...,
   Module1Route.base,
-],
-```
-
----
+↓
+Tentukan slice fitur dan sequence yang berkaitan
+↓
+Komposisi App
+↓
+Implementasi dan pengujian
 
 ### 3.3 Compose Localization
-
+Ikuti aturan tiap layer, sequence, dan slice. App menggunakan serta mengorkestrasi komponen yang berkaitan untuk menjalankan alur fitur.
 Compose localization umum dari `app_l10n` bersama localization milik module-module yang digunakan aplikasi.
 
 Contoh:
@@ -655,13 +663,15 @@ Module
 ↓
 Feature
 ↓
-Slice
+Alur Fitur
 ↓
-Sequence
+Use Case dan Sequence
 ↓
-Blueprint
+Slice fitur terkait
 ↓
-Implementation
+Komposisi App
+↓
+Implementasi dan pengujian
 ```
 
-Sequence dan Blueprint adalah sumber kebenaran implementasi.
+Ikuti aturan masing-masing layer, sequence, dan slice. App mengorkestrasi bagian-bagian yang berkaitan.

@@ -29,11 +29,11 @@ UI tidak bertanggung jawab terhadap:
 
 ## UI Structure
 
-Visual yang terikat pada slice dikelompokkan di dalam slice. Jika visual tersebut digunakan bersama, letakkan di shared.
+Visual yang menjadi bagian UI dari suatu slice dikelompokkan di `ui/<slice>`. Jika visual tersebut digunakan bersama beberapa slice, letakkan di shared.
 
 ```text
 ui/
-├── <slice>/
+├── <ui_slice>/
 │   ├── views/
 │   └── widgets/
 └── shared/
@@ -52,7 +52,7 @@ class ProductDetailView extends StatelessWidget {
 }
 ```
 
-View hanya menerima data.
+View hanya menerima data dan callback yang diperlukan untuk menyampaikan interaksi.
 
 View tidak memanggil repository.
 
@@ -127,11 +127,13 @@ UI ada untuk menyajikan informasi kepada user.
 
 ## Key Principle
 
-UI hanya menampilkan data.
+UI hanya menampilkan data dan menyediakan titik interaksi melalui event/callback yang diberikan oleh App.
 
-UI tidak mengorkestrasi bisnis.
+UI tidak mengorkestrasi bisnis dan tidak memanggil Logic (Cubit/Bloc/Controller) secara langsung. App yang menerima/menghubungkan interaksi UI dan mengorkestrasi Logic.
 
-UI tidak mengetahui implementasi data.
+UI boleh menangani perilaku presentasi lokal seperti membaca input, validasi field/form untuk feedback langsung, dan menyusun nilai input. UI mengekspos nilai atau hasil interaksi melalui callback; App yang meneruskannya ke Logic. Aturan bisnis dan state aplikasi tetap menjadi tanggung jawab Domain/Logic.
+
+UI tidak mengetahui implementasi data maupun Logic. Callback menjadi batas komunikasi; App bertanggung jawab menghubungkan callback UI dengan aksi Logic dan menyusun state Logic menjadi data presentasi.
 
 UI hanya boleh mengetahui domain model yang dibutuhkan untuk presentasi, bukan repository contract atau use case.
 

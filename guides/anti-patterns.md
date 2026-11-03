@@ -12,21 +12,21 @@ Anti-patterns help keep architecture consistent by highlighting implementation c
 
 Avoid the following:
 
-* starting implementation from folders instead of sequence
+* starting implementation from folders before understanding the feature flow and layer responsibilities
 * placing business orchestration in UI
 * letting DTO or raw responses leak into Logic or UI
 * accessing repository implementation directly from inappropriate layers
 * moving resources to shared boundaries too early without clear ownership
 * creating naming variants outside active conventions
-* combining multiple business goals into one slice
+* combining unrelated responsibilities into one feature slice
 * allowing circular dependency across features
 
 
-## Folder First vs Sequence First
+## Folder First vs Flow and Contract First
 
 This anti-pattern does not mean folders are unimportant.
 
-Workspace, module, and feature still require clear folder structure. The problem appears when implementation starts by guessing folders, files, and classes before the slice and sequence are clear.
+Workspace, module, and feature still require clear folder structure. The problem appears when implementation starts by guessing folders, files, and classes before the feature flow, Use Cases, and layer responsibilities are clear.
 
 Wrong approach example:
 
@@ -37,18 +37,18 @@ Wrong approach example:
 Problems with this approach:
 
 * structure grows without clear reason
-* generated files often miss the correct sequence blueprint
+* implementation and tests may diverge from layer rules or Use Case sequence contracts
 * naming and dependency drift more easily
 
 Correct approach:
 
 * start from requirement
-* identify the feature slice
-* choose the most appropriate sequence
-* open the corresponding blueprint
-* then derive folders, files, classes, and implementation flow
+* identify the feature flow and required Use Cases
+* determine sequence types from Use Case contracts
+* identify related feature slices and their Logic/UI parts
+* then derive folders, files, classes, dependencies, and implementation flow
 
-In short: folders still matter, but folders should follow sequence decisions, not the other way around.
+In short: folders follow layer and slice boundaries; sequence types follow Use Case contracts. App orchestrates the related parts.
 
 
 ## App vs Module Confusion
@@ -75,6 +75,6 @@ Before moving something into shared, make sure:
 
 ## Sequence Misuse
 
-Do not force a slice into an unsuitable sequence only to mimic another implementation.
+Do not assume a feature slice must have one sequence, or that its name determines a sequence.
 
-If sequence feels wrong, reevaluate slice requirement first.
+If the relationship between a slice and a Use Case is unclear, reevaluate the feature flow, layer responsibilities, and App composition.
